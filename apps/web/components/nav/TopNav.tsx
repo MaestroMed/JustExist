@@ -1,6 +1,8 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'motion/react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { motion, useMotionTemplate, useScroll, useTransform } from 'motion/react';
 import { Container } from '@nacks/ui';
 
 const NAV_LINKS = [
@@ -12,66 +14,73 @@ const NAV_LINKS = [
 ] as const;
 
 /**
- * Navigation sticky top — transparente au top, tint ink-80 au scroll.
- * Liens NAV désactivés en Sprint 1 (les pages cibles n'existent pas encore).
+ * Navigation sticky — transparente au top, tint ink-80 au scroll.
  */
 export function TopNav() {
   const { scrollY } = useScroll();
   const bgOpacity = useTransform(scrollY, [0, 100], [0, 0.85]);
-  const borderOpacity = useTransform(scrollY, [0, 100], [0, 0.08]);
+  const borderOpacity = useTransform(scrollY, [0, 100], [0, 0.1]);
+  const bgColor = useMotionTemplate`rgba(10, 10, 10, ${bgOpacity})`;
+  const borderColor = useMotionTemplate`1px solid rgba(245, 241, 232, ${borderOpacity})`;
+  const pathname = usePathname();
 
   return (
     <motion.header
       className="fixed left-0 right-0 top-0 z-[var(--z-sticky)] backdrop-blur-[6px]"
-      style={{
-        backgroundColor: useTransform(bgOpacity, (o) => `rgba(10, 10, 10, ${o})`),
-        borderBottom: useTransform(
-          borderOpacity,
-          (o) => `1px solid rgba(245, 241, 232, ${o})`,
-        ),
-      }}
+      style={{ backgroundColor: bgColor, borderBottom: borderColor }}
     >
       <Container size="full" as="nav" className="flex items-center justify-between py-5">
-        <motion.a
+        <Link
           href="/"
-          className="font-[var(--font-display)] text-lg font-[600] tracking-[-0.02em] text-[var(--color-cream)]"
-          initial={{ opacity: 0, y: -6 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.4, duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+          className="font-[var(--font-display)] text-lg font-[600] tracking-[-0.02em] text-[var(--color-cream)] transition-opacity hover:opacity-70"
           data-cursor="link"
         >
           NACKS
-        </motion.a>
+        </Link>
 
-        <motion.ul
-          className="hidden gap-8 font-[var(--font-display)] text-xs uppercase tracking-[0.2em] text-[var(--color-cream-600)] md:flex"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2.5, duration: 0.5 }}
-        >
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              <span
-                aria-disabled="true"
-                className="cursor-not-allowed opacity-60 transition-opacity hover:text-[var(--color-cream)] hover:opacity-100"
-                title="Bientôt"
-              >
-                {link.label}
-              </span>
-            </li>
-          ))}
-        </motion.ul>
+        <ul className="hidden items-center gap-7 font-[var(--font-display)] text-xs uppercase tracking-[0.2em] text-[var(--color-cream-600)] md:flex">
+          {NAV_LINKS.map((link) => {
+            const isActive = pathname.startsWith(link.href);
+            return (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="group relative transition-colors hover:text-[var(--color-cream)]"
+                  data-cursor="link"
+                >
+                  <span className={isActive ? 'text-[var(--color-cream)]' : ''}>{link.label}</span>
+                  <span
+                    className={`absolute -bottom-1 left-0 h-[1px] bg-[var(--color-blood)] transition-[width] duration-[var(--duration-base)] ${
+                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    }`}
+                  />
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
 
-        <motion.div
-          className="font-[var(--font-mono)] text-xs text-[var(--color-cream-600)]"
-          initial={{ opacity: 0, y: -6 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.5, duration: 0.5 }}
-        >
-          <span aria-hidden="true" className="hidden md:inline">
-            [ sprint 1 — preview ]
-          </span>
-        </motion.div>
+        <div className="flex items-center gap-4 font-[var(--font-mono)] text-xs">
+          <Link
+            href="/compte"
+            className="hidden text-[var(--color-cream-600)] transition-colors hover:text-[var(--color-cream)] md:block"
+            data-cursor="link"
+          >
+            Compte
+          </Link>
+          <button
+            type="button"
+            aria-label="Panier"
+            className="flex items-center gap-2 text-[var(--color-cream)] transition-opacity hover:opacity-70"
+            data-cursor="link"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+              <path d="M3 6h18l-2 13H5L3 6z" />
+              <path d="M8 6V4a4 4 0 1 1 8 0v2" />
+            </svg>
+            <span className="tabular-nums">0</span>
+          </button>
+        </div>
       </Container>
     </motion.header>
   );

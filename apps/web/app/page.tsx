@@ -1,7 +1,12 @@
 import { TopNav } from '@/components/nav/TopNav';
 import { HeroOpening } from '@/components/scenes/HeroOpening';
 import { Manifesto } from '@/components/scenes/Manifesto';
-import { FooterTease } from '@/components/scenes/FooterTease';
+import { DropLive } from '@/components/scenes/DropLive';
+import { ThreePortes } from '@/components/scenes/ThreePortes';
+import { UniversHorizontal } from '@/components/scenes/UniversHorizontal';
+import { NacksShow } from '@/components/scenes/NacksShow';
+import { CercleNewsletter } from '@/components/scenes/CercleNewsletter';
+import { FooterUnivers } from '@/components/scenes/FooterUnivers';
 
 export default function HomePage() {
   return (
@@ -9,7 +14,12 @@ export default function HomePage() {
       <TopNav />
       <HeroOpening />
       <Manifesto />
-      <FooterTease />
+      <DropLive />
+      <ThreePortes />
+      <UniversHorizontal />
+      <NacksShow />
+      <CercleNewsletter />
+      <FooterUnivers />
     </main>
   );
 }
