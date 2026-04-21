@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+@import '@nacks/config/styles/reset.css';
+@import '@nacks/config/styles/theme.css';
+
+html,
+body {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+}

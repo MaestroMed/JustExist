@@ -1,0 +1,13 @@
+{
+  "extends": "@nacks/config/tsconfig/base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "noEmit": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist"]
+}

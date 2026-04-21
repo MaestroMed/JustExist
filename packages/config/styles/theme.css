@@ -1,0 +1,100 @@
+/* ===========================================================
+ * Nacks Galerie — Design Tokens (Tailwind 4 @theme)
+ * Toute la palette, typo, espacement, easing exposé en CSS vars.
+ * Référence : BRIEF.md §6 + ULTRAPLAN.md §2.
+ * =========================================================== */
+
+@theme {
+  /* ────────── Couleurs primaires ────────── */
+  --color-ink: #0a0a0a;
+  --color-cream: #f5f1e8;
+  --color-blood: #e63946;
+
+  /* ────────── Couleurs univers (héritées des œuvres) ────────── */
+  --color-bubble: #ffd43b;
+  --color-acid: #4ade80;
+  --color-poppy: #1e40af;
+  --color-pop: #ec4899;
+  --color-luxe: #d4a056;
+  --color-fortnite: #7c3aed;
+  --color-cyan: #06b6d4;
+
+  /* ────────── Neutres dérivés (pour surfaces, disabled, focus) ────────── */
+  --color-ink-50: rgba(10, 10, 10, 0.04);
+  --color-ink-100: rgba(10, 10, 10, 0.08);
+  --color-ink-200: rgba(10, 10, 10, 0.16);
+  --color-ink-400: rgba(10, 10, 10, 0.4);
+  --color-ink-600: rgba(10, 10, 10, 0.6);
+  --color-ink-800: rgba(10, 10, 10, 0.8);
+
+  --color-cream-50: rgba(245, 241, 232, 0.04);
+  --color-cream-100: rgba(245, 241, 232, 0.08);
+  --color-cream-200: rgba(245, 241, 232, 0.16);
+  --color-cream-400: rgba(245, 241, 232, 0.4);
+  --color-cream-600: rgba(245, 241, 232, 0.6);
+  --color-cream-800: rgba(245, 241, 232, 0.8);
+
+  /* ────────── Typographie ────────── */
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+
+  /* Échelle fluide — clamp(min, ideal, max) */
+  --text-xs: clamp(0.75rem, 0.71rem + 0.17vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.83rem + 0.2vw, 1rem);
+  --text-base: clamp(1rem, 0.95rem + 0.22vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1.07rem + 0.26vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.17rem + 0.35vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.37rem + 0.57vw, 1.875rem);
+  --text-3xl: clamp(1.875rem, 1.67rem + 0.87vw, 2.5rem);
+  --text-4xl: clamp(2.5rem, 2.17rem + 1.43vw, 3.5rem);
+  --text-5xl: clamp(3rem, 2.52rem + 2.08vw, 4.5rem);
+  --text-6xl: clamp(4rem, 3.26rem + 3.22vw, 6.5rem);
+  --text-7xl: clamp(5rem, 3.91rem + 4.75vw, 9rem);
+  --text-8xl: clamp(6rem, 4.3rem + 7.4vw, 12rem);
+
+  /* ────────── Espacement & layout ────────── */
+  --spacing-section: clamp(5rem, 4rem + 4vw, 10rem);
+  --spacing-block: clamp(2.5rem, 2rem + 2vw, 5rem);
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-full: 9999px;
+
+  --container-max: 1440px;
+  --container-content: 720px;
+  --container-wide: 1200px;
+
+  /* ────────── Easing & durations ────────── */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+  --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-nacks: cubic-bezier(0.19, 1, 0.22, 1); /* signature doux */
+
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 600ms;
+  --duration-cinematic: 1200ms;
+
+  /* ────────── Z-index scale ────────── */
+  --z-below: -1;
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 500;
+  --z-modal: 1000;
+  --z-cursor: 9999;
+
+  /* ────────── Shadows (rare, mais disponibles) ────────── */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-glow-blood: 0 0 60px rgb(230 57 70 / 0.4);
+  --shadow-glow-bubble: 0 0 60px rgb(255 212 59 / 0.4);
+}
+
+/* ────────── Dark mode / palette inversion futures ────────── */
+/* On reste en dark par défaut — l'univers Nacks est nocturne. */
+/* Si un mode « cream » est introduit plus tard, il se fera via data-theme. */

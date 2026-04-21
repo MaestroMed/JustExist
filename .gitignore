@@ -1,0 +1,71 @@
+# Deps
+node_modules/
+.pnpm-store/
+
+# Next.js
+.next/
+next-env.d.ts
+out/
+
+# Turborepo
+.turbo/
+
+# Build
+dist/
+build/
+*.tsbuildinfo
+
+# Env
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.production.local
+.env.test.local
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Editors
+.vscode/*
+!.vscode/settings.json.example
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Sentry
+.sentryclirc
+
+# Drizzle
+drizzle/meta/
+
+# Vercel
+.vercel
+
+# Temp
+.tmp/
+tmp/
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Playwright / tests
+playwright-report/
+test-results/
+
+# Local assets (preprod uploads)
+.r2-local/

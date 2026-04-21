@@ -1,0 +1,109 @@
+@import 'tailwindcss';
+@import '@nacks/config/styles/reset.css';
+@import '@nacks/config/styles/theme.css';
+
+/* ===========================================================
+ * Nacks Galerie — Global styles
+ * Scope : body, selection, scrollbar, grain overlay, helpers.
+ * =========================================================== */
+
+html,
+body {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-feature-settings:
+    'ss01' on,
+    'cv01' on,
+    'cv11' on;
+}
+
+/* Scrollbar — minimaliste, cream sur ink */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-cream-200);
+  border-radius: 999px;
+  border: 3px solid var(--color-ink);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-cream-400);
+}
+
+/* Custom cursor : on masque le curseur natif partout sauf sur mobile */
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body,
+  a,
+  button,
+  [role='button'] {
+    cursor: none;
+  }
+}
+
+/* Paper grain texture — overlay léger pour donner l'âme atelier */
+.grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.06;
+  mix-blend-mode: screen;
+}
+
+/* Helpers */
+.text-balance {
+  text-wrap: balance;
+}
+.text-pretty {
+  text-wrap: pretty;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Focus ring Nacks */
+.focus-ring {
+  outline: 2px solid var(--color-blood);
+  outline-offset: 3px;
+}
+
+/* Animations pure CSS disponibles */
+@keyframes nacks-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes nacks-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes nacks-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "nacks-galerie",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Nacks Galerie — royaume numérique de Naguy Claude.",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "dev:web": "turbo run dev --filter=@nacks/web",
+    "dev:admin": "turbo run dev --filter=@nacks/admin",
+    "build": "turbo run build",
+    "build:web": "turbo run build --filter=@nacks/web",
+    "build:admin": "turbo run build --filter=@nacks/admin",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint -- --fix",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,css,yml,yaml}\"",
+    "clean": "turbo run clean && rm -rf node_modules .turbo",
+    "test": "turbo run test"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.8",
+    "turbo": "^2.3.3",
+    "typescript": "^5.6.3"
+  }
+}

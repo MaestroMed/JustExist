@@ -1,0 +1,53 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "stream",
+  "globalDependencies": [".env", ".env.local", "tsconfig.base.json"],
+  "globalEnv": ["NODE_ENV", "VERCEL_ENV", "VERCEL_URL"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": [
+        "DATABASE_URL",
+        "DATABASE_URL_POOLED",
+        "AUTH_SECRET",
+        "AUTH_URL",
+        "STRIPE_PUBLIC_KEY",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET",
+        "RESEND_API_KEY",
+        "RESEND_FROM_EMAIL",
+        "R2_ACCOUNT_ID",
+        "R2_ACCESS_KEY_ID",
+        "R2_SECRET_ACCESS_KEY",
+        "R2_BUCKET_NAME",
+        "R2_PUBLIC_URL",
+        "NEXT_PUBLIC_TURNSTILE_SITE_KEY",
+        "TURNSTILE_SECRET_KEY",
+        "NEXT_PUBLIC_PLAUSIBLE_DOMAIN",
+        "SENTRY_DSN",
+        "SENTRY_AUTH_TOKEN",
+        "NEXT_PUBLIC_SITE_URL",
+        "NEXT_PUBLIC_SITE_NAME"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}
