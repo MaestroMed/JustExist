@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { motion, useMotionTemplate, useScroll, useTransform } from 'motion/react';
 import { Container } from '@nacks/ui';
 import { LogoSignature } from '@/components/easter/LogoSignature';
+import { openCartDrawer } from '@/components/shop/CartDrawer';
 import { LiveDropBadge } from './LiveDropBadge';
 
 type NavLink = { label: string; href: string; liveable?: boolean };
@@ -78,11 +79,14 @@ export function TopNav({ hasLiveDrop = false }: { hasLiveDrop?: boolean }) {
           >
             Compte
           </Link>
-          <Link
-            href="/panier"
-            aria-label="Panier"
+          <button
+            type="button"
+            onClick={openCartDrawer}
+            aria-label="Ouvrir le panier"
             className="flex items-center gap-2 text-[var(--color-cream)] transition-opacity hover:opacity-70"
             data-cursor="link"
+            data-cursor-label="Panier"
+            data-no-ripple=""
           >
             <svg
               width="18"
@@ -97,7 +101,7 @@ export function TopNav({ hasLiveDrop = false }: { hasLiveDrop?: boolean }) {
               <path d="M8 6V4a4 4 0 1 1 8 0v2" />
             </svg>
             <span className="tabular-nums">0</span>
-          </Link>
+          </button>
         </div>
       </Container>
     </motion.header>

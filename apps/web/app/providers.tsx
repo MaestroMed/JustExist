@@ -11,6 +11,7 @@ import { AudioToggle } from '@/components/polish/AudioToggle';
 import { PageTransition } from '@/components/polish/PageTransition';
 import { ScrollToTop } from '@/components/polish/ScrollToTop';
 import { CommandPalette } from '@/components/command/CommandPalette';
+import { CartDrawer } from '@/components/shop/CartDrawer';
 import { EasterEggsProvider } from '@/components/easter/EasterEggsProvider';
 
 export function Providers({ children }: { children: ReactNode }) {
@@ -21,6 +22,7 @@ export function Providers({ children }: { children: ReactNode }) {
       <ScrollToTop />
       <EasterEggsProvider />
       <CommandPalette />
+      <CartDrawer />
       <ExitIntent />
       <AudioToggle />
       <SmoothScroll>
