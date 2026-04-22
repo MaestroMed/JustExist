@@ -10,7 +10,19 @@ import { CercleNewsletter } from '@/components/scenes/CercleNewsletter';
 import { FooterUnivers } from '@/components/scenes/FooterUnivers';
 import { SignatureMarquee } from '@/components/marquee/SignatureMarquee';
 import { LiveDropAnnouncer } from '@/components/nav/LiveDropAnnouncer';
+import { HomeScrollNav } from '@/components/nav/HomeScrollNav';
 import { getLiveDrop } from '@/lib/content/drops';
+
+const SCENES = [
+  { id: 'scene-hero', label: 'Arrivée' },
+  { id: 'scene-manifeste', label: 'Manifeste' },
+  { id: 'scene-drop', label: 'Drop' },
+  { id: 'scene-portes', label: 'Portes' },
+  { id: 'scene-univers', label: 'Univers' },
+  { id: 'scene-show', label: 'Show' },
+  { id: 'scene-journal', label: 'Journal' },
+  { id: 'scene-cercle', label: 'Cercle' },
+];
 
 export default function HomePage() {
   const hasLiveDrop = Boolean(getLiveDrop());
@@ -18,18 +30,35 @@ export default function HomePage() {
     <main className="relative">
       <LiveDropAnnouncer />
       <TopNav hasLiveDrop={hasLiveDrop} />
-      <HeroOpening />
-      <Manifesto />
+      <HomeScrollNav sections={SCENES} />
+      <div id="scene-hero">
+        <HeroOpening />
+      </div>
+      <div id="scene-manifeste">
+        <Manifesto />
+      </div>
       <SignatureMarquee variant="blood" speed={45} />
-      <DropLive />
+      <div id="scene-drop">
+        <DropLive />
+      </div>
       <SignatureMarquee variant="cream" reverse speed={50} dense />
-      <ThreePortes />
-      <UniversHorizontal />
+      <div id="scene-portes">
+        <ThreePortes />
+      </div>
+      <div id="scene-univers">
+        <UniversHorizontal />
+      </div>
       <SignatureMarquee variant="bubble" speed={42} />
-      <NacksShow />
-      <JournalTease />
+      <div id="scene-show">
+        <NacksShow />
+      </div>
+      <div id="scene-journal">
+        <JournalTease />
+      </div>
       <SignatureMarquee variant="outline" reverse speed={55} dense />
-      <CercleNewsletter />
+      <div id="scene-cercle">
+        <CercleNewsletter />
+      </div>
       <FooterUnivers />
     </main>
   );
