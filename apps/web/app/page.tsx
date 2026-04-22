@@ -5,6 +5,7 @@ import { DropLive } from '@/components/scenes/DropLive';
 import { ThreePortes } from '@/components/scenes/ThreePortes';
 import { UniversHorizontal } from '@/components/scenes/UniversHorizontal';
 import { NacksShow } from '@/components/scenes/NacksShow';
+import { JournalTease } from '@/components/scenes/JournalTease';
 import { CercleNewsletter } from '@/components/scenes/CercleNewsletter';
 import { FooterUnivers } from '@/components/scenes/FooterUnivers';
 import { SignatureMarquee } from '@/components/marquee/SignatureMarquee';
@@ -26,6 +27,7 @@ export default function HomePage() {
       <UniversHorizontal />
       <SignatureMarquee variant="bubble" speed={42} />
       <NacksShow />
+      <JournalTease />
       <SignatureMarquee variant="outline" reverse speed={55} dense />
       <CercleNewsletter />
       <FooterUnivers />
