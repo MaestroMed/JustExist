@@ -3,9 +3,10 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@nacks/ui';
 import { PageShell } from '@/components/layouts/PageShell';
-import { ArtPoster } from '@/components/art/ArtPoster';
+import { DropHero } from '@/components/drops/DropHero';
 import { Countdown } from '@/components/drops/Countdown';
 import { DropCard } from '@/components/drops/DropCard';
+import { SplitHeading } from '@/components/polish/SplitHeading';
 import { drops, getDrop, getPastDrops } from '@/lib/content/drops';
 import { formatPrice } from '@/lib/content/artworks';
 
@@ -35,29 +36,28 @@ export default async function DropDetailPage({ params }: { params: Params }) {
 
   return (
     <PageShell>
-      {/* Hero plein cadre */}
-      <section className="relative bg-[var(--color-ink)]">
-        <div className="relative mx-auto aspect-[16/10] w-full max-w-[var(--container-max)] overflow-hidden">
-          <ArtPoster variant={drop.posterVariant} label={drop.title} />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)] via-transparent" />
-        </div>
-      </section>
+      {/* Hero plein cadre — scroll-parallax */}
+      <DropHero title={drop.title} variant={drop.posterVariant} />
 
-      <Container size="full" className="pt-16">
+      <Container size="full" className="relative -mt-[30vh] pt-16">
         {/* Title + status */}
-        <div className="flex flex-col gap-6 pb-12 md:flex-row md:items-end md:justify-between">
+        <div className="relative flex flex-col gap-6 pb-12 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="font-[var(--font-mono)] text-xs uppercase tracking-[0.3em] text-[var(--color-blood)]">
               {isLive && '● En direct'}
               {isUpcoming && 'À venir'}
               {isPast && 'Archive'}
             </p>
-            <h1
-              className="mt-4 font-[var(--font-display)] font-[500] leading-[0.92] tracking-[-0.03em] text-[var(--color-cream)]"
+            <SplitHeading
+              text={drop.title}
+              as="h1"
+              className="mt-4 block font-[var(--font-display)] font-[500] leading-[0.92] tracking-[-0.03em] text-[var(--color-cream)]"
               style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}
-            >
-              {drop.title}
-            </h1>
+              mode="chars"
+              stagger={0.02}
+              blur
+              once
+            />
             <p className="mt-4 max-w-2xl font-[var(--font-body)] text-lg text-[var(--color-cream-600)]">
               {drop.subtitle}
             </p>
@@ -133,12 +133,16 @@ export default async function DropDetailPage({ params }: { params: Params }) {
           <p className="font-[var(--font-mono)] text-xs uppercase tracking-[0.3em] text-[var(--color-cream-600)]">
             L'histoire
           </p>
-          <p
-            className="mt-6 font-[var(--font-display)] font-[400] leading-[1.25] tracking-[-0.01em] text-balance text-[var(--color-cream)]"
+          <SplitHeading
+            text={drop.lore}
+            as="p"
+            className="mt-6 block font-[var(--font-display)] font-[400] leading-[1.25] tracking-[-0.01em] text-balance text-[var(--color-cream)]"
             style={{ fontSize: 'clamp(1.25rem, 2.4vw, 1.875rem)' }}
-          >
-            {drop.lore}
-          </p>
+            mode="words"
+            stagger={0.025}
+            blur={false}
+            once
+          />
           <p className="mt-8 font-[var(--font-mono)] text-sm text-[var(--color-blood)]">— Nacks</p>
         </section>
 

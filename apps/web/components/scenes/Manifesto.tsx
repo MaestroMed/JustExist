@@ -3,6 +3,7 @@
 import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
 import { Container } from '@nacks/ui';
+import { SplitHeading } from '@/components/polish/SplitHeading';
 
 const LINES = [
   'Je suis de Sarcelles.',
@@ -15,7 +16,7 @@ const LINES = [
 
 /**
  * SCÈNE 2 — Le Manifeste.
- * Texte typographie massive, apparition ligne-par-ligne sur entry in viewport.
+ * Chaque ligne révélée mot-par-mot au viewport, avec blur-in subtile.
  */
 export function Manifesto() {
   const ref = useRef<HTMLDivElement>(null);
@@ -29,30 +30,24 @@ export function Manifesto() {
       <Container size="wide">
         <div className="flex flex-col gap-[0.3em] font-[var(--font-display)] font-[500] leading-[1.05] tracking-[-0.025em]">
           {LINES.map((line, i) => (
-            <motion.p
+            <SplitHeading
               key={i}
-              className="overflow-hidden text-[clamp(1.75rem,5vw,4.5rem)] text-balance"
-              initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 0 }}
-              animate={
-                inView
-                  ? { clipPath: 'inset(0 0% 0 0)', opacity: 1 }
-                  : { clipPath: 'inset(0 100% 0 0)', opacity: 0 }
-              }
-              transition={{
-                delay: 0.15 + i * 0.12,
-                duration: 0.9,
-                ease: [0.19, 1, 0.22, 1],
-              }}
-            >
-              {line}
-            </motion.p>
+              text={line}
+              as="p"
+              className="text-[clamp(1.75rem,5vw,4.5rem)] text-balance text-[var(--color-cream)]"
+              mode="words"
+              stagger={0.035}
+              delay={0.15 + i * 0.12}
+              once
+              blur
+            />
           ))}
           <motion.p
             className="mt-[1.2em] font-[var(--font-mono)] text-[var(--color-blood)]"
             style={{ fontSize: 'clamp(1rem, 1.5vw, 1.25rem)', letterSpacing: '0.02em' }}
             initial={{ opacity: 0, y: 12 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-            transition={{ delay: 0.15 + LINES.length * 0.12 + 0.2, duration: 0.6 }}
+            transition={{ delay: 0.15 + LINES.length * 0.12 + 0.4, duration: 0.6 }}
           >
             — Nacks
           </motion.p>

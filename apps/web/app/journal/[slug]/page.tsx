@@ -6,6 +6,8 @@ import { PageShell } from '@/components/layouts/PageShell';
 import { ArticleCard } from '@/components/journal/ArticleCard';
 import { ArtPoster } from '@/components/art/ArtPoster';
 import { NewsletterForm } from '@/components/forms/NewsletterForm';
+import { ReadingProgress } from '@/components/polish/ReadingProgress';
+import { SplitHeading } from '@/components/polish/SplitHeading';
 import { journalPosts, getPost } from '@/lib/content/journal';
 
 type Params = Promise<{ slug: string }>;
@@ -30,6 +32,7 @@ export default async function ArticlePage({ params }: { params: Params }) {
 
   return (
     <PageShell>
+      <ReadingProgress targetSelector="article" />
       {/* Hero cover */}
       <section className="relative">
         <div className="relative mx-auto aspect-[16/9] w-full max-w-[var(--container-max)] overflow-hidden">
@@ -53,12 +56,16 @@ export default async function ArticlePage({ params }: { params: Params }) {
           <span>{post.readingTime} min</span>
         </div>
 
-        <h1
-          className="mt-6 font-[var(--font-display)] font-[500] leading-[0.95] tracking-[-0.03em] text-[var(--color-cream)] text-balance"
+        <SplitHeading
+          text={post.title}
+          as="h1"
+          className="mt-6 block font-[var(--font-display)] font-[500] leading-[0.95] tracking-[-0.03em] text-[var(--color-cream)] text-balance"
           style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }}
-        >
-          {post.title}
-        </h1>
+          mode="words"
+          stagger={0.04}
+          blur
+          once
+        />
 
         <p className="mt-6 font-[var(--font-body)] text-xl italic leading-[1.5] text-[var(--color-cream-600)]">
           {post.subtitle}
