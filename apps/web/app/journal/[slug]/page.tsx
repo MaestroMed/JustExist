@@ -10,6 +10,7 @@ import { ReadingProgress } from '@/components/polish/ReadingProgress';
 import { SplitHeading } from '@/components/polish/SplitHeading';
 import { ShareButtons } from '@/components/polish/ShareButtons';
 import { RevealParagraph } from '@/components/journal/RevealParagraph';
+import { NextArticleCard } from '@/components/journal/NextArticleCard';
 import { buildBlogPosting, buildBreadcrumb, serializeJsonLd } from '@/lib/seo/jsonld';
 import { journalPosts, getPost } from '@/lib/content/journal';
 
@@ -50,7 +51,12 @@ export default async function ArticlePage({ params }: { params: Params }) {
   const post = getPost(slug);
   if (!post) notFound();
 
-  const related = journalPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
+  const sorted = [...journalPosts].sort(
+    (a, b) => b.publishedAt.getTime() - a.publishedAt.getTime(),
+  );
+  const currentIndex = sorted.findIndex((p) => p.slug === post.slug);
+  const nextPost = sorted[(currentIndex + 1) % sorted.length];
+  const related = journalPosts.filter((p) => p.slug !== post.slug && p.slug !== nextPost?.slug).slice(0, 3);
 
   return (
     <PageShell>
@@ -132,6 +138,12 @@ export default async function ArticlePage({ params }: { params: Params }) {
           </div>
         </div>
       </Container>
+
+      {nextPost && (
+        <Container size="wide" className="pt-20">
+          <NextArticleCard post={nextPost} />
+        </Container>
+      )}
 
       {related.length > 0 && (
         <Container size="full" className="py-20">

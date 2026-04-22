@@ -6,6 +6,10 @@ import { PageShell } from '@/components/layouts/PageShell';
 import { CharacterPortrait } from '@/components/art/CharacterPortrait';
 import { PoppySceneClient } from '@/components/universe/PoppyScene.client';
 import { ArtworkCard } from '@/components/shop/ArtworkCard';
+import { DropCard } from '@/components/drops/DropCard';
+import { ArticleCard } from '@/components/journal/ArticleCard';
+import { drops } from '@/lib/content/drops';
+import { journalPosts } from '@/lib/content/journal';
 import { characters, getCharacter } from '@/lib/content/characters';
 import { getArtworksByCharacter } from '@/lib/content/artworks';
 import type { CharacterSlug } from '@/lib/content/characters';
@@ -46,6 +50,14 @@ export default async function CharacterPage({ params }: { params: Params }) {
   if (!data) notFound();
 
   const artworks = getArtworksByCharacter(data.slug);
+  const characterDrops = drops.filter((d) => d.character === data.slug);
+  const characterArticles = journalPosts
+    .filter((p) => {
+      const hay = (p.title + ' ' + p.subtitle + ' ' + p.excerpt).toLowerCase();
+      const needle = data.name.toLowerCase().split(' ')[0] ?? '';
+      return needle.length > 2 && hay.includes(needle);
+    })
+    .slice(0, 3);
 
   return (
     <PageShell>
@@ -177,6 +189,62 @@ export default async function CharacterPage({ params }: { params: Params }) {
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {artworks.map((a) => (
                 <ArtworkCard key={a.slug} artwork={a} />
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
+
+      {/* Drops featuring this character */}
+      {characterDrops.length > 0 && (
+        <section className="bg-[var(--color-ink)] py-16 md:py-24">
+          <Container size="full">
+            <div className="mb-10 flex items-end justify-between">
+              <h2
+                className="font-[var(--font-display)] font-[500] leading-[1] tracking-[-0.02em] text-[var(--color-cream)]"
+                style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}
+              >
+                Ses drops
+              </h2>
+              <Link
+                href="/drops"
+                className="font-[var(--font-mono)] text-xs uppercase tracking-[0.25em] text-[var(--color-cream-600)] hover:text-[var(--color-cream)]"
+                data-cursor="link"
+              >
+                Tous les drops →
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {characterDrops.map((d) => (
+                <DropCard key={d.slug} drop={d} />
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
+
+      {/* Articles mentioning this character */}
+      {characterArticles.length > 0 && (
+        <section className="border-t border-[var(--color-cream-100)] bg-[var(--color-ink)] py-16 md:py-24">
+          <Container size="full">
+            <div className="mb-10 flex items-end justify-between">
+              <h2
+                className="font-[var(--font-display)] font-[500] leading-[1] tracking-[-0.02em] text-[var(--color-cream)]"
+                style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}
+              >
+                Sur {data.name} dans le journal
+              </h2>
+              <Link
+                href="/journal"
+                className="font-[var(--font-mono)] text-xs uppercase tracking-[0.25em] text-[var(--color-cream-600)] hover:text-[var(--color-cream)]"
+                data-cursor="link"
+              >
+                Tout le journal →
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+              {characterArticles.map((p) => (
+                <ArticleCard key={p.slug} post={p} />
               ))}
             </div>
           </Container>
