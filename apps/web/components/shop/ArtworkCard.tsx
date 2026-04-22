@@ -6,6 +6,7 @@ import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } fr
 import type { Artwork } from '@/lib/content/artworks';
 import { formatPrice } from '@/lib/content/artworks';
 import { ArtPoster } from '@/components/art/ArtPoster';
+import { WishlistButton } from './WishlistButton';
 
 export function ArtworkCard({ artwork, priority = false }: { artwork: Artwork; priority?: boolean }) {
   const { slug, title, type, priceCents, edition, status, posterVariant } = artwork;
@@ -110,6 +111,11 @@ export function ArtworkCard({ artwork, priority = false }: { artwork: Artwork; p
             <span className="rounded-full bg-[var(--color-ink)]/60 px-3 py-1 font-[var(--font-mono)] text-[10px] uppercase tracking-[0.2em] text-[var(--color-cream)] backdrop-blur">
               {typeLabel(type)}
             </span>
+          </div>
+
+          {/* Wishlist heart — bottom left */}
+          <div className="absolute bottom-3 left-3" style={{ transform: 'translateZ(40px)' }}>
+            <WishlistButton slug={slug} label={`Ajouter ${title} à la wishlist`} />
           </div>
 
           {/* Flèche entrant par la droite au hover */}
