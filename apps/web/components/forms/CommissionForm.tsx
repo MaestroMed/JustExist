@@ -42,25 +42,25 @@ export function CommissionForm() {
         >
           <div className="grid gap-6 md:grid-cols-2">
             <Field label="Prénom">
-              <input required type="text" autoComplete="given-name" />
+              <input name="firstName" required type="text" autoComplete="given-name" />
             </Field>
             <Field label="Nom">
-              <input required type="text" autoComplete="family-name" />
+              <input name="lastName" required type="text" autoComplete="family-name" />
             </Field>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">
             <Field label="Email">
-              <input required type="email" autoComplete="email" />
+              <input name="email" required type="email" autoComplete="email" />
             </Field>
             <Field label="Téléphone (optionnel)">
-              <input type="tel" autoComplete="tel" />
+              <input name="phone" type="tel" autoComplete="tel" />
             </Field>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">
             <Field label="Occasion">
-              <select required defaultValue="">
+              <select name="occasion" required defaultValue="">
                 <option value="" disabled>Choisis</option>
                 <option>Cadeau</option>
                 <option>Décoration personnelle</option>
@@ -71,7 +71,7 @@ export function CommissionForm() {
               </select>
             </Field>
             <Field label="Budget">
-              <select required defaultValue="">
+              <select name="budgetBand" required defaultValue="">
                 <option value="" disabled>Choisis une fourchette</option>
                 <option>1 500 – 2 500 €</option>
                 <option>2 500 – 4 000 €</option>
@@ -83,19 +83,19 @@ export function CommissionForm() {
 
           <div className="grid gap-6 md:grid-cols-2">
             <Field label="Dimensions souhaitées">
-              <input type="text" placeholder="ex : 80 × 100 cm" />
+              <input name="dimensions" type="text" placeholder="ex : 80 × 100 cm" />
             </Field>
             <Field label="Délai souhaité">
-              <input type="text" placeholder="ex : 6 à 8 semaines" />
+              <input name="deadline" type="text" placeholder="ex : 6 à 8 semaines" />
             </Field>
           </div>
 
           <Field label="Brief — raconte-moi ce que tu veux voir">
-            <textarea required rows={6} placeholder="Le personnage, l'émotion, les couleurs, ce que l'œuvre doit dire…" />
+            <textarea name="brief" required rows={6} placeholder="Le personnage, l'émotion, les couleurs, ce que l'œuvre doit dire…" />
           </Field>
 
           <Field label="Comment as-tu entendu parler de moi ?">
-            <select defaultValue="">
+            <select name="source" defaultValue="">
               <option value="" disabled>Choisis</option>
               <option>TikTok</option>
               <option>Instagram</option>

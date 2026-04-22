@@ -53,6 +53,9 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.svg',
   },
+  other: {
+    'x-ua-compatible': 'IE=edge',
+  },
 };
 
 export const viewport: Viewport = {
@@ -63,10 +66,47 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 };
 
+/*
+ * ============================================================
+ *   N A C K S · Built with soul.
+ *   Site custom full-stack, pas un template.
+ *   Code, design, data, assets — tout appartient à Nacks.
+ *   Tu lis ce commentaire → tu es curieux.se.
+ *   On pourrait probablement s'entendre : contact@nacksgalerie.com
+ * ============================================================
+ */
+
+const HTML_PROLOGUE = `
+  ███╗   ██╗ █████╗  ██████╗██╗  ██╗███████╗
+  ████╗  ██║██╔══██╗██╔════╝██║ ██╔╝██╔════╝
+  ██╔██╗ ██║███████║██║     █████╔╝ ███████╗
+  ██║╚██╗██║██╔══██║██║     ██╔═██╗ ╚════██║
+  ██║ ╚████║██║  ██║╚██████╗██║  ██╗███████║
+  ╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
+  Ship with soul. Ship with code. Ship in custody.
+  You're reading the source. Nice.
+  contact@nacksgalerie.com
+`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className={fontClassNames} suppressHydrationWarning>
+      <head>
+        {/* eslint-disable-next-line react/no-danger */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `/*\n${HTML_PROLOGUE}\n*/`,
+          }}
+        />
+      </head>
       <body>
+        {/* Skip link — accessibilité clavier */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[10000] focus:rounded focus:bg-[var(--color-blood)] focus:px-4 focus:py-2 focus:font-[var(--font-mono)] focus:text-xs focus:uppercase focus:tracking-[0.25em] focus:text-[var(--color-cream)]"
+        >
+          Aller au contenu principal
+        </a>
         <Providers>{children}</Providers>
       </body>
     </html>

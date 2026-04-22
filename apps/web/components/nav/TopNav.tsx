@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, useMotionTemplate, useScroll, useTransform } from 'motion/react';
 import { Container } from '@nacks/ui';
+import { LogoSignature } from '@/components/easter/LogoSignature';
 
 const NAV_LINKS = [
   { label: 'Œuvres', href: '/oeuvres' },
@@ -30,13 +31,16 @@ export function TopNav() {
       style={{ backgroundColor: bgColor, borderBottom: borderColor }}
     >
       <Container size="full" as="nav" className="flex items-center justify-between py-5">
-        <Link
-          href="/"
-          className="font-[var(--font-display)] text-lg font-[600] tracking-[-0.02em] text-[var(--color-cream)] transition-opacity hover:opacity-70"
-          data-cursor="link"
-        >
-          NACKS
-        </Link>
+        <LogoSignature>
+          <Link
+            href="/"
+            className="select-none font-[var(--font-display)] text-lg font-[600] tracking-[-0.02em] text-[var(--color-cream)] transition-opacity hover:opacity-70"
+            data-cursor="link"
+            data-cursor-label="Accueil"
+          >
+            NACKS
+          </Link>
+        </LogoSignature>
 
         <ul className="hidden items-center gap-7 font-[var(--font-display)] text-xs uppercase tracking-[0.2em] text-[var(--color-cream-600)] md:flex">
           {NAV_LINKS.map((link) => {

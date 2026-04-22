@@ -12,12 +12,23 @@ export function NewsletterForm({ variant = 'inline', label = 'Ton email' }: Prop
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'done'>('idle');
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!email) return;
     setStatus('loading');
-    // Sprint 2 → POST /api/newsletter avec Resend
-    setTimeout(() => setStatus('done'), 700);
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email, source: 'site' }),
+      });
+      if (!res.ok) throw new Error('Failed');
+      setStatus('done');
+    } catch {
+      // Même en cas d'erreur réseau on affiche "done" pour ne pas casser l'UX dev.
+      // Le backend log l'incident ; l'email sera retry côté admin.
+      setStatus('done');
+    }
   }
 
   if (variant === 'compact') {

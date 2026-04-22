@@ -1,23 +1,28 @@
 'use client';
 
 import { motion } from 'motion/react';
+import { PoppyClickable } from '@/components/easter/PoppyClickable';
 
 const LETTERS = ['N', 'A', 'C', 'K', 'S'] as const;
 
 /**
  * Signature NACKS — révélation letter-by-letter avec clip-path wipe.
  * Sous le wordmark, un trait rouge signature se dessine en SVG (pathLength).
+ * Le point rouge central est la zone cliquable easter egg Mr Poppy.
  */
 export function NacksSignature() {
   return (
     <div className="relative flex flex-col items-center gap-6 md:gap-8">
-      {/* Petit marqueur au-dessus — signe de présence */}
-      <motion.span
-        className="block h-[6px] w-[6px] rounded-full bg-[var(--color-blood)]"
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.1, duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
-      />
+      {/* Petit marqueur au-dessus — signe de présence + easter egg Poppy */}
+      <PoppyClickable>
+        <motion.span
+          className="block h-[6px] w-[6px] rounded-full bg-[var(--color-blood)]"
+          aria-hidden="true"
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.1, duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
+        />
+      </PoppyClickable>
 
       {/* Le wordmark NACKS */}
       <h1
