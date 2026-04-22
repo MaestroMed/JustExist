@@ -69,6 +69,7 @@ export function FooterUnivers() {
             { href: '/univers', label: 'Univers' },
             { href: '/journal', label: 'Journal' },
             { href: '/atelier', label: 'Atelier' },
+            { href: '/communaute', label: 'Communauté' },
           ]} />
           <FooterColumn title="Compte" links={[
             { href: '/compte', label: 'Se connecter' },
@@ -77,7 +78,7 @@ export function FooterUnivers() {
             { href: '/atelier/contact', label: 'Contact' },
             { href: '/atelier/presse', label: 'Kit presse' },
           ]} />
-          <FooterColumn title="Communauté" links={[
+          <FooterColumn title="Réseaux" links={[
             { href: nacks.social.tiktok.url, label: 'TikTok', external: true },
             { href: nacks.social.instagram.url, label: 'Instagram', external: true },
             { href: nacks.social.youtube.url, label: 'YouTube', external: true },

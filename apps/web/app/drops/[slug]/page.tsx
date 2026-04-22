@@ -7,6 +7,7 @@ import { DropHero } from '@/components/drops/DropHero';
 import { Countdown } from '@/components/drops/Countdown';
 import { DropCard } from '@/components/drops/DropCard';
 import { SplitHeading } from '@/components/polish/SplitHeading';
+import { ShareButtons } from '@/components/polish/ShareButtons';
 import { drops, getDrop, getPastDrops } from '@/lib/content/drops';
 import { formatPrice, getArtwork } from '@/lib/content/artworks';
 import {
@@ -149,6 +150,13 @@ export default async function DropDetailPage({ params }: { params: Params }) {
             once
           />
           <p className="mt-8 font-[var(--font-mono)] text-sm text-[var(--color-blood)]">— Nacks</p>
+          <div className="mt-12 border-t border-[var(--color-cream-100)] pt-8">
+            <ShareButtons
+              url={`/drops/${drop.slug}`}
+              title={`${drop.title} — Drop Nacks Galerie`}
+              description={drop.subtitle}
+            />
+          </div>
         </section>
 
         {/* Specs */}

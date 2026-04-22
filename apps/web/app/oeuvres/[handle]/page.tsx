@@ -6,7 +6,9 @@ import { PageShell } from '@/components/layouts/PageShell';
 import { ArtworkCard } from '@/components/shop/ArtworkCard';
 import { ArtPoster } from '@/components/art/ArtPoster';
 import { ProductAccordion } from '@/components/shop/ProductAccordion';
+import { ArtworkGallery } from '@/components/shop/ArtworkGallery';
 import { SplitHeading } from '@/components/polish/SplitHeading';
+import { ShareButtons } from '@/components/polish/ShareButtons';
 import { artworks, formatPrice, getArtwork } from '@/lib/content/artworks';
 import { getCharacter } from '@/lib/content/characters';
 import {
@@ -56,22 +58,9 @@ export default async function ArtworkPage({ params }: { params: Params }) {
         </nav>
 
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-          {/* Gauche : image */}
+          {/* Gauche : image + lightbox (client component) */}
           <div className="lg:col-span-7">
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm shadow-[0_60px_160px_-60px_rgba(0,0,0,0.9)]">
-              <ArtPoster variant={artwork.posterVariant} label={artwork.title} />
-            </div>
-            {/* Mini gallery placeholders — 3 autres vues */}
-            <div className="mt-4 grid grid-cols-3 gap-3">
-              {['detail', 'signature', 'context'].map((view) => (
-                <div
-                  key={view}
-                  className="relative aspect-square overflow-hidden rounded-sm bg-[var(--color-cream-100)] opacity-60"
-                >
-                  <ArtPoster variant={artwork.posterVariant} label={`${artwork.title} — ${view}`} />
-                </div>
-              ))}
-            </div>
+            <ArtworkGallery variant={artwork.posterVariant} title={artwork.title} />
           </div>
 
           {/* Droite : info sticky */}
@@ -177,6 +166,15 @@ export default async function ArtworkPage({ params }: { params: Params }) {
                   <dt className="font-[var(--font-mono)] text-xs uppercase tracking-[0.2em] text-[var(--color-cream-600)]">Expédition</dt>
                   <dd className="text-[var(--color-cream)]">7 jours ouvrés, tube renforcé</dd>
                 </dl>
+              </div>
+
+              {/* Share */}
+              <div className="mt-2 border-t border-[var(--color-cream-100)] pt-6">
+                <ShareButtons
+                  url={`/oeuvres/${artwork.slug}`}
+                  title={`${artwork.title} — Nacks Galerie`}
+                  description={artwork.subtitle}
+                />
               </div>
 
               {character && (

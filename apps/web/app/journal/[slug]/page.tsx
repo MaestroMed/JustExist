@@ -8,6 +8,7 @@ import { ArtPoster } from '@/components/art/ArtPoster';
 import { NewsletterForm } from '@/components/forms/NewsletterForm';
 import { ReadingProgress } from '@/components/polish/ReadingProgress';
 import { SplitHeading } from '@/components/polish/SplitHeading';
+import { ShareButtons } from '@/components/polish/ShareButtons';
 import { buildBlogPosting, buildBreadcrumb, serializeJsonLd } from '@/lib/seo/jsonld';
 import { journalPosts, getPost } from '@/lib/content/journal';
 
@@ -82,6 +83,14 @@ export default async function ArticlePage({ params }: { params: Params }) {
             </p>
           ))}
         </article>
+
+        <div className="mt-16 border-t border-[var(--color-cream-100)] pt-8">
+          <ShareButtons
+            url={`/journal/${post.slug}`}
+            title={`${post.title} — Journal Nacks`}
+            description={post.excerpt}
+          />
+        </div>
 
         <div className="mt-20 border-y border-[var(--color-cream-100)] py-12 text-center">
           <p className="font-[var(--font-mono)] text-xs uppercase tracking-[0.3em] text-[var(--color-cream-600)]">
