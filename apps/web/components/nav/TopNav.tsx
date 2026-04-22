@@ -5,19 +5,24 @@ import { usePathname } from 'next/navigation';
 import { motion, useMotionTemplate, useScroll, useTransform } from 'motion/react';
 import { Container } from '@nacks/ui';
 import { LogoSignature } from '@/components/easter/LogoSignature';
+import { LiveDropBadge } from './LiveDropBadge';
 
-const NAV_LINKS = [
+type NavLink = { label: string; href: string; liveable?: boolean };
+
+const NAV_LINKS: readonly NavLink[] = [
   { label: 'Œuvres', href: '/oeuvres' },
-  { label: 'Drops', href: '/drops' },
+  { label: 'Drops', href: '/drops', liveable: true },
   { label: 'Univers', href: '/univers' },
   { label: 'Journal', href: '/journal' },
   { label: 'Atelier', href: '/atelier' },
-] as const;
+  { label: 'Cercle', href: '/communaute' },
+];
 
 /**
  * Navigation sticky — transparente au top, tint ink-80 au scroll.
+ * Badge pulsant rouge à côté de "Drops" si un drop est live.
  */
-export function TopNav() {
+export function TopNav({ hasLiveDrop = false }: { hasLiveDrop?: boolean }) {
   const { scrollY } = useScroll();
   const bgOpacity = useTransform(scrollY, [0, 100], [0, 0.85]);
   const borderOpacity = useTransform(scrollY, [0, 100], [0, 0.1]);
@@ -53,6 +58,7 @@ export function TopNav() {
                   data-cursor="link"
                 >
                   <span className={isActive ? 'text-[var(--color-cream)]' : ''}>{link.label}</span>
+                  {link.liveable && hasLiveDrop && <LiveDropBadge />}
                   <span
                     className={`absolute -bottom-1 left-0 h-[1px] bg-[var(--color-blood)] transition-[width] duration-[var(--duration-base)] ${
                       isActive ? 'w-full' : 'w-0 group-hover:w-full'
@@ -72,18 +78,26 @@ export function TopNav() {
           >
             Compte
           </Link>
-          <button
-            type="button"
+          <Link
+            href="/panier"
             aria-label="Panier"
             className="flex items-center gap-2 text-[var(--color-cream)] transition-opacity hover:opacity-70"
             data-cursor="link"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              aria-hidden="true"
+            >
               <path d="M3 6h18l-2 13H5L3 6z" />
               <path d="M8 6V4a4 4 0 1 1 8 0v2" />
             </svg>
             <span className="tabular-nums">0</span>
-          </button>
+          </Link>
         </div>
       </Container>
     </motion.header>

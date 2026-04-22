@@ -1,15 +1,18 @@
 import type { ReactNode } from 'react';
 import { TopNav } from '@/components/nav/TopNav';
 import { FooterUnivers } from '@/components/scenes/FooterUnivers';
+import { getLiveDrop } from '@/lib/content/drops';
 
 /**
  * Shell réutilisé par toutes les pages sauf homepage.
  * Inclut nav sticky + footer complet.
+ * Propage hasLiveDrop à TopNav pour afficher le badge pulsant si un drop est live.
  */
 export function PageShell({ children }: { children: ReactNode }) {
+  const hasLiveDrop = Boolean(getLiveDrop());
   return (
     <>
-      <TopNav />
+      <TopNav hasLiveDrop={hasLiveDrop} />
       <main className="relative min-h-[60vh] pt-20">{children}</main>
       <FooterUnivers />
     </>
