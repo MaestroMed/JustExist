@@ -8,7 +8,12 @@ import { Countdown } from '@/components/drops/Countdown';
 import { DropCard } from '@/components/drops/DropCard';
 import { SplitHeading } from '@/components/polish/SplitHeading';
 import { drops, getDrop, getPastDrops } from '@/lib/content/drops';
-import { formatPrice } from '@/lib/content/artworks';
+import { formatPrice, getArtwork } from '@/lib/content/artworks';
+import {
+  buildBreadcrumb,
+  buildDropEvent,
+  serializeJsonLd,
+} from '@/lib/seo/jsonld';
 
 type Params = Promise<{ slug: string }>;
 
@@ -185,6 +190,22 @@ export default async function DropDetailPage({ params }: { params: Params }) {
           </section>
         )}
       </Container>
+
+      {/* JSON-LD Event + BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd([
+            buildDropEvent(drop, getArtwork(drop.artworkSlug)),
+            buildBreadcrumb([
+              { name: 'Accueil', href: '/' },
+              { name: 'Drops', href: '/drops' },
+              { name: drop.title, href: `/drops/${drop.slug}` },
+            ]),
+          ]),
+        }}
+      />
     </PageShell>
   );
 }

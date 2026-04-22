@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { fontClassNames } from '@/lib/fonts';
+import { buildOrganization, buildWebSite, serializeJsonLd } from '@/lib/seo/jsonld';
 import { Providers } from './providers';
 import './globals.css';
 
@@ -96,6 +97,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           dangerouslySetInnerHTML={{
             __html: `/*\n${HTML_PROLOGUE}\n*/`,
+          }}
+        />
+        {/* JSON-LD Organization + WebSite */}
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: serializeJsonLd([buildOrganization(), buildWebSite()]),
           }}
         />
       </head>

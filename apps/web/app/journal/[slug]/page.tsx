@@ -8,6 +8,7 @@ import { ArtPoster } from '@/components/art/ArtPoster';
 import { NewsletterForm } from '@/components/forms/NewsletterForm';
 import { ReadingProgress } from '@/components/polish/ReadingProgress';
 import { SplitHeading } from '@/components/polish/SplitHeading';
+import { buildBlogPosting, buildBreadcrumb, serializeJsonLd } from '@/lib/seo/jsonld';
 import { journalPosts, getPost } from '@/lib/content/journal';
 
 type Params = Promise<{ slug: string }>;
@@ -107,6 +108,22 @@ export default async function ArticlePage({ params }: { params: Params }) {
           </div>
         </Container>
       )}
+
+      {/* JSON-LD BlogPosting + BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd([
+            buildBlogPosting(post),
+            buildBreadcrumb([
+              { name: 'Accueil', href: '/' },
+              { name: 'Journal', href: '/journal' },
+              { name: post.title, href: `/journal/${post.slug}` },
+            ]),
+          ]),
+        }}
+      />
     </PageShell>
   );
 }

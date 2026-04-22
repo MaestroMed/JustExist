@@ -5,8 +5,16 @@ import { Container } from '@nacks/ui';
 import { PageShell } from '@/components/layouts/PageShell';
 import { ArtworkCard } from '@/components/shop/ArtworkCard';
 import { ArtPoster } from '@/components/art/ArtPoster';
+import { ProductAccordion } from '@/components/shop/ProductAccordion';
+import { SplitHeading } from '@/components/polish/SplitHeading';
 import { artworks, formatPrice, getArtwork } from '@/lib/content/artworks';
 import { getCharacter } from '@/lib/content/characters';
+import {
+  buildArtwork,
+  buildBreadcrumb,
+  buildFAQ,
+  serializeJsonLd,
+} from '@/lib/seo/jsonld';
 
 type Params = Promise<{ handle: string }>;
 
@@ -191,6 +199,102 @@ export default async function ArtworkPage({ params }: { params: Params }) {
             </div>
           </aside>
         </div>
+
+        {/* Accordion coloré : FAQ / Livraison / Authenticité / Contact */}
+        <section className="mx-auto mt-20 max-w-3xl">
+          <SplitHeading
+            text="Tout ce qu'il faut savoir."
+            as="h2"
+            className="mb-8 block font-[var(--font-display)] font-[500] leading-[1] tracking-[-0.025em] text-[var(--color-cream)]"
+            style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)' }}
+            mode="words"
+            stagger={0.03}
+            blur
+          />
+          <ProductAccordion
+            items={[
+              {
+                id: 'authenticite',
+                title: "Authenticité & certificat",
+                tone: 'peach',
+                content: (
+                  <>
+                    <p>
+                      Chaque pièce est accompagnée d'un certificat d'authenticité (COA) papier, signé au
+                      Posca par Nacks, avec embossage sec et numéro unique. La provenance est aussi
+                      enregistrée dans un registre numérique consultable à tout moment.
+                    </p>
+                    <p className="mt-2">
+                      Pour les éditions limitées, le numéro de série est peint à la main au dos de la
+                      pièce.
+                    </p>
+                  </>
+                ),
+              },
+              {
+                id: 'livraison',
+                title: 'Livraison & emballage',
+                tone: 'blue',
+                content: (
+                  <>
+                    <p>
+                      <strong>France métropolitaine :</strong> Colissimo Suivi, 3 à 7 jours ouvrés.
+                      Frais offerts dès 300 €.
+                    </p>
+                    <p className="mt-1">
+                      <strong>International :</strong> UPS ou DHL selon destination (5 à 12 jours).
+                      Douanes à la charge de l'acheteur.
+                    </p>
+                    <p className="mt-1">
+                      <strong>Retrait atelier :</strong> Sarcelles, sur rendez-vous, gratuit.
+                    </p>
+                    <p className="mt-2">
+                      Emballage : carton rigide, papier de soie, coins renforcés. Assurance incluse à
+                      hauteur de la valeur déclarée.
+                    </p>
+                  </>
+                ),
+              },
+              {
+                id: 'retours',
+                title: 'Retours & remboursement',
+                tone: 'rose',
+                content: (
+                  <>
+                    <p>
+                      14 jours pour se rétracter sans justification, conformément au Code de la
+                      consommation. L'œuvre doit revenir dans son emballage d'origine, état parfait,
+                      frais de retour à ta charge sauf défaut.
+                    </p>
+                    <p className="mt-2">
+                      Remboursement intégral sous 10 jours après réception et inspection, sur la carte
+                      utilisée pour l'achat.
+                    </p>
+                  </>
+                ),
+              },
+              {
+                id: 'support',
+                title: 'Contact & support',
+                tone: 'acid',
+                content: (
+                  <>
+                    <p>
+                      Une question avant l'achat, un doute sur le format, une demande de devis
+                      personnalisé ? Écris directement :
+                    </p>
+                    <p className="mt-2 font-[var(--font-mono)] text-sm">
+                      <a href="mailto:contact@nacksgalerie.com" className="underline">
+                        contact@nacksgalerie.com
+                      </a>
+                    </p>
+                    <p className="mt-2">Réponse sous 48 à 72 heures ouvrées, par Nacks.</p>
+                  </>
+                ),
+              },
+            ]}
+          />
+        </section>
       </Container>
 
       {related.length > 0 && (
@@ -217,6 +321,38 @@ export default async function ArtworkPage({ params }: { params: Params }) {
           </div>
         </Container>
       )}
+      {/* JSON-LD — VisualArtwork + Product + BreadcrumbList + FAQPage */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd([
+            ...buildArtwork(artwork, character),
+            buildBreadcrumb([
+              { name: 'Accueil', href: '/' },
+              { name: 'Œuvres', href: '/oeuvres' },
+              { name: artwork.title, href: `/oeuvres/${artwork.slug}` },
+            ]),
+            buildFAQ([
+              {
+                question: "L'œuvre est-elle authentique ?",
+                answer:
+                  "Oui. Chaque œuvre est accompagnée d'un certificat d'authenticité papier signé au Posca, avec embossage sec et numéro unique.",
+              },
+              {
+                question: "Quels sont les délais de livraison ?",
+                answer:
+                  "France : 3 à 7 jours ouvrés via Colissimo Suivi. International : 5 à 12 jours via UPS ou DHL.",
+              },
+              {
+                question: "Puis-je me rétracter ?",
+                answer:
+                  "Oui, 14 jours à compter de la réception, conformément au Code de la consommation français. L'œuvre doit revenir en parfait état.",
+              },
+            ]),
+          ]),
+        }}
+      />
     </PageShell>
   );
 }
