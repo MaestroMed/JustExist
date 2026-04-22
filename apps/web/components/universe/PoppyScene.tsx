@@ -1,8 +1,8 @@
 'use client';
 
-import { Suspense, useRef, useState } from 'react';
+import { Suspense, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, Float } from '@react-three/drei';
+import { OrbitControls, Environment, ContactShadows, Float, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 
 type Skin = 'classique' | 'neon' | 'golden' | 'street';
@@ -62,10 +62,10 @@ export function PoppyScene() {
         <color attach="background" args={['#0A0A0A']} />
         <fog attach="fog" args={['#0A0A0A', 4, 9]} />
 
-        <ambientLight intensity={0.35} />
+        <ambientLight intensity={0.3} />
         <directionalLight
           position={[4, 6, 4]}
-          intensity={2.2}
+          intensity={2.4}
           castShadow
           shadow-mapSize={[1024, 1024]}
           shadow-camera-left={-2.5}
@@ -75,17 +75,36 @@ export function PoppyScene() {
           color="#ffffff"
         />
         <directionalLight position={[-4, 3, -2]} intensity={0.6} color={palette.accent} />
+        {/* Spotlight dramatique */}
+        <spotLight
+          position={[0, 5.5, 2]}
+          angle={Math.PI / 5}
+          penumbra={0.7}
+          intensity={1.4}
+          color={palette.accent}
+          castShadow
+        />
 
         <Suspense fallback={null}>
           <Environment preset="studio" />
+          <Stars
+            radius={12}
+            depth={25}
+            count={800}
+            factor={1.8}
+            saturation={0}
+            fade
+            speed={0.2}
+          />
+          <DustParticles color={palette.accent} count={200} />
           <Float speed={1.2} rotationIntensity={0.25} floatIntensity={0.25}>
             <Poppy palette={palette} />
           </Float>
           <OrbitingAccessories palette={palette} />
           <ContactShadows
             position={[0, -0.9, 0]}
-            opacity={0.55}
-            blur={2}
+            opacity={0.65}
+            blur={2.4}
             scale={6}
             far={1.4}
             color="#000000"
@@ -127,16 +146,25 @@ export function PoppyScene() {
 
 function Poppy({ palette }: { palette: (typeof SKINS)[Skin] }) {
   const group = useRef<THREE.Group>(null);
+  const breathGroup = useRef<THREE.Group>(null);
 
   useFrame(({ clock, mouse }) => {
     if (!group.current) return;
     const t = clock.getElapsedTime();
+    // Mouse-tracking rotation
     group.current.rotation.y = mouse.x * 0.3 + Math.sin(t * 0.3) * 0.05;
     group.current.rotation.x = -mouse.y * 0.18;
+    // Breathing idle animation
+    if (breathGroup.current) {
+      const breath = 1 + Math.sin(t * 1.4) * 0.012;
+      breathGroup.current.scale.y = breath;
+      breathGroup.current.position.y = Math.sin(t * 0.5) * 0.02;
+    }
   });
 
   return (
     <group ref={group} position={[0, -0.15, 0]}>
+      <group ref={breathGroup}>
       {/* Tête */}
       <mesh castShadow position={[0, 0.25, 0]}>
         <sphereGeometry args={[0.7, 64, 64]} />
@@ -169,7 +197,55 @@ function Poppy({ palette }: { palette: (typeof SKINS)[Skin] }) {
         <meshStandardMaterial color={palette.body} roughness={0.6} metalness={0.05} />
       </mesh>
       <MarinièreStripes color={palette.stripes} />
+      </group>
     </group>
+  );
+}
+
+function DustParticles({ color, count }: { color: string; count: number }) {
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const seeds = useMemo(() => {
+    return Array.from({ length: count }).map((_, i) => ({
+      base: new THREE.Vector3(
+        (Math.random() - 0.5) * 8,
+        (Math.random() - 0.3) * 5,
+        (Math.random() - 0.5) * 8,
+      ),
+      phase: Math.random() * Math.PI * 2,
+      speed: 0.3 + Math.random() * 0.5,
+      amp: 0.1 + Math.random() * 0.3,
+      size: 0.012 + Math.random() * 0.02,
+      key: i,
+    }));
+  }, [count]);
+
+  useFrame(({ clock }) => {
+    if (!meshRef.current) return;
+    const t = clock.getElapsedTime();
+    seeds.forEach((seed, i) => {
+      dummy.position.copy(seed.base);
+      dummy.position.y += Math.sin(t * seed.speed + seed.phase) * seed.amp;
+      dummy.position.x += Math.cos(t * seed.speed * 0.7 + seed.phase) * seed.amp * 0.5;
+      dummy.rotation.set(t * 0.2 + seed.phase, t * 0.15 + seed.phase, 0);
+      dummy.scale.setScalar(seed.size);
+      dummy.updateMatrix();
+      meshRef.current!.setMatrixAt(i, dummy.matrix);
+    });
+    meshRef.current.instanceMatrix.needsUpdate = true;
+  });
+
+  return (
+    <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial
+        color={color}
+        emissive={color}
+        emissiveIntensity={0.8}
+        transparent
+        opacity={0.65}
+      />
+    </instancedMesh>
   );
 }
 
