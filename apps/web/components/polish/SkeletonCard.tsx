@@ -2,8 +2,17 @@
  * Skeleton neutre pour grille œuvres / drops / articles pendant chargement.
  * Shimmer subtile (animation CSS sans JS).
  */
-export function SkeletonCard({ aspect = '4/5' }: { aspect?: '4/5' | 'square' | '16/9' }) {
-  const aspectClass = aspect === 'square' ? 'aspect-square' : aspect === '16/9' ? 'aspect-[16/9]' : 'aspect-[4/5]';
+type Aspect = '4/5' | 'square' | '16/9' | '4/3';
+
+export function SkeletonCard({ aspect = '4/5' }: { aspect?: Aspect }) {
+  const aspectClass =
+    aspect === 'square'
+      ? 'aspect-square'
+      : aspect === '16/9'
+        ? 'aspect-[16/9]'
+        : aspect === '4/3'
+          ? 'aspect-[4/3]'
+          : 'aspect-[4/5]';
   return (
     <div className="flex flex-col gap-4">
       <div
@@ -24,10 +33,17 @@ export function SkeletonGrid({
   cols = 3,
 }: {
   count?: number;
-  aspect?: '4/5' | 'square' | '16/9';
+  aspect?: Aspect;
   cols?: 1 | 2 | 3 | 4;
 }) {
-  const colClass = cols === 1 ? 'grid-cols-1' : cols === 2 ? 'grid-cols-1 md:grid-cols-2' : cols === 4 ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
+  const colClass =
+    cols === 1
+      ? 'grid-cols-1'
+      : cols === 2
+        ? 'grid-cols-1 md:grid-cols-2'
+        : cols === 4
+          ? 'grid-cols-2 md:grid-cols-4'
+          : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
   return (
     <div className={`grid gap-8 ${colClass}`}>
       {Array.from({ length: count }).map((_, i) => (

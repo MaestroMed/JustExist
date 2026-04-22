@@ -154,3 +154,24 @@ body {
     animation: none;
   }
 }
+
+@keyframes nacks-draw-line {
+  0% {
+    transform: scaleX(0.2);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(0.2);
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="animate-[nacks-draw-line"] {
+    animation: none !important;
+  }
+}

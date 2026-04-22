@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@nacks/ui';
 import { PageShell, PageHeader } from '@/components/layouts/PageShell';
+import { TimelineVisual } from '@/components/atelier/TimelineVisual';
 import { nacks } from '@/lib/content/nacks';
 
 export const metadata: Metadata = {
@@ -41,25 +42,19 @@ export default function AtelierPage() {
           </div>
         </section>
 
-        {/* Timeline */}
+        {/* Timeline visuelle */}
         <section className="mt-28 border-t border-[var(--color-cream-100)] pt-16">
           <p className="font-[var(--font-mono)] text-xs uppercase tracking-[0.3em] text-[var(--color-cream-600)]">
             Timeline
           </p>
-          <div className="mt-8 grid gap-8 md:grid-cols-5">
-            {nacks.timeline.map((item) => (
-              <div key={item.year} className="flex flex-col gap-3 border-t-2 border-[var(--color-cream)] pt-4">
-                <span className="font-[var(--font-mono)] text-4xl font-[500] tabular-nums text-[var(--color-cream)]">
-                  {item.year}
-                </span>
-                <p className="font-[var(--font-display)] text-lg font-[500] text-[var(--color-cream)]">
-                  {item.label}
-                </p>
-                <p className="font-[var(--font-body)] text-sm text-[var(--color-cream-600)]">
-                  {item.detail}
-                </p>
-              </div>
-            ))}
+          <h2
+            className="mt-4 font-[var(--font-display)] font-[500] leading-[1] tracking-[-0.025em] text-[var(--color-cream)]"
+            style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}
+          >
+            De 2022 à aujourd'hui.
+          </h2>
+          <div className="mt-16">
+            <TimelineVisual items={nacks.timeline} />
           </div>
         </section>
 
