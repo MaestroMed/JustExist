@@ -8,6 +8,8 @@ import { ScrollProgress } from '@/components/polish/ScrollProgress';
 import { ClickRipple } from '@/components/polish/ClickRipple';
 import { ExitIntent } from '@/components/polish/ExitIntent';
 import { AudioToggle } from '@/components/polish/AudioToggle';
+import { PageTransition } from '@/components/polish/PageTransition';
+import { ScrollToTop } from '@/components/polish/ScrollToTop';
 import { CommandPalette } from '@/components/command/CommandPalette';
 import { EasterEggsProvider } from '@/components/easter/EasterEggsProvider';
 
@@ -16,6 +18,7 @@ export function Providers({ children }: { children: ReactNode }) {
     <>
       <Preloader />
       <ScrollProgress />
+      <ScrollToTop />
       <EasterEggsProvider />
       <CommandPalette />
       <ExitIntent />
@@ -23,7 +26,7 @@ export function Providers({ children }: { children: ReactNode }) {
       <SmoothScroll>
         <CustomCursor />
         <ClickRipple />
-        {children}
+        <PageTransition>{children}</PageTransition>
       </SmoothScroll>
     </>
   );

@@ -44,7 +44,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
 
   const statusLabel =
     drop.status === 'live'
-      ? '● EN DIRECT'
+      ? 'EN DIRECT'
       : drop.status === 'upcoming'
         ? 'À VENIR'
         : drop.status === 'sold_out' || drop.status === 'past'
@@ -89,14 +89,25 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '16px',
             fontSize: '28px',
             fontWeight: 600,
             letterSpacing: '0.35em',
             color: statusColor,
           }}
         >
-          {statusLabel}
+          {drop.status === 'live' && (
+            <div
+              style={{
+                display: 'flex',
+                width: '16px',
+                height: '16px',
+                borderRadius: '9999px',
+                backgroundColor: OG_COLORS.blood,
+                marginRight: '16px',
+              }}
+            />
+          )}
+          <div style={{ display: 'flex' }}>{statusLabel}</div>
         </div>
 
         {/* Title */}

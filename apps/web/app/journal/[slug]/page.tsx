@@ -9,6 +9,7 @@ import { NewsletterForm } from '@/components/forms/NewsletterForm';
 import { ReadingProgress } from '@/components/polish/ReadingProgress';
 import { SplitHeading } from '@/components/polish/SplitHeading';
 import { ShareButtons } from '@/components/polish/ShareButtons';
+import { RevealParagraph } from '@/components/journal/RevealParagraph';
 import { buildBlogPosting, buildBreadcrumb, serializeJsonLd } from '@/lib/seo/jsonld';
 import { journalPosts, getPost } from '@/lib/content/journal';
 
@@ -97,9 +98,17 @@ export default async function ArticlePage({ params }: { params: Params }) {
           style={{ fontSize: 'clamp(1.0625rem, 1.4vw, 1.25rem)' }}
         >
           {post.body.map((paragraph, i) => (
-            <p key={i} className={i === 0 ? 'first-letter:float-left first-letter:mr-3 first-letter:font-[var(--font-display)] first-letter:text-7xl first-letter:font-[600] first-letter:leading-[0.85] first-letter:text-[var(--color-blood)]' : ''}>
+            <RevealParagraph
+              key={i}
+              index={i}
+              className={
+                i === 0
+                  ? 'first-letter:float-left first-letter:mr-3 first-letter:font-[var(--font-display)] first-letter:text-7xl first-letter:font-[600] first-letter:leading-[0.85] first-letter:text-[var(--color-blood)]'
+                  : ''
+              }
+            >
               {paragraph}
-            </p>
+            </RevealParagraph>
           ))}
         </article>
 
