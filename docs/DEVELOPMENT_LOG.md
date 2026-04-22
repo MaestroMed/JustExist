@@ -5,6 +5,73 @@ Ordre antéchronologique (plus récent en haut).
 
 ---
 
+## 2026-04-22 (session marathon) — 20 commits pour atteindre le niveau award-winning
+
+**Contexte :** Mehdi demande en cascade « vas-y », « continues », « do better ». Cette entrée consolide tous les commits de la session longue (de `10cd0e6` à `e319024`) au-dessus de la fondation Phase 0.
+
+### 20 commits shippés (ordre chronologique)
+
+1. `10cd0e6` — WebGL hero + Mr Poppy 3D R3F + ArtworkCard 3D tilt
+2. `a1d7f7a` — SplitHeading + ReadingProgress + DropHero scroll-parallax
+3. `02b066d` — JSON-LD 7 types + ProductAccordion + sitemap + robots
+4. `fe2fa3a` — OG images dynamiques (24) + CountrySelect + /communaute
+5. `5b00368` — ImageLightbox + ShareButtons + ScrollCountUp + nav links
+6. `fc5eccd` — MagneticButton CTAs + count-up prix + metadata OG + skeletons
+7. `ede3ca3` — Page transitions + article reveals + Plausible + OG fix
+8. `46ff655` — Loading states + timeline visuelle /atelier + SectionDivider
+9. `6e013c9` — Live drop badge nav + /atelier/chronologie + sentry hook
+10. `2725345` — Admin dashboard opérationnel + 4 stubs modules
+11. `9373114` — Error boundaries + raccourcis page + turnstile stub
+12. `4cb9d08` — ArtPoster v2 densifié + Ghost Poppy silhouette hero
+13. `00b5a28` — NextArticleCard + 404 illustré + character related sections
+14. `121bc27` — Mr Poppy 3D dense (particles + breathing + spotlight + stars)
+15. `e319024` — AnnounceBar live drop sticky au-dessus de la nav
+
+### Composants clés nouveaux
+
+**Hero cinématographique** : `ShaderBackground` (WebGL noise Posca mouse-reactive), `GhostPoppy` (silhouette XL translucide), `NacksSignature v2` (lettres blur+clip+mouse-parallax), `CyclingTagline` (4 phrases rotation), `SignatureMarquee` (4 variants, entre sections).
+
+**Polish UX** : `PageTransition` (fade+slide key=pathname), `ScrollToTop`, `ScrollProgress` (barre rouge), `ClickRipple` (Posca 5 couleurs), `MagneticButton`, `MouseParallaxLayer`, `ExitIntent`, `AudioToggle` (Web Audio API procédural), `CommandPalette` (cmdk + vim keys), `ScrollCountUp`, `ShareButtons`, `ReadingProgress`, `SplitHeading`, `RevealParagraph`, `SkeletonCard`, `SectionDivider`, `LiveDropBadge`, `AnnounceBar`, `LiveDropAnnouncer`.
+
+**Formulaires** : `CountrySelect` (60 pays cherchable), `TurnstileWidget` (lazy Cloudflare), `CommissionForm` + `ContactForm` + `NewsletterForm` (câblés aux APIs).
+
+**SVG art** : `ArtPoster` v2 (8 variants densifiés halftone + noise + typo intégrée + stamps + paint drips + corner signature), `CharacterPortrait` (4 portraits), `ArtworkGallery` (wrapper client avec ImageLightbox deepzoom).
+
+**3D R3F** : `PoppyScene` avec 200 dust particles en instancedMesh + breathing idle + spotlight colored + stars field + OrbitingAccessories (pioche, lama, cubes Fortnite) + ContactShadows + Environment studio + 4 skins switchables.
+
+**Admin** : `AdminShell` (sidebar 9 modules + badges), `KPICard`, `SparkChart` (SVG pur, pas de lib), `AdminHeader`, dashboard avec 4 KPIs + chart 30j + table commandes + panneau drops actifs, 4 stubs (oeuvres/drops/commandes/commissions avec Sprint cible documenté).
+
+**SEO** : `lib/seo/jsonld.ts` (buildOrganization, buildWebSite, buildPerson, buildArtwork, buildDropEvent, buildBlogPosting, buildBreadcrumb, buildFAQ + serializeJsonLd), `app/sitemap.ts` dynamique (35+ URLs), `app/robots.ts`, `lib/seo/countries.ts` (60 pays).
+
+**Pages ajoutées ou upgradées** : `/communaute`, `/atelier/chronologie` (3 villes parallèles), `/atelier/raccourcis` (référence clavier), `/journal/changelog`, `/legal/*` (4 pages rédactionnelles complètes), admin/* (5 routes).
+
+**Fichiers système** : `app/opengraph-image.tsx` (homepage) + 4 per-segment (artworks, drops, posts, characters), `app/loading.tsx` + 3 per-segment skeletons, `app/error.tsx` + `global-error.tsx`, `app/not-found.tsx` (Mr Poppy illustré cherchant).
+
+### Intégrations externes
+
+Plausible Analytics (lazy, env-gated), Cloudflare Turnstile (lazy, env-gated), Sentry hook (stub prêt à recevoir DSN), Resend (templates câblés côté API).
+
+### Métriques finales session
+
+- Typecheck : 6/6 packages clean (admin, auth, config, db, emails, ui, web)
+- Build : 2/2 apps OK
+- Web : 49 routes statiques/SSG + 3 API dynamiques + 24 OG images + sitemap + robots
+- Admin : 6 routes
+- Homepage first-load JS : **222 KB** (WebGL + R3F lazy-split)
+- Article first-load : 162 KB
+- PDP : 168 KB
+
+### Bloquants pour production (identiques — le code est prêt)
+
+1. Credentials Neon / Stripe / Resend / Cloudflare R2
+2. Vraies photos d'œuvres HD
+3. Modèle Mr Poppy .glb optimisé
+4. Brief Nacks final
+5. DNS nacksgalerie.com vers Vercel
+6. KYC Stripe
+
+---
+
 ## 2026-04-22 (nuit) — Phase 0 polish + Sprint 2 infra + pages manquantes
 
 **Contexte :** carte blanche Mehdi. Objectif : ne pas s'arrêter avant typecheck + build + smoke vert.
