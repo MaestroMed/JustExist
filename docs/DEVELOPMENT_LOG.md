@@ -5,6 +5,44 @@ Ordre antéchronologique (plus récent en haut).
 
 ---
 
+## 2026-04-22 (nuit) — Phase 0 polish + Sprint 2 infra + pages manquantes
+
+**Contexte :** carte blanche Mehdi. Objectif : ne pas s'arrêter avant typecheck + build + smoke vert.
+
+**Livré (commit `2b732ad`, poussé) :**
+
+### Phase 0 — polish cinématographique
+- **Hooks custom :** `useMagnetic` (distance + spring damping), `useMouseParallax`, `useKonami` (séquence ↑↑↓↓←→←→BA), `useLongPress` (seuil ms configurable), `usePoppyClicks` (compteur sessionStorage, seuil 40).
+- **Polish UI :** `ScrollProgress` (barre rouge pathLength), `ClickRipple` (trace Posca éphémère 5 couleurs palette, exclut inputs), `MagneticButton` wrapper, `MouseParallaxLayer` double couche, `ExitIntent` (≥ 45s + mouse top + dismiss forever), `AudioToggle` (Web Audio API — pink noise buffer + hum 56Hz low-pass 380Hz, zéro fichier audio).
+- **`CommandPalette`** (cmdk) : CMD+K / Ctrl+K / `?` ouvre. Recherche œuvres/drops/personnages/journal. Raccourcis vim `g + o/d/u/j/a/c/p/h`.
+- **Easter eggs** : `EasterEggsProvider` global (toast signature blood), `LogoSignature` (clic maintenu 3s = signature plein écran 8s mix-blend-difference), `PoppyClickable` (40 clics cumulés change la palette pour la session), Konami → drop caché + code `KONAMI10`.
+- **`CustomCursor` upgradé** : 7 variants (`default`, `link`, `image`, `buy`, `lock`, `drag`, `text`) + trail dot damping spring + labels contextuels.
+- **HeroOpening** : `MouseParallaxLayer` en double couche (particules + wordmark).
+- **404 interactif** : email pré-rempli vers Nacks avec URL manquante + hint CMD+K.
+- **Layout** : skip-link accessibilité, commentaire HTML source avec ASCII art NACKS + message aux devs curieux, `.gitattributes` normalisation LF.
+
+### Sprint 2 — infrastructure (code prêt, creds à brancher)
+- **`@nacks/db`** : 15 tables Drizzle complètes (users/accounts/sessions/verificationTokens pour Auth.js, characters, artworks + images + variants, drops + purchases, orders + items, commissions, newsletter, wishlist, contactMessages, journalPosts, siteConfig). Client paresseux → ne crash pas sans DATABASE_URL.
+- **`@nacks/auth`** : Auth.js v5 config factory avec Drizzle Adapter + Resend magic-link. Dégradation gracieuse si DB/Resend absents.
+- **`@nacks/emails`** : 5 templates React Email (MagicLink, Welcome, OrderConfirmation, Shipment, CommissionReceipt) + renderer HTML/texte pour Resend.
+- **API routes** `/api/newsletter`, `/api/commission` (scoring auto), `/api/contact` : validation maison, rate-limiter in-memory (3-5 req/min), persist DB si configurée, envoi Resend si configuré, toujours log.
+- **Forms** `NewsletterForm`, `CommissionForm`, `ContactForm` câblés aux APIs.
+
+### 10 pages manquantes
+- `/panier` (empty state, récap latéral, featured), `/checkout` (UI tunnel 4 étapes, Stripe Sprint 6).
+- `/legal/cgv`, `/legal/confidentialite`, `/legal/mentions`, `/legal/retours` — rédactionnel complet droit FR + RGPD, pas des stubs.
+- `/atelier/contact` (ContactForm + sidebar presse/commission), `/atelier/presse` (bio 50/250 mots, timeline, assets par email, archives).
+- `/journal/changelog` (2 releases documentées).
+
+### Qualité
+- **Typecheck 6/6 clean** (dont 3 nouveaux packages DB/Auth/Emails).
+- **Build** : 47 routes SSG/statiques + 3 API dynamiques. Homepage 219 KB first-load JS (budget 220 KB tenu).
+- **Smoke test** 12 routes HTML → toutes HTTP 200. APIs newsletter + contact → 200. API commission → 400 correct sur budget hors-plage.
+
+**Prochaine action :** creds externes (Neon DB, Stripe, Resend, Cloudflare R2) → activer le Sprint 2 fonctionnel, migrer data-layer dummy vers DB.
+
+---
+
 ## 2026-04-22 (soir) — ULTRAPLAN UX/UI 30 versions écrit
 
 **Contexte :** Mehdi demande une vision UX/UI long terme couvrant 30 prochaines versions du site. Le MVP actuel (8 scènes + 11 pages) est solide mais pas encore state-of-the-art.
