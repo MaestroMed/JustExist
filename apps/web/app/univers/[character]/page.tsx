@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Container } from '@nacks/ui';
 import { PageShell } from '@/components/layouts/PageShell';
 import { CharacterPortrait } from '@/components/art/CharacterPortrait';
+import { PoppySceneClient } from '@/components/universe/PoppyScene.client';
 import { ArtworkCard } from '@/components/shop/ArtworkCard';
 import { characters, getCharacter } from '@/lib/content/characters';
 import { getArtworksByCharacter } from '@/lib/content/artworks';
@@ -79,8 +80,14 @@ export default async function CharacterPage({ params }: { params: Params }) {
                 </div>
               </div>
             </div>
-            <div className="relative aspect-square w-full max-w-[min(70vh,600px)] justify-self-center">
-              <CharacterPortrait character={data.slug} className="h-full w-full" />
+            <div className="relative w-full max-w-[min(70vh,600px)] justify-self-center">
+              {data.slug === 'mr-poppy' ? (
+                <PoppySceneClient />
+              ) : (
+                <div className="aspect-square">
+                  <CharacterPortrait character={data.slug} className="h-full w-full" />
+                </div>
+              )}
             </div>
           </div>
         </Container>

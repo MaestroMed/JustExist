@@ -7,6 +7,7 @@ import { UniversHorizontal } from '@/components/scenes/UniversHorizontal';
 import { NacksShow } from '@/components/scenes/NacksShow';
 import { CercleNewsletter } from '@/components/scenes/CercleNewsletter';
 import { FooterUnivers } from '@/components/scenes/FooterUnivers';
+import { SignatureMarquee } from '@/components/marquee/SignatureMarquee';
 
 export default function HomePage() {
   return (
@@ -14,10 +15,14 @@ export default function HomePage() {
       <TopNav />
       <HeroOpening />
       <Manifesto />
+      <SignatureMarquee variant="blood" speed={45} />
       <DropLive />
+      <SignatureMarquee variant="cream" reverse speed={50} dense />
       <ThreePortes />
       <UniversHorizontal />
+      <SignatureMarquee variant="bubble" speed={42} />
       <NacksShow />
+      <SignatureMarquee variant="outline" reverse speed={55} dense />
       <CercleNewsletter />
       <FooterUnivers />
     </main>

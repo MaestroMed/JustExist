@@ -49,7 +49,10 @@ export const Typography = forwardRef<HTMLElement, Props>(function Typography(
   },
   ref,
 ) {
-  const Tag: ElementType = as ?? defaultTag(variant);
+  // React 19 a durci ElementType — les polymorphic components deviennent verbeux à typer.
+  // On casse volontairement ici, le runtime est sain.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Tag = (as ?? defaultTag(variant)) as any;
   return (
     <Tag
       ref={ref as never}
