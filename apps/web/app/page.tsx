@@ -8,12 +8,14 @@ import { NacksShow } from '@/components/scenes/NacksShow';
 import { CercleNewsletter } from '@/components/scenes/CercleNewsletter';
 import { FooterUnivers } from '@/components/scenes/FooterUnivers';
 import { SignatureMarquee } from '@/components/marquee/SignatureMarquee';
+import { LiveDropAnnouncer } from '@/components/nav/LiveDropAnnouncer';
 import { getLiveDrop } from '@/lib/content/drops';
 
 export default function HomePage() {
   const hasLiveDrop = Boolean(getLiveDrop());
   return (
     <main className="relative">
+      <LiveDropAnnouncer />
       <TopNav hasLiveDrop={hasLiveDrop} />
       <HeroOpening />
       <Manifesto />
