@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { CountrySelect } from './CountrySelect';
 
 export function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
@@ -57,6 +58,7 @@ export function ContactForm() {
           <Field label="Ton email">
             <input name="email" required type="email" autoComplete="email" />
           </Field>
+          <CountrySelect name="country" label="Pays (optionnel)" defaultCode="FR" />
           <Field label="Sujet">
             <select name="type" defaultValue="general">
               <option value="general">Question générale</option>

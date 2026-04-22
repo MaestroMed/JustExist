@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { CountrySelect } from './CountrySelect';
 
 export function CommissionForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'done'>('idle');
@@ -53,10 +54,12 @@ export function CommissionForm() {
             <Field label="Email">
               <input name="email" required type="email" autoComplete="email" />
             </Field>
-            <Field label="Téléphone (optionnel)">
-              <input name="phone" type="tel" autoComplete="tel" />
-            </Field>
+            <CountrySelect name="country" label="Pays" defaultCode="FR" includeDial />
           </div>
+
+          <Field label="Téléphone (optionnel)">
+            <input name="phone" type="tel" autoComplete="tel" placeholder="+33 6 …" />
+          </Field>
 
           <div className="grid gap-6 md:grid-cols-2">
             <Field label="Occasion">
