@@ -22,7 +22,24 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const { slug } = await params;
   const drop = getDrop(slug);
   if (!drop) return { title: 'Drop introuvable' };
-  return { title: drop.title, description: drop.subtitle };
+  return {
+    title: drop.title,
+    description: drop.subtitle,
+    openGraph: {
+      title: `${drop.title} — Drop Nacks Galerie`,
+      description: drop.subtitle,
+      type: 'website',
+      locale: 'fr_FR',
+      siteName: 'Nacks Galerie',
+      url: `/drops/${drop.slug}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${drop.title} — Drop Nacks Galerie`,
+      description: drop.subtitle,
+    },
+    alternates: { canonical: `/drops/${drop.slug}` },
+  };
 }
 
 export async function generateStaticParams() {

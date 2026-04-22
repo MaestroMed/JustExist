@@ -18,7 +18,26 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) return { title: 'Article introuvable' };
-  return { title: post.title, description: post.excerpt };
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: {
+      title: `${post.title} — Journal Nacks`,
+      description: post.excerpt,
+      type: 'article',
+      locale: 'fr_FR',
+      siteName: 'Nacks Galerie',
+      url: `/journal/${post.slug}`,
+      publishedTime: post.publishedAt.toISOString(),
+      authors: ['Naguy Claude'],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${post.title} — Journal Nacks`,
+      description: post.excerpt,
+    },
+    alternates: { canonical: `/journal/${post.slug}` },
+  };
 }
 
 export async function generateStaticParams() {

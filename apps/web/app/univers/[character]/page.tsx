@@ -16,7 +16,24 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const { character } = await params;
   const data = getCharacter(character as CharacterSlug);
   if (!data) return { title: 'Personnage introuvable' };
-  return { title: data.name, description: data.tagline };
+  return {
+    title: data.name,
+    description: `${data.tagline} — ${data.phrase}`,
+    openGraph: {
+      title: `${data.name} — Univers Nacks`,
+      description: data.tagline,
+      type: 'website',
+      locale: 'fr_FR',
+      siteName: 'Nacks Galerie',
+      url: `/univers/${data.slug}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${data.name} — Univers Nacks`,
+      description: data.tagline,
+    },
+    alternates: { canonical: `/univers/${data.slug}` },
+  };
 }
 
 export async function generateStaticParams() {

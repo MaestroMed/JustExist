@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { Container } from '@nacks/ui';
 import { ArtPoster } from '@/components/art/ArtPoster';
 import { Countdown } from '@/components/drops/Countdown';
+import { MagneticButton } from '@/components/polish/MagneticButton';
+import { ScrollCountUp } from '@/components/polish/ScrollCountUp';
 import { getLiveDrop, getUpcomingDrop } from '@/lib/content/drops';
 import { formatPrice } from '@/lib/content/artworks';
 
@@ -72,22 +74,27 @@ export function DropLive() {
               <span className="font-[var(--font-display)] text-sm uppercase tracking-[0.2em] text-[var(--color-cream-600)]">
                 Prix
               </span>
-              <span className="font-[var(--font-mono)] text-3xl font-[500] tabular-nums text-[var(--color-cream)] md:text-4xl">
-                {formatPrice(drop.priceCents)}
-              </span>
+              <ScrollCountUp
+                target={drop.priceCents / 100}
+                suffix=" €"
+                decimals={0}
+                className="font-[var(--font-mono)] text-3xl font-[500] tabular-nums text-[var(--color-cream)] md:text-4xl"
+              />
             </div>
 
-            <Link
-              href={`/drops/${drop.slug}`}
-              className="group inline-flex items-center justify-between border border-[var(--color-cream)] bg-[var(--color-cream)] px-8 py-5 font-[var(--font-display)] text-sm font-[500] uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-blood)] hover:text-[var(--color-cream)]"
-              data-cursor="buy"
-              data-cursor-label={isLive ? 'Entrer' : 'Voir'}
-            >
-              <span>{isLive ? 'Entrer dans le drop' : 'Rejoindre la liste'}</span>
-              <span className="translate-x-0 transition-transform duration-[var(--duration-base)] group-hover:translate-x-2">
-                →
-              </span>
-            </Link>
+            <MagneticButton strength={0.35} radius={70} className="self-start">
+              <Link
+                href={`/drops/${drop.slug}`}
+                className="group inline-flex items-center justify-between border border-[var(--color-cream)] bg-[var(--color-cream)] px-8 py-5 font-[var(--font-display)] text-sm font-[500] uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-blood)] hover:text-[var(--color-cream)]"
+                data-cursor="buy"
+                data-cursor-label={isLive ? 'Entrer' : 'Voir'}
+              >
+                <span>{isLive ? 'Entrer dans le drop' : 'Rejoindre la liste'}</span>
+                <span className="ml-4 translate-x-0 transition-transform duration-[var(--duration-base)] group-hover:translate-x-2">
+                  →
+                </span>
+              </Link>
+            </MagneticButton>
 
             {isLive && (
               <p className="font-[var(--font-body)] text-xs text-[var(--color-cream-400)]">

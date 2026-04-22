@@ -27,6 +27,22 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return {
     title: artwork.title,
     description: artwork.subtitle,
+    openGraph: {
+      title: `${artwork.title} — Nacks Galerie`,
+      description: artwork.subtitle,
+      type: 'article',
+      locale: 'fr_FR',
+      siteName: 'Nacks Galerie',
+      url: `/oeuvres/${artwork.slug}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${artwork.title} — Nacks Galerie`,
+      description: artwork.subtitle,
+    },
+    alternates: {
+      canonical: `/oeuvres/${artwork.slug}`,
+    },
   };
 }
 
