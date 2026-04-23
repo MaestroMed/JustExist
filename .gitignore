@@ -69,3 +69,9 @@ test-results/
 
 # Local assets (preprod uploads)
 .r2-local/
+
+# Large 3D models — hosted sur R2 en prod, pas dans git
+# (mr-poppy.glb fait 84 MB — il doit aller sur cdn.nacksgalerie.com/models/)
+apps/web/public/models/*.glb
+apps/web/public/models/*.gltf
+apps/web/public/models/*.bin

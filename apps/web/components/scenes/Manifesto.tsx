@@ -3,7 +3,6 @@
 import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
 import { Container } from '@nacks/ui';
-import { SplitHeading } from '@/components/polish/SplitHeading';
 
 const LINES = [
   'Je suis de Sarcelles.',
@@ -16,7 +15,8 @@ const LINES = [
 
 /**
  * SCÈNE 2 — Le Manifeste.
- * Chaque ligne révélée mot-par-mot au viewport, avec blur-in subtile.
+ * Chaque ligne révélée ligne par ligne (clip-path wipe), pas char-par-char
+ * pour éviter tout break vertical. Simple et robuste.
  */
 export function Manifesto() {
   const ref = useRef<HTMLDivElement>(null);
@@ -30,17 +30,24 @@ export function Manifesto() {
       <Container size="wide">
         <div className="flex flex-col gap-[0.3em] font-[var(--font-display)] font-[500] leading-[1.05] tracking-[-0.025em]">
           {LINES.map((line, i) => (
-            <SplitHeading
-              key={i}
-              text={line}
-              as="p"
-              className="text-[clamp(1.75rem,5vw,4.5rem)] text-balance text-[var(--color-cream)]"
-              mode="words"
-              stagger={0.035}
-              delay={0.15 + i * 0.12}
-              once
-              blur
-            />
+            <div key={i} className="overflow-hidden">
+              <motion.p
+                className="text-[clamp(1.75rem,5vw,4.5rem)] text-balance text-[var(--color-cream)]"
+                initial={{ y: '100%', opacity: 0, filter: 'blur(10px)' }}
+                animate={
+                  inView
+                    ? { y: '0%', opacity: 1, filter: 'blur(0px)' }
+                    : { y: '100%', opacity: 0, filter: 'blur(10px)' }
+                }
+                transition={{
+                  duration: 0.9,
+                  delay: 0.15 + i * 0.12,
+                  ease: [0.19, 1, 0.22, 1],
+                }}
+              >
+                {line}
+              </motion.p>
+            </div>
           ))}
           <motion.p
             className="mt-[1.2em] font-[var(--font-mono)] text-[var(--color-blood)]"

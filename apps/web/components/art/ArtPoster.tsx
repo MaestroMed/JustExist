@@ -176,32 +176,171 @@ function Stamp({ x, y, text, color = '#E63946', rotation = -8, size = 1 }: {
 // PRIMITIVES PERSONNAGES (inchangés mais légèrement enrichis)
 // ============================================================
 
-function BearHead({ x = 200, y = 260, size = 130, body = '#1E40AF' }: {
-  x?: number; y?: number; size?: number; body?: string;
+function BearHead({
+  x = 200,
+  y = 260,
+  size = 130,
+  body = '#6B3410',
+  withCrown = false,
+  withChain = false,
+  withMarinière = true,
+}: {
+  x?: number;
+  y?: number;
+  size?: number;
+  body?: string;
+  withCrown?: boolean;
+  withChain?: boolean;
+  withMarinière?: boolean;
 }) {
   const ear = size * 0.42;
+  // Mr Poppy canonique : ours brun cartoon, X yeux NOIRS K.O., nez énorme brillant,
+  // museau massif, contours noirs épais cel-shade.
   return (
     <g transform={`translate(${x} ${y})`}>
-      <circle cx={-size * 0.58} cy={-size * 0.7} r={ear} fill={body} />
-      <circle cx={size * 0.58} cy={-size * 0.7} r={ear} fill={body} />
-      <circle cx={-size * 0.58} cy={-size * 0.7} r={ear * 0.5} fill="#F5F1E8" opacity={0.6} />
-      <circle cx={size * 0.58} cy={-size * 0.7} r={ear * 0.5} fill="#F5F1E8" opacity={0.6} />
-      <circle cx={0} cy={0} r={size} fill={body} />
-      {/* Highlight sur tête */}
-      <ellipse cx={-size * 0.32} cy={-size * 0.42} rx={size * 0.22} ry={size * 0.14} fill="#F5F1E8" opacity={0.15} />
-      <ellipse cx={0} cy={size * 0.3} rx={size * 0.45} ry={size * 0.3} fill="#F5F1E8" />
-      <ellipse cx={0} cy={size * 0.15} rx={size * 0.12} ry={size * 0.08} fill="#0A0A0A" />
-      <g stroke="#E63946" strokeWidth={size * 0.08} strokeLinecap="round">
-        <line x1={-size * 0.45} y1={-size * 0.3} x2={-size * 0.2} y2={-size * 0.05} />
-        <line x1={-size * 0.2} y1={-size * 0.3} x2={-size * 0.45} y2={-size * 0.05} />
-        <line x1={size * 0.2} y1={-size * 0.3} x2={size * 0.45} y2={-size * 0.05} />
-        <line x1={size * 0.45} y1={-size * 0.3} x2={size * 0.2} y2={-size * 0.05} />
+      {/* Oreilles contour noir */}
+      <circle cx={-size * 0.6} cy={-size * 0.72} r={ear} fill={body} stroke="#0A0A0A" strokeWidth={size * 0.04} />
+      <circle cx={size * 0.6} cy={-size * 0.72} r={ear} fill={body} stroke="#0A0A0A" strokeWidth={size * 0.04} />
+      <circle cx={-size * 0.6} cy={-size * 0.72} r={ear * 0.48} fill="#8B4513" opacity={0.5} />
+      <circle cx={size * 0.6} cy={-size * 0.72} r={ear * 0.48} fill="#8B4513" opacity={0.5} />
+
+      {/* Tête avec contour noir épais */}
+      <circle cx={0} cy={0} r={size} fill={body} stroke="#0A0A0A" strokeWidth={size * 0.04} />
+      {/* Highlight cel-shade */}
+      <ellipse cx={-size * 0.28} cy={-size * 0.38} rx={size * 0.26} ry={size * 0.16} fill="#F5F1E8" opacity={0.18} />
+      <path
+        d={`M ${-size * 0.7} ${-size * 0.35} Q ${-size * 0.58} ${-size * 0.6}, ${-size * 0.3} ${-size * 0.7}`}
+        stroke="#F5F1E8"
+        strokeWidth={size * 0.03}
+        strokeLinecap="round"
+        fill="none"
+        opacity={0.3}
+      />
+
+      {/* Museau massif (presque la moitié de la tête) */}
+      <ellipse cx={0} cy={size * 0.35} rx={size * 0.52} ry={size * 0.42} fill="#C69970" stroke="#0A0A0A" strokeWidth={size * 0.035} />
+
+      {/* Nez énorme rond brillant noir */}
+      <circle cx={0} cy={size * 0.12} r={size * 0.18} fill="#0A0A0A" />
+      <ellipse cx={-size * 0.06} cy={size * 0.06} rx={size * 0.05} ry={size * 0.035} fill="#F5F1E8" opacity={0.55} />
+
+      {/* X yeux NOIRS épais — K.O. style, signature Mr Poppy */}
+      <g stroke="#0A0A0A" strokeWidth={size * 0.11} strokeLinecap="round">
+        <line x1={-size * 0.48} y1={-size * 0.3} x2={-size * 0.18} y2={-size * 0.02} />
+        <line x1={-size * 0.18} y1={-size * 0.3} x2={-size * 0.48} y2={-size * 0.02} />
+        <line x1={size * 0.18} y1={-size * 0.3} x2={size * 0.48} y2={-size * 0.02} />
+        <line x1={size * 0.48} y1={-size * 0.3} x2={size * 0.18} y2={-size * 0.02} />
       </g>
-      <g>
-        <rect x={-size * 1.2} y={size * 0.95} width={size * 2.4} height={size * 0.1} fill="#F5F1E8" />
-        <rect x={-size * 1.2} y={size * 1.08} width={size * 2.4} height={size * 0.08} fill="#F5F1E8" />
-        <rect x={-size * 1.2} y={size * 1.2} width={size * 2.4} height={size * 0.07} fill="#F5F1E8" />
+
+      {withCrown && <Crown x={0} y={-size * 1.35} size={size * 0.55} />}
+
+      {/* Marinière bleu marine + blanche, rayures épaisses */}
+      {withMarinière && (
+        <g>
+          <rect x={-size * 1.2} y={size * 0.95} width={size * 2.4} height={size * 0.75} fill="#1E40AF" stroke="#0A0A0A" strokeWidth={size * 0.03} />
+          <rect x={-size * 1.2} y={size * 1.02} width={size * 2.4} height={size * 0.08} fill="#F5F1E8" />
+          <rect x={-size * 1.2} y={size * 1.2} width={size * 2.4} height={size * 0.08} fill="#F5F1E8" />
+          <rect x={-size * 1.2} y={size * 1.38} width={size * 2.4} height={size * 0.08} fill="#F5F1E8" />
+          <rect x={-size * 1.2} y={size * 1.56} width={size * 2.4} height={size * 0.08} fill="#F5F1E8" />
+        </g>
+      )}
+
+      {withChain && <MPChain x={0} y={size * 1.08} size={size * 0.55} />}
+    </g>
+  );
+}
+
+function Crown({ x = 0, y = 0, size = 70 }: { x?: number; y?: number; size?: number }) {
+  const w = size;
+  const h = size * 0.85;
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <rect x={-w / 2} y={h * 0.35} width={w} height={h * 0.35} fill="#D4A056" stroke="#0A0A0A" strokeWidth={size * 0.07} />
+      <path
+        d={`M ${-w / 2} ${h * 0.35} L ${-w * 0.38} ${-h * 0.05} L ${-w * 0.2} ${h * 0.25} L 0 ${-h * 0.15} L ${w * 0.2} ${h * 0.25} L ${w * 0.38} ${-h * 0.05} L ${w / 2} ${h * 0.35} Z`}
+        fill="#FFD43B"
+        stroke="#0A0A0A"
+        strokeWidth={size * 0.07}
+        strokeLinejoin="round"
+      />
+      <circle cx={-w * 0.38} cy={-h * 0.02} r={size * 0.08} fill="#E63946" stroke="#0A0A0A" strokeWidth={size * 0.02} />
+      <circle cx={0} cy={-h * 0.12} r={size * 0.09} fill="#E63946" stroke="#0A0A0A" strokeWidth={size * 0.02} />
+      <circle cx={w * 0.38} cy={-h * 0.02} r={size * 0.08} fill="#E63946" stroke="#0A0A0A" strokeWidth={size * 0.02} />
+      <rect x={-w / 2 + size * 0.04} y={h * 0.45} width={w - size * 0.08} height={size * 0.06} fill="#D4A056" opacity={0.8} />
+      <rect x={-w * 0.4} y={h * 0.4} width={size * 0.05} height={h * 0.22} fill="#F5F1E8" opacity={0.4} />
+    </g>
+  );
+}
+
+function MPChain({ x = 0, y = 0, size = 70 }: { x?: number; y?: number; size?: number }) {
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <g fill="#FFD43B" stroke="#0A0A0A" strokeWidth={size * 0.04}>
+        {[-3, -2, -1, 0, 1, 2, 3].map((i) => (
+          <ellipse
+            key={i}
+            cx={i * size * 0.22}
+            cy={Math.abs(i) * size * 0.04}
+            rx={size * 0.14}
+            ry={size * 0.08}
+          />
+        ))}
       </g>
+      <g transform={`translate(0 ${size * 0.5})`}>
+        <rect x={-size * 0.28} y={-size * 0.28} width={size * 0.56} height={size * 0.56} rx={size * 0.06} fill="#FFD43B" stroke="#0A0A0A" strokeWidth={size * 0.06} />
+        <rect x={-size * 0.22} y={-size * 0.22} width={size * 0.44} height={size * 0.44} rx={size * 0.04} fill="none" stroke="#D4A056" strokeWidth={size * 0.025} />
+        <text x="0" y={size * 0.08} textAnchor="middle" fontFamily="Space Grotesk, sans-serif" fontWeight={700} fontSize={size * 0.42} fill="#0A0A0A" letterSpacing="-0.03em">
+          MP
+        </text>
+      </g>
+    </g>
+  );
+}
+
+function BubbleLetters({
+  text,
+  x = 200,
+  y = 100,
+  size = 60,
+  colors = ['#FFD43B', '#E63946'],
+}: {
+  text: string;
+  x?: number;
+  y?: number;
+  size?: number;
+  colors?: string[];
+}) {
+  const letters = [...text];
+  const letterW = size * 0.75;
+  const totalW = letters.length * letterW;
+  return (
+    <g transform={`translate(${x - totalW / 2} ${y})`}>
+      {letters.map((letter, i) => {
+        const color = colors[i % colors.length] ?? '#FFD43B';
+        const tilt = (i % 2 === 0 ? -1 : 1) * (3 + (i % 3));
+        return (
+          <g key={i} transform={`translate(${i * letterW + letterW / 2} ${size * 0.3}) rotate(${tilt})`}>
+            <text
+              x="0"
+              y="0"
+              textAnchor="middle"
+              fontFamily="Impact, 'Space Grotesk', sans-serif"
+              fontWeight={900}
+              fontSize={size}
+              fill={color}
+              stroke="#0A0A0A"
+              strokeWidth={size * 0.08}
+              paintOrder="stroke fill"
+              strokeLinejoin="round"
+            >
+              {letter === ' ' ? '\u00A0' : letter}
+            </text>
+            {letter !== ' ' && (
+              <circle cx={-size * 0.12} cy={-size * 0.2} r={size * 0.06} fill="#F5F1E8" opacity={0.6} />
+            )}
+          </g>
+        );
+      })}
     </g>
   );
 }
@@ -296,68 +435,53 @@ function SplatterBurst({ x, y, color, size = 1 }: { x: number; y: number; color:
 const variants: Record<PosterVariant, () => ReactNode> = {
   'poppy-neon': () => (
     <>
-      <rect width="400" height="520" fill="url(#g-neon)" />
-      {/* Halftone cream sur moitié haute */}
-      <rect width="400" height="300" fill="url(#p-halftone-cream)" opacity={0.7} />
-      {/* Cercles lumineux aérosol */}
-      <circle cx="80" cy="100" r="50" fill="#FFD43B" opacity={0.3} />
-      <circle cx="340" cy="440" r="70" fill="#06B6D4" opacity={0.3} />
-      <SplatterBurst x={60} y={420} color="#FFD43B" size={0.6} />
-      <SplatterBurst x={350} y={80} color="#EC4899" size={0.5} />
-      {/* Brush stroke signature en arrière */}
-      <path d="M 40 260 Q 200 200, 360 280" stroke="#F5F1E8" strokeWidth="3" fill="none" opacity={0.25} strokeLinecap="round" />
-      <BearHead body="#1E40AF" />
-      {/* Monogramme NC au dessus */}
-      <text x="36" y="48" fontFamily="Space Grotesk, sans-serif" fontWeight={700} fontSize={16} fill="#F5F1E8" opacity={0.5} letterSpacing="0.2em">NC</text>
-      <text x="364" y="48" fontFamily="JetBrains Mono, monospace" fontSize={10} fill="#F5F1E8" opacity={0.7} textAnchor="end">MMXXVI</text>
-      {/* Bubble tag */}
-      <g transform="translate(200 440)">
-        <rect x={-94} y={-24} width={188} height={48} rx={24} fill="#FFD43B" />
-        <rect x={-92} y={-22} width={184} height={44} rx={22} fill="none" stroke="#0A0A0A" strokeWidth={1.5} />
-        <text x="0" y="6" textAnchor="middle" fontFamily="Space Grotesk, sans-serif" fontWeight={700} fontSize={22} fill="#0A0A0A" letterSpacing="0.05em">
-          MR POPPY
-        </text>
-      </g>
-      <text x="200" y="478" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize={9} fill="#F5F1E8" opacity={0.75} letterSpacing="0.25em">
-        NEON NIGHT
+      <rect width="400" height="520" fill="#0A0A0A" />
+      {/* Glow halos aérosol derrière les bubble letters */}
+      <circle cx="140" cy="100" r="70" fill="#FFD43B" opacity={0.25} />
+      <circle cx="310" cy="100" r="70" fill="#E63946" opacity={0.25} />
+      <circle cx="80" cy="440" r="50" fill="#EC4899" opacity={0.25} />
+      <circle cx="340" cy="440" r="60" fill="#06B6D4" opacity={0.25} />
+      {/* Halftone subtil */}
+      <rect width="400" height="520" fill="url(#p-halftone-cream)" opacity={0.08} />
+      {/* Bubble letters MR POPPY derrière l'ours, graffiti jaune / rouge */}
+      <BubbleLetters text="MR" x={110} y={60} size={88} colors={['#FFD43B', '#FFD43B']} />
+      <BubbleLetters text="POPPY" x={260} y={60} size={72} colors={['#E63946', '#FFD43B', '#E63946', '#FFD43B', '#E63946']} />
+      {/* Splatter accents */}
+      <SplatterBurst x={60} y={260} color="#FFD43B" size={0.55} />
+      <SplatterBurst x={360} y={280} color="#EC4899" size={0.45} />
+      {/* Mr Poppy — ours brun canonique avec couronne + chaîne MP */}
+      <BearHead x={200} y={250} size={110} body="#6B3410" withCrown withChain />
+      {/* Signature de l'illustrateur en bas à droite */}
+      <text x="360" y="495" textAnchor="end" fontFamily="JetBrains Mono, monospace" fontSize={10} fill="#F5F1E8" opacity={0.6} letterSpacing="0.2em">
+        NEON NIGHT · MMXXVI
       </text>
-      <Stamp x={330} y={120} text="DROP" color="#FFD43B" size={0.85} rotation={-14} />
-      <PaintDrip x={88} y={100} color="#FFD43B" height={30} width={5} />
+      <Stamp x={60} y={460} text="DROP" color="#FFD43B" size={0.7} rotation={-12} />
     </>
   ),
 
   'poppy-classic': () => (
     <>
-      <rect width="400" height="520" fill="#F5F1E8" />
-      {/* Halftone subtil */}
-      <rect width="400" height="520" fill="url(#p-halftone-sm)" opacity={0.25} />
-      {/* Grand carré neutre derrière ours */}
-      <rect x="60" y="100" width="280" height="280" fill="#FFFFFF" opacity={0.4} />
-      <rect x="60" y="100" width="280" height="280" fill="none" stroke="#0A0A0A" strokeWidth={1} opacity={0.15} />
-      {/* Posca doodles */}
-      <g stroke="#1E40AF" strokeWidth="2" fill="none" opacity={0.45}>
-        <path d="M 30 60 Q 70 30, 120 60 T 200 50" />
-        <circle cx="340" cy="90" r="14" />
-        <path d="M 320 440 L 360 480" strokeWidth="3" />
-        <path d="M 20 460 Q 60 440, 100 470" />
-        <path d="M 365 260 L 385 260" strokeWidth={3} />
-        <path d="M 375 250 L 375 270" strokeWidth={3} />
+      <rect width="400" height="520" fill="#0A0A0A" />
+      {/* Bubble letters "MR POPPY" en graffiti jaune/rouge, le fond noir canonique */}
+      <BubbleLetters text="MR" x={100} y={60} size={94} colors={['#FFD43B']} />
+      <BubbleLetters text="POPPY" x={268} y={60} size={78} colors={['#E63946', '#FFD43B', '#E63946', '#FFD43B', '#E63946']} />
+      {/* Posca doodles subtils */}
+      <g stroke="#FFD43B" strokeWidth="2" fill="none" opacity={0.25}>
+        <path d="M 30 200 Q 60 180, 90 200" />
+        <circle cx="360" cy="220" r="12" />
       </g>
-      <BearHead body="#1E40AF" />
-      {/* Titre + édition */}
-      <text x="200" y="424" textAnchor="middle" fontFamily="Space Grotesk, sans-serif" fontWeight={700} fontSize={36} fill="#0A0A0A" letterSpacing="-0.03em">
-        MR POPPY
+      <SplatterBurst x={60} y={400} color="#FFD43B" size={0.5} />
+      <SplatterBurst x={350} y={420} color="#E63946" size={0.45} />
+      {/* Ours brun canonique avec couronne + chaîne MP */}
+      <BearHead x={200} y={260} size={115} body="#6B3410" withCrown withChain />
+      {/* Signature manuscrite côté droit */}
+      <text x="360" y="335" fontFamily="Space Grotesk, sans-serif" fontStyle="italic" fontSize={14} fill="#F5F1E8" opacity={0.6} textAnchor="end" transform="rotate(-2 360 335)">
+        NCRZ
       </text>
-      <text x="200" y="448" textAnchor="middle" fontFamily="Space Grotesk, sans-serif" fontWeight={400} fontSize={12} fill="#0A0A0A" opacity={0.65} letterSpacing="0.25em">
-        ORIGINE · 2025
+      <text x="200" y="495" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize={10} fill="#F5F1E8" opacity={0.5} letterSpacing="0.25em">
+        ORIGINE · N° ___ / 150
       </text>
-      {/* Ligne signée */}
-      <line x1="120" y1="470" x2="280" y2="470" stroke="#0A0A0A" strokeWidth={1} />
-      <text x="200" y="490" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize={10} fill="#0A0A0A" opacity={0.6} letterSpacing="0.15em">
-        N° ___ / 150 · SIGNÉ POSCA
-      </text>
-      <Stamp x={50} y={50} text="ORIGINAL" color="#E63946" size={0.65} rotation={-12} />
-      <PaintDrip x={340} y={100} color="#1E40AF" height={36} width={4} />
+      <Stamp x={60} y={450} text="ORIGINAL" color="#E63946" size={0.6} rotation={-10} />
     </>
   ),
 
@@ -519,21 +643,15 @@ const variants: Record<PosterVariant, () => ReactNode> = {
   'figurine-mr-poppy': () => (
     <>
       <rect width="400" height="520" fill="#0A0A0A" />
-      {/* Spotlight depuis au-dessus */}
       <rect width="400" height="520" fill="url(#g-spotlight)" />
       <rect width="400" height="520" fill="url(#g-stage)" />
       {/* Plateau rotatif */}
-      <ellipse cx="200" cy="440" rx="140" ry="20" fill="#F5F1E8" opacity={0.08} />
-      <ellipse cx="200" cy="446" rx="120" ry="14" fill="#F5F1E8" opacity={0.15} />
-      <ellipse cx="200" cy="450" rx="100" ry="10" fill="#000" opacity={0.55} />
-      {/* Poppy — plus petit pour avoir le corps */}
-      <BearHead x={200} y={260} size={95} body="#1E40AF" />
-      {/* Corps figurine */}
-      <rect x="145" y="340" width="110" height="95" rx="18" fill="#1E40AF" />
-      <rect x="145" y="344" width="110" height="13" fill="#F5F1E8" />
-      <rect x="145" y="363" width="110" height="10" fill="#F5F1E8" />
-      <rect x="145" y="379" width="110" height="8" fill="#F5F1E8" />
-      {/* Halftone subtil sur background */}
+      <ellipse cx="200" cy="460" rx="140" ry="20" fill="#F5F1E8" opacity={0.08} />
+      <ellipse cx="200" cy="466" rx="120" ry="14" fill="#F5F1E8" opacity={0.15} />
+      <ellipse cx="200" cy="470" rx="100" ry="10" fill="#000" opacity={0.55} />
+      {/* Mr Poppy canonique — avec couronne + chaîne */}
+      <BearHead x={200} y={240} size={100} body="#6B3410" withCrown withChain />
+      {/* Halftone subtil */}
       <rect width="400" height="520" fill="url(#p-halftone-cream)" opacity={0.06} />
       {/* Étiquette figurine */}
       <g transform="translate(200 478)">

@@ -38,57 +38,129 @@ function renderCharacter(slug: CharacterSlug) {
 }
 
 function MrPoppyFull() {
+  // Mr Poppy canonique : ours brun, X noirs, couronne dorée, chaîne MP, trône doré derrière.
   const cx = 400;
-  const cy = 360;
-  const size = 200;
+  const cy = 380;
+  const size = 190;
+  const body = '#6B3410';
+  const bellyColor = '#C69970';
   return (
     <>
       <defs>
-        <radialGradient id="mrp-glow" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stopColor="#FFD43B" stopOpacity="0.3" />
+        <radialGradient id="mrp-halo" cx="0.5" cy="0.4" r="0.6">
+          <stop offset="0" stopColor="#FFD43B" stopOpacity="0.35" />
           <stop offset="1" stopColor="#FFD43B" stopOpacity="0" />
         </radialGradient>
       </defs>
-      {/* Halo */}
-      <circle cx={cx} cy={cy} r={size * 1.9} fill="url(#mrp-glow)" />
-      {/* Oreilles */}
-      <circle cx={cx - size * 0.58} cy={cy - size * 0.72} r={size * 0.42} fill="#1E40AF" />
-      <circle cx={cx + size * 0.58} cy={cy - size * 0.72} r={size * 0.42} fill="#1E40AF" />
-      <circle cx={cx - size * 0.58} cy={cy - size * 0.72} r={size * 0.22} fill="#F5F1E8" opacity={0.65} />
-      <circle cx={cx + size * 0.58} cy={cy - size * 0.72} r={size * 0.22} fill="#F5F1E8" opacity={0.65} />
-      {/* Tête */}
-      <circle cx={cx} cy={cy} r={size} fill="#1E40AF" />
-      {/* Museau */}
-      <ellipse cx={cx} cy={cy + size * 0.3} rx={size * 0.48} ry={size * 0.32} fill="#F5F1E8" />
-      {/* Nez */}
-      <ellipse cx={cx} cy={cy + size * 0.15} rx={size * 0.12} ry={size * 0.08} fill="#0A0A0A" />
-      {/* X yeux */}
-      <g stroke="#E63946" strokeWidth={size * 0.08} strokeLinecap="round">
-        <line x1={cx - size * 0.45} y1={cy - size * 0.3} x2={cx - size * 0.2} y2={cy - size * 0.05} />
-        <line x1={cx - size * 0.2} y1={cy - size * 0.3} x2={cx - size * 0.45} y2={cy - size * 0.05} />
-        <line x1={cx + size * 0.2} y1={cy - size * 0.3} x2={cx + size * 0.45} y2={cy - size * 0.05} />
-        <line x1={cx + size * 0.45} y1={cy - size * 0.3} x2={cx + size * 0.2} y2={cy - size * 0.05} />
+
+      {/* Halo doré derrière */}
+      <circle cx={cx} cy={cy - size * 0.5} r={size * 2} fill="url(#mrp-halo)" />
+
+      {/* Trône — dossier derrière l'ours */}
+      <g>
+        <rect
+          x={cx - size * 0.8}
+          y={cy + size * 0.3}
+          width={size * 1.6}
+          height={size * 2.2}
+          fill="#D4A056"
+          stroke="#0A0A0A"
+          strokeWidth={size * 0.025}
+        />
+        {/* Dossier haut avec pointes décoratives */}
+        <path
+          d={`M ${cx - size * 0.8} ${cy + size * 0.3} L ${cx - size * 0.6} ${cy - size * 0.5} L ${cx - size * 0.4} ${cy + size * 0.2} L ${cx - size * 0.2} ${cy - size * 0.5} L ${cx} ${cy + size * 0.2} L ${cx + size * 0.2} ${cy - size * 0.5} L ${cx + size * 0.4} ${cy + size * 0.2} L ${cx + size * 0.6} ${cy - size * 0.5} L ${cx + size * 0.8} ${cy + size * 0.3} Z`}
+          fill="#D4A056"
+          stroke="#0A0A0A"
+          strokeWidth={size * 0.025}
+        />
+        {/* Motif capitonné */}
+        {[-0.5, 0, 0.5].map((i) => (
+          <circle key={i} cx={cx + i * size * 0.5} cy={cy + size * 1} r={size * 0.04} fill="#E63946" />
+        ))}
+        {/* Coussin rouge */}
+        <rect x={cx - size * 0.7} y={cy + size * 0.8} width={size * 1.4} height={size * 0.5} fill="#E63946" opacity={0.4} />
       </g>
-      {/* Corps avec marinière */}
+
+      {/* Couronne */}
+      <g transform={`translate(${cx} ${cy - size * 1.15})`}>
+        <rect x={-size * 0.35} y={size * 0.14} width={size * 0.7} height={size * 0.14} fill="#D4A056" stroke="#0A0A0A" strokeWidth={size * 0.03} />
+        <path
+          d={`M ${-size * 0.35} ${size * 0.14} L ${-size * 0.28} ${-size * 0.05} L ${-size * 0.15} ${size * 0.08} L 0 ${-size * 0.15} L ${size * 0.15} ${size * 0.08} L ${size * 0.28} ${-size * 0.05} L ${size * 0.35} ${size * 0.14} Z`}
+          fill="#FFD43B"
+          stroke="#0A0A0A"
+          strokeWidth={size * 0.03}
+          strokeLinejoin="round"
+        />
+        <circle cx={-size * 0.28} cy={-size * 0.02} r={size * 0.04} fill="#E63946" stroke="#0A0A0A" strokeWidth={size * 0.012} />
+        <circle cx={0} cy={-size * 0.12} r={size * 0.05} fill="#E63946" stroke="#0A0A0A" strokeWidth={size * 0.012} />
+        <circle cx={size * 0.28} cy={-size * 0.02} r={size * 0.04} fill="#E63946" stroke="#0A0A0A" strokeWidth={size * 0.012} />
+      </g>
+
+      {/* Oreilles */}
+      <circle cx={cx - size * 0.6} cy={cy - size * 0.72} r={size * 0.42} fill={body} stroke="#0A0A0A" strokeWidth={size * 0.035} />
+      <circle cx={cx + size * 0.6} cy={cy - size * 0.72} r={size * 0.42} fill={body} stroke="#0A0A0A" strokeWidth={size * 0.035} />
+      <circle cx={cx - size * 0.6} cy={cy - size * 0.72} r={size * 0.2} fill="#8B4513" opacity={0.5} />
+      <circle cx={cx + size * 0.6} cy={cy - size * 0.72} r={size * 0.2} fill="#8B4513" opacity={0.5} />
+
+      {/* Tête */}
+      <circle cx={cx} cy={cy} r={size} fill={body} stroke="#0A0A0A" strokeWidth={size * 0.035} />
+      {/* Highlight */}
+      <ellipse cx={cx - size * 0.28} cy={cy - size * 0.38} rx={size * 0.26} ry={size * 0.16} fill="#F5F1E8" opacity={0.18} />
+
+      {/* Museau massif */}
+      <ellipse cx={cx} cy={cy + size * 0.35} rx={size * 0.52} ry={size * 0.42} fill={bellyColor} stroke="#0A0A0A" strokeWidth={size * 0.03} />
+
+      {/* Nez énorme noir brillant */}
+      <circle cx={cx} cy={cy + size * 0.12} r={size * 0.18} fill="#0A0A0A" />
+      <ellipse cx={cx - size * 0.06} cy={cy + size * 0.06} rx={size * 0.05} ry={size * 0.035} fill="#F5F1E8" opacity={0.55} />
+
+      {/* X yeux NOIRS épais */}
+      <g stroke="#0A0A0A" strokeWidth={size * 0.11} strokeLinecap="round">
+        <line x1={cx - size * 0.48} y1={cy - size * 0.3} x2={cx - size * 0.18} y2={cy - size * 0.02} />
+        <line x1={cx - size * 0.18} y1={cy - size * 0.3} x2={cx - size * 0.48} y2={cy - size * 0.02} />
+        <line x1={cx + size * 0.18} y1={cy - size * 0.3} x2={cx + size * 0.48} y2={cy - size * 0.02} />
+        <line x1={cx + size * 0.48} y1={cy - size * 0.3} x2={cx + size * 0.18} y2={cy - size * 0.02} />
+      </g>
+
+      {/* Corps marinière (bleu marine + blanc) */}
       <path
-        d={`M ${cx - size * 1.2} ${cy + size * 1.0} Q ${cx - size * 1.2} ${cy + size * 2.5}, ${cx} ${cy + size * 2.8} Q ${cx + size * 1.2} ${cy + size * 2.5}, ${cx + size * 1.2} ${cy + size * 1.0} Z`}
+        d={`M ${cx - size * 1.15} ${cy + size * 1.0} Q ${cx - size * 1.15} ${cy + size * 2.5}, ${cx} ${cy + size * 2.8} Q ${cx + size * 1.15} ${cy + size * 2.5}, ${cx + size * 1.15} ${cy + size * 1.0} Z`}
         fill="#1E40AF"
+        stroke="#0A0A0A"
+        strokeWidth={size * 0.03}
       />
-      {[0, 1, 2, 3, 4].map((i) => (
+      {[0, 1, 2, 3, 4, 5].map((i) => (
         <rect
           key={i}
-          x={cx - size * 1.2}
-          y={cy + size * 1.15 + i * size * 0.22}
-          width={size * 2.4}
-          height={size * 0.1}
+          x={cx - size * 1.15}
+          y={cy + size * 1.08 + i * size * 0.2}
+          width={size * 2.3}
+          height={size * 0.07}
           fill="#F5F1E8"
         />
       ))}
-      {/* Pioche MP à droite */}
-      <g transform={`translate(${cx + size * 1.2} ${cy + size * 0.6}) rotate(-25)`}>
-        <rect x="-6" y="-120" width="12" height="200" fill="#7C3AED" />
-        <path d="M -40 -120 L 40 -120 L 60 -150 L 20 -160 L -20 -160 L -60 -150 Z" fill="#FFD43B" />
-        <path d="M -40 -120 L 40 -120 L 40 -135 L -40 -135 Z" fill="#EC4899" />
+
+      {/* Chaîne gold MP */}
+      <g transform={`translate(${cx} ${cy + size * 1.15})`}>
+        <g fill="#FFD43B" stroke="#0A0A0A" strokeWidth={size * 0.02}>
+          {[-3, -2, -1, 0, 1, 2, 3].map((i) => (
+            <ellipse
+              key={i}
+              cx={i * size * 0.18}
+              cy={Math.abs(i) * size * 0.025}
+              rx={size * 0.1}
+              ry={size * 0.05}
+            />
+          ))}
+        </g>
+        {/* Pendentif MP */}
+        <g transform={`translate(0 ${size * 0.35})`}>
+          <rect x={-size * 0.22} y={-size * 0.22} width={size * 0.44} height={size * 0.44} rx={size * 0.05} fill="#FFD43B" stroke="#0A0A0A" strokeWidth={size * 0.03} />
+          <text x="0" y={size * 0.07} textAnchor="middle" fontFamily="Space Grotesk, sans-serif" fontWeight={700} fontSize={size * 0.32} fill="#0A0A0A" letterSpacing="-0.03em">
+            MP
+          </text>
+        </g>
       </g>
     </>
   );
