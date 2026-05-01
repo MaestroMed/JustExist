@@ -10,13 +10,10 @@ export const metadata: Metadata = {
 export default function MentionsPage() {
   return (
     <LegalLayout
-      eyebrow="Informations obligatoires"
       title="Mentions légales"
-      lastUpdated="22 avril 2026"
-      neighbors={[
-        { href: '/legal/cgv', label: 'CGV' },
-        { href: '/legal/confidentialite', label: 'Confidentialité' },
-      ]}
+      subtitle="Éditeur, hébergeur, propriété intellectuelle, crédits — les obligations légales d'un site marchand français."
+      lastUpdate="2026-04-22"
+      currentHref="/legal/mentions"
     >
       <LegalSection title="Éditeur du site">
         <p>

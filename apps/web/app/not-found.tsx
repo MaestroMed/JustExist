@@ -1,168 +1,193 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { motion } from 'motion/react';
 import { Container } from '@nacks/ui';
+import { PageShell } from '@/components/layouts/PageShell';
 
-const LOST_LINES = [
-  "Il n'y a rien ici.",
-  'Pas encore, en tout cas.',
-  "Si tu pensais que ça existait, peut-être que c'est à venir.",
+const INK = 'var(--color-ink, #0a0a0a)';
+const CREAM = 'var(--color-cream, #f5f1e8)';
+
+const FONT_SERIF =
+  "var(--font-serif, 'Playfair Display', Georgia, serif)";
+const FONT_BODY = "var(--font-body, Inter, system-ui, sans-serif)";
+const FONT_GRAFFITI =
+  "var(--font-graffiti, 'Permanent Marker', system-ui, sans-serif)";
+
+export const metadata = {
+  title: 'Page introuvable — Nacks Galerie',
+  description:
+    "Cette adresse ne mène nulle part. Peut-être un lien ancien ou une typo.",
+  robots: { index: false, follow: false },
+};
+
+const CTAS: Array<{ href: string; label: string }> = [
+  { href: '/', label: "Retour à l'accueil" },
+  { href: '/oeuvres', label: 'Voir les œuvres' },
+  { href: '/atelier', label: "Voir l'atelier" },
 ];
 
+/**
+ * 404 — Page introuvable.
+ *
+ * DA pivot e-commerce galerie premium :
+ *   cream background, ink text, Playfair italic display, Inter body.
+ *   1 mini drip noir SVG sous le titre + 1 micro tag NACKS coin haut droit.
+ *   Calme, posé, espace négatif généreux. Aucune urgence, aucun marketing.
+ */
 export default function NotFound() {
-  const [path, setPath] = useState<string>('');
-  const pathname = usePathname();
-
-  useEffect(() => {
-    setPath(typeof window !== 'undefined' ? window.location.pathname : pathname);
-  }, [pathname]);
-
-  const mailBody = encodeURIComponent(
-    `Salut Nacks,\n\nJ'ai tapé l'URL suivante et elle n'existe pas :\n${path || '(inconnue)'}\n\nJe pensais trouver…\n\n`,
-  );
-
   return (
-    <main className="grain relative flex min-h-[100svh] items-center overflow-hidden bg-[var(--color-ink)] text-[var(--color-cream)]">
-      {/* Halo rouge subtil */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
+    <PageShell>
+      <section
+        aria-labelledby="nf-title"
+        className="relative w-full overflow-hidden"
         style={{
-          background:
-            'radial-gradient(ellipse at 50% 40%, rgba(230,57,70,0.1), transparent 60%)',
+          backgroundColor: CREAM,
+          color: INK,
+          paddingBlock: 'clamp(5rem, 14vh, 10rem)',
+          minHeight: 'calc(100svh - 5rem)',
         }}
-      />
-
-      {/* Mr Poppy cherchant — silhouette translucide */}
-      <motion.svg
-        aria-hidden="true"
-        viewBox="0 0 400 400"
-        className="pointer-events-none absolute -right-20 -bottom-20 h-[min(70vh,520px)] w-[min(70vh,520px)] opacity-[0.08] md:right-10 md:bottom-10"
-        initial={{ opacity: 0, x: 100, rotate: -10 }}
-        animate={{ opacity: 0.08, x: 0, rotate: 0 }}
-        transition={{ duration: 1.6, ease: [0.19, 1, 0.22, 1] }}
       >
-        {/* Oreilles */}
-        <circle cx="125" cy="95" r="45" fill="#F5F1E8" />
-        <circle cx="275" cy="95" r="45" fill="#F5F1E8" />
-        {/* Tête */}
-        <circle cx="200" cy="170" r="110" fill="#F5F1E8" />
-        {/* Museau */}
-        <ellipse cx="200" cy="200" rx="55" ry="35" fill="#0A0A0A" opacity={0.3} />
-        {/* Nez */}
-        <ellipse cx="200" cy="185" rx="12" ry="8" fill="#0A0A0A" />
-        {/* X yeux — perdus, regardent de travers */}
-        <g stroke="#E63946" strokeWidth="9" strokeLinecap="round" strokeOpacity="0.8">
-          <line x1="145" y1="135" x2="175" y2="165" />
-          <line x1="175" y1="135" x2="145" y2="165" />
-          <line x1="225" y1="135" x2="255" y2="165" />
-          <line x1="255" y1="135" x2="225" y2="165" />
-        </g>
-        {/* Loupe dans la patte */}
-        <g transform="translate(310 240)">
-          <circle cx="0" cy="0" r="32" fill="none" stroke="#F5F1E8" strokeWidth="8" />
-          <line x1="22" y1="22" x2="48" y2="48" stroke="#F5F1E8" strokeWidth="8" strokeLinecap="round" />
-        </g>
-        {/* Point d'interrogation flottant */}
-        <motion.text
-          x="280"
-          y="100"
-          fontFamily="Space Grotesk, sans-serif"
-          fontWeight={700}
-          fontSize="60"
-          fill="#E63946"
-          opacity={0.6}
-          animate={{ y: [100, 90, 100] }}
-          transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+        {/* Micro tag NACKS — coin haut droit, ultra discret */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute select-none"
+          style={{
+            top: 'clamp(1.5rem, 3vh, 2.5rem)',
+            right: 'clamp(1.5rem, 4vw, 5rem)',
+            fontFamily: FONT_GRAFFITI,
+            fontSize: 'clamp(0.85rem, 1vw, 1rem)',
+            letterSpacing: '0.18em',
+            color: INK,
+            opacity: 0.55,
+            transform: 'rotate(-4deg)',
+          }}
         >
-          ?
-        </motion.text>
-      </motion.svg>
+          NACKS
+        </span>
 
-      <Container size="content" className="relative z-10 flex flex-col items-center gap-8 text-center">
-        <motion.p
-          className="font-[var(--font-mono)] text-xs uppercase tracking-[0.3em] text-[var(--color-blood)]"
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          Erreur 404 · page introuvable
-        </motion.p>
-        <motion.h1
-          className="font-[var(--font-display)] font-[500] leading-[0.9] tracking-[-0.035em]"
-          style={{ fontSize: 'clamp(3rem, 10vw, 8rem)' }}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1, ease: [0.19, 1, 0.22, 1] }}
-        >
-          Cette toile
-          <br />
-          <span className="text-[var(--color-blood)]">n'existe pas.</span>
-        </motion.h1>
-        <motion.div
-          className="flex max-w-xl flex-col gap-2 font-[var(--font-body)] text-base text-[var(--color-cream-600)]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          {LOST_LINES.map((line, i) => (
-            <p key={i}>{line}</p>
-          ))}
-          <p className="mt-2 text-sm italic opacity-80">
-            Mr Poppy cherche la page avec sa loupe. Il trouve pas.
+        <Container size="content" className="relative flex flex-col items-start gap-[clamp(1.75rem,3vh,2.5rem)]">
+          {/* Eyebrow */}
+          <p
+            className="uppercase"
+            style={{
+              fontFamily: FONT_BODY,
+              fontSize: 'clamp(0.7rem, 0.78vw, 0.82rem)',
+              letterSpacing: '0.28em',
+              color: 'rgba(10,10,10,0.55)',
+              margin: 0,
+            }}
+          >
+            404 · Page introuvable
           </p>
-        </motion.div>
 
-        {path && (
-          <motion.p
-            className="rounded border border-[var(--color-cream-100)] bg-[var(--color-cream-100)]/20 px-4 py-2 font-[var(--font-mono)] text-xs tracking-[0.05em] text-[var(--color-cream-600)]"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <span className="text-[var(--color-cream-400)]">URL demandée : </span>
-            <span className="text-[var(--color-cream)]">{path}</span>
-          </motion.p>
-        )}
+          {/* Titre serif italic XXL + mini drip dessous */}
+          <div className="relative">
+            <h1
+              id="nf-title"
+              style={{
+                fontFamily: FONT_SERIF,
+                fontStyle: 'italic',
+                fontWeight: 400,
+                fontSize: 'clamp(3rem, 9vw, 7rem)',
+                lineHeight: 0.98,
+                letterSpacing: '-0.025em',
+                color: INK,
+                margin: 0,
+              }}
+            >
+              Œuvre introuvable.
+            </h1>
 
-        <motion.div
-          className="mt-4 flex flex-col gap-3 md:flex-row md:gap-4"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-        >
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center gap-2 border border-[var(--color-cream)] px-8 py-3 font-[var(--font-display)] text-sm uppercase tracking-[0.2em] transition-colors hover:bg-[var(--color-cream)] hover:text-[var(--color-ink)]"
-            data-cursor="link"
-            data-cursor-label="Maison"
-          >
-            Retourner dans le monde
-          </Link>
-          <a
-            href={`mailto:contact@nacksgalerie.com?subject=URL%20introuvable&body=${mailBody}`}
-            className="inline-flex items-center justify-center gap-2 border border-[var(--color-blood)] bg-[var(--color-blood)] px-8 py-3 font-[var(--font-display)] text-sm uppercase tracking-[0.2em] text-[var(--color-cream)] transition-opacity hover:opacity-90"
-            data-cursor="link"
-            data-cursor-label="Écrire"
-          >
-            Demander à Nacks
-          </a>
-        </motion.div>
+            {/* Mini drip noir SVG — sous le point final, signature graffiti subtle */}
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 60 36"
+              width="60"
+              height="36"
+              className="pointer-events-none absolute"
+              style={{
+                left: 'clamp(0rem, 0.5vw, 0.5rem)',
+                bottom: '-1.4rem',
+                opacity: 0.85,
+              }}
+            >
+              <path
+                d="M4 0 C4 8, 2 14, 4 20 Q5 24 6 20 C8 14, 6 8, 6 0 Z"
+                fill={INK}
+              />
+              <circle cx="5" cy="22" r="1.4" fill={INK} />
+              <path
+                d="M22 0 C22 6, 21 11, 22 16 Q22.6 18 23.2 16 C24 11, 23 6, 23 0 Z"
+                fill={INK}
+              />
+              <circle cx="22.6" cy="17.6" r="1.1" fill={INK} />
+            </svg>
+          </div>
 
-        <motion.p
-          className="mt-8 font-[var(--font-mono)] text-[10px] uppercase tracking-[0.25em] text-[var(--color-cream-400)]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1 }}
-        >
-          Appuie sur{' '}
-          <kbd className="rounded border border-[var(--color-cream-200)] px-1.5 py-0.5">⌘ K</kbd>{' '}
-          pour chercher
-        </motion.p>
-      </Container>
-    </main>
+          {/* Sous-titre */}
+          <p
+            className="max-w-xl"
+            style={{
+              fontFamily: FONT_BODY,
+              fontSize: 'clamp(1rem, 1.05vw, 1.15rem)',
+              lineHeight: 1.55,
+              color: 'rgba(10,10,10,0.7)',
+              margin: 0,
+              marginTop: '0.5rem',
+            }}
+          >
+            Cette adresse ne mène nulle part. Peut-être un lien ancien ou une typo.
+          </p>
+
+          {/* Détail technique discret */}
+          <p
+            style={{
+              fontFamily: FONT_BODY,
+              fontSize: 'clamp(0.78rem, 0.85vw, 0.9rem)',
+              letterSpacing: '0.04em',
+              color: 'rgba(10,10,10,0.5)',
+              margin: 0,
+            }}
+          >
+            Code 404 · NACKS GALERIE
+          </p>
+
+          {/* CTAs pill — 3 actions, alignées gauche, espacement aéré */}
+          <nav
+            aria-label="Navigation de secours"
+            className="flex flex-wrap items-center"
+            style={{
+              gap: 'clamp(0.7rem, 1.3vw, 1.2rem)',
+              marginTop: 'clamp(1rem, 2vh, 1.5rem)',
+            }}
+          >
+            {CTAS.map((cta, idx) => (
+              <Link
+                key={cta.href}
+                href={cta.href}
+                data-cursor="link"
+                data-cursor-label={cta.label}
+                className="inline-flex items-center transition-transform hover:scale-[1.02]"
+                style={{
+                  fontFamily: FONT_SERIF,
+                  fontStyle: 'italic',
+                  fontSize: 'clamp(0.95rem, 1.05vw, 1.15rem)',
+                  color: idx === 0 ? CREAM : INK,
+                  backgroundColor: idx === 0 ? INK : 'transparent',
+                  padding:
+                    'clamp(0.75rem, 1.4vh, 1rem) clamp(1.5rem, 2.4vw, 2rem)',
+                  borderRadius: '999px',
+                  boxShadow:
+                    idx === 0 ? 'none' : 'inset 0 0 0 1.5px rgba(10,10,10,0.85)',
+                  textDecoration: 'none',
+                  whiteSpace: 'nowrap',
+                  transition: 'background-color 200ms ease, color 200ms ease',
+                }}
+              >
+                <span>{cta.label}&nbsp;→</span>
+              </Link>
+            ))}
+          </nav>
+        </Container>
+      </section>
+    </PageShell>
   );
 }

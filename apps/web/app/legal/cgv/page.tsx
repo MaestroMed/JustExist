@@ -2,22 +2,18 @@ import type { Metadata } from 'next';
 import { LegalLayout, LegalSection } from '@/components/layouts/LegalLayout';
 
 export const metadata: Metadata = {
-  title: 'Conditions générales de vente',
-  description: 'CGV de Nacks Galerie.',
+  title: 'CGV',
+  description: 'Conditions générales de vente de Nacks Galerie.',
   robots: { index: true, follow: true },
 };
 
 export default function CGVPage() {
   return (
     <LegalLayout
-      eyebrow="Conditions générales de vente"
       title="CGV"
-      lastUpdated="22 avril 2026"
-      neighbors={[
-        { href: '/legal/mentions', label: 'Mentions légales' },
-        { href: '/legal/confidentialite', label: 'Confidentialité' },
-        { href: '/legal/retours', label: 'Retours' },
-      ]}
+      subtitle="Les règles qui encadrent toute commande passée sur nacksgalerie.com — claires, lisibles, sans astérisque caché."
+      lastUpdate="2026-04-22"
+      currentHref="/legal/cgv"
     >
       <p>
         Les présentes conditions s'appliquent à toute commande passée sur le site

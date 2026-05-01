@@ -3,6 +3,16 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { Container } from '@nacks/ui';
+import { PageShell } from '@/components/layouts/PageShell';
+
+const INK = 'var(--color-ink, #0a0a0a)';
+const CREAM = 'var(--color-cream, #f5f1e8)';
+
+const FONT_SERIF =
+  "var(--font-serif, 'Playfair Display', Georgia, serif)";
+const FONT_BODY = "var(--font-body, Inter, system-ui, sans-serif)";
+const FONT_GRAFFITI =
+  "var(--font-graffiti, 'Permanent Marker', system-ui, sans-serif)";
 
 type Props = {
   error: Error & { digest?: string };
@@ -10,74 +20,177 @@ type Props = {
 };
 
 /**
- * Error boundary — page 500 stylisée, même DA que le 404.
- * Envoie l'erreur en console (+ Sentry quand câblé).
+ * Root error boundary — Next.js spec : MUST be a client component.
+ *
+ * DA pivot e-commerce galerie premium :
+ *   cream background, ink text, Playfair italic display, Inter body.
+ *   Pas d'urgence, pas de panique. Posé, calme, pro.
+ *   1 micro tag NACKS coin haut droit (max 1 spray accent).
  */
 export default function Error({ error, reset }: Props) {
   useEffect(() => {
+    // Log côté client. Sentry est branché ailleurs si dispo.
     console.error('[nacks] route error:', error);
   }, [error]);
 
   return (
-    <main className="grain relative flex min-h-[100svh] items-center bg-[var(--color-ink)] text-[var(--color-cream)]">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
+    <PageShell>
+      <section
+        aria-labelledby="err-title"
+        className="relative w-full overflow-hidden"
         style={{
-          background:
-            'radial-gradient(ellipse at 50% 40%, rgba(230,57,70,0.12), transparent 60%)',
+          backgroundColor: CREAM,
+          color: INK,
+          paddingBlock: 'clamp(5rem, 14vh, 10rem)',
+          minHeight: 'calc(100svh - 5rem)',
         }}
-      />
-
-      <Container size="content" className="relative z-10 flex flex-col items-center gap-8 text-center">
-        <p className="font-[var(--font-mono)] text-xs uppercase tracking-[0.3em] text-[var(--color-blood)]">
-          Erreur 500 · quelque chose s'est cassé
-        </p>
-        <h1
-          className="font-[var(--font-display)] font-[500] leading-[0.9] tracking-[-0.035em]"
-          style={{ fontSize: 'clamp(2.5rem, 9vw, 7rem)' }}
+      >
+        {/* Micro tag NACKS — coin haut droit, ultra discret */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute select-none"
+          style={{
+            top: 'clamp(1.5rem, 3vh, 2.5rem)',
+            right: 'clamp(1.5rem, 4vw, 5rem)',
+            fontFamily: FONT_GRAFFITI,
+            fontSize: 'clamp(0.85rem, 1vw, 1rem)',
+            letterSpacing: '0.18em',
+            color: INK,
+            opacity: 0.55,
+            transform: 'rotate(-4deg)',
+          }}
         >
-          La peinture<br />
-          <span className="text-[var(--color-blood)]">n'a pas tenu.</span>
-        </h1>
-        <p className="max-w-xl font-[var(--font-body)] text-base text-[var(--color-cream-600)]">
-          Une erreur inattendue s'est produite. Rien d'irréversible. Essaie de recharger — si ça continue,
-          écris-moi, je veux savoir.
-        </p>
+          NACKS
+        </span>
 
-        {error.digest && (
-          <p className="rounded border border-[var(--color-cream-100)] bg-[var(--color-cream-100)]/10 px-4 py-2 font-[var(--font-mono)] text-[10px] tracking-[0.05em] text-[var(--color-cream-600)]">
-            Référence :{' '}
-            <span className="text-[var(--color-cream)]">{error.digest}</span>
+        <Container size="content" className="relative flex flex-col items-start gap-[clamp(1.75rem,3vh,2.5rem)]">
+          {/* Eyebrow */}
+          <p
+            className="uppercase"
+            style={{
+              fontFamily: FONT_BODY,
+              fontSize: 'clamp(0.7rem, 0.78vw, 0.82rem)',
+              letterSpacing: '0.28em',
+              color: 'rgba(10,10,10,0.55)',
+              margin: 0,
+            }}
+          >
+            Erreur · Service interrompu
           </p>
-        )}
 
-        <div className="mt-4 flex flex-col gap-3 md:flex-row md:gap-4">
-          <button
-            type="button"
-            onClick={reset}
-            className="inline-flex items-center justify-center gap-2 bg-[var(--color-cream)] px-8 py-3 font-[var(--font-display)] text-sm uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-blood)] hover:text-[var(--color-cream)]"
-            data-cursor="link"
-            data-cursor-label="Retenter"
+          {/* Titre serif italic XL */}
+          <h1
+            id="err-title"
+            style={{
+              fontFamily: FONT_SERIF,
+              fontStyle: 'italic',
+              fontWeight: 400,
+              fontSize: 'clamp(2.5rem, 7vw, 5.5rem)',
+              lineHeight: 1.0,
+              letterSpacing: '-0.025em',
+              color: INK,
+              margin: 0,
+            }}
           >
-            Retenter
-          </button>
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center gap-2 border border-[var(--color-cream)] px-8 py-3 font-[var(--font-display)] text-sm uppercase tracking-[0.2em] text-[var(--color-cream)] transition-colors hover:bg-[var(--color-cream)] hover:text-[var(--color-ink)]"
-            data-cursor="link"
+            Une erreur est survenue.
+          </h1>
+
+          {/* Sous-titre rassurant */}
+          <p
+            className="max-w-xl"
+            style={{
+              fontFamily: FONT_BODY,
+              fontSize: 'clamp(1rem, 1.05vw, 1.15rem)',
+              lineHeight: 1.55,
+              color: 'rgba(10,10,10,0.7)',
+              margin: 0,
+            }}
           >
-            Retourner à l'accueil
-          </Link>
-          <a
-            href={`mailto:contact@nacksgalerie.com?subject=${encodeURIComponent('Erreur 500 — ' + (error.digest ?? ''))}&body=${encodeURIComponent("Salut Nacks,\n\nJ'ai eu une erreur 500.\n" + (error.digest ? `Référence : ${error.digest}\n` : '') + "\n")}`}
-            className="inline-flex items-center justify-center gap-2 font-[var(--font-mono)] text-xs uppercase tracking-[0.2em] text-[var(--color-cream-600)] transition-colors hover:text-[var(--color-cream)]"
-            data-cursor="link"
+            Pas de panique. Naguy a été prévenu, on regarde.
+          </p>
+
+          {/* Référence digest (si dispo) */}
+          {error?.digest ? (
+            <p
+              style={{
+                fontFamily: FONT_BODY,
+                fontSize: 'clamp(0.78rem, 0.85vw, 0.9rem)',
+                letterSpacing: '0.04em',
+                color: 'rgba(10,10,10,0.5)',
+                margin: 0,
+              }}
+            >
+              Référence&nbsp;: <span style={{ fontFamily: 'var(--font-mono)' }}>{error.digest}</span>
+            </p>
+          ) : (
+            <p
+              style={{
+                fontFamily: FONT_BODY,
+                fontSize: 'clamp(0.78rem, 0.85vw, 0.9rem)',
+                letterSpacing: '0.04em',
+                color: 'rgba(10,10,10,0.5)',
+                margin: 0,
+              }}
+            >
+              NACKS GALERIE · Erreur applicative
+            </p>
+          )}
+
+          {/* CTAs pill — Réessayer (filled) + Accueil (outline) */}
+          <div
+            className="flex flex-wrap items-center"
+            style={{
+              gap: 'clamp(0.7rem, 1.3vw, 1.2rem)',
+              marginTop: 'clamp(1rem, 2vh, 1.5rem)',
+            }}
           >
-            Prévenir Nacks →
-          </a>
-        </div>
-      </Container>
-    </main>
+            <button
+              type="button"
+              onClick={() => reset()}
+              data-cursor="link"
+              data-cursor-label="Réessayer"
+              className="inline-flex items-center transition-transform hover:scale-[1.02]"
+              style={{
+                fontFamily: FONT_SERIF,
+                fontStyle: 'italic',
+                fontSize: 'clamp(0.95rem, 1.05vw, 1.15rem)',
+                color: CREAM,
+                backgroundColor: INK,
+                padding:
+                  'clamp(0.75rem, 1.4vh, 1rem) clamp(1.5rem, 2.4vw, 2rem)',
+                borderRadius: '999px',
+                border: 'none',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <span>Réessayer&nbsp;→</span>
+            </button>
+
+            <Link
+              href="/"
+              data-cursor="link"
+              data-cursor-label="Accueil"
+              className="inline-flex items-center transition-transform hover:scale-[1.02]"
+              style={{
+                fontFamily: FONT_SERIF,
+                fontStyle: 'italic',
+                fontSize: 'clamp(0.95rem, 1.05vw, 1.15rem)',
+                color: INK,
+                backgroundColor: 'transparent',
+                padding:
+                  'clamp(0.75rem, 1.4vh, 1rem) clamp(1.5rem, 2.4vw, 2rem)',
+                borderRadius: '999px',
+                boxShadow: 'inset 0 0 0 1.5px rgba(10,10,10,0.85)',
+                textDecoration: 'none',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <span>Retour à l&apos;accueil&nbsp;→</span>
+            </Link>
+          </div>
+        </Container>
+      </section>
+    </PageShell>
   );
 }
