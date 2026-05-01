@@ -219,8 +219,8 @@ function BottomStrip() {
       }}
     >
       <div>
-        <span style={{ marginRight: '1.5rem' }}>Instagram @nacks</span>
-        <span style={{ marginRight: '1.5rem' }}>· Tiktok 500K</span>
+        <span style={{ marginRight: '1.5rem' }}>Instagram @nacks_galerie</span>
+        <span style={{ marginRight: '1.5rem' }}>· TikTok @nacksgalerie · 450K</span>
         <span>· Posca &amp; spray</span>
       </div>
       <div className="hidden md:block">

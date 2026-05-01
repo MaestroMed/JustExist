@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { PageShell } from '@/components/layouts/PageShell';
 import { DripButton } from '@/components/ui/DripButton';
 import { nacks } from '@/lib/content/nacks';
+import { buildPerson } from '@/lib/seo/jsonld';
 
 export const metadata: Metadata = {
   title: 'Atelier — Naguy "Nacks" Claude',
   description:
-    "L'atelier de Naguy 'Nacks' Claude — Sarcelles pour les murs, Paris pour les œuvres et les rendez-vous. Bio, jalons, visite sur RDV.",
+    "L'atelier de Naguy 'Nacks' Claude — Sarcelles, Val-d'Oise. Studio partagé avec La Voix Off, Pop Art × Street Art au Posca. Bio, jalons, visite sur RDV.",
 };
 
 const INK = 'var(--color-ink, #0a0a0a)';
@@ -18,26 +20,27 @@ const FONT_SERIF = "var(--font-serif, 'Playfair Display', Georgia, serif)";
 const FONT_BODY = "var(--font-body, Inter, system-ui, sans-serif)";
 const FONT_TAG = "var(--font-tag, 'Caveat', 'Permanent Marker', cursive)";
 
-/* ───────── Bio canonique (extraite du Manifesto + nacks.ts) ───────── */
+/* ───────── Bio canonique — vraie histoire Naguy 'Nacks' Claude ───────── */
 const BIO_PARAGRAPHS: ReadonlyArray<{ body: string; emphasis?: string[] }> = [
   {
     body:
-      "Né à Sarcelles. Élevé entre les murs et les carnets. Le Posca avant le pinceau, le spray avant le cadre. Une enfance écrite sur ce qui voulait bien recevoir l'encre — bétons, marges, peaux de papier.",
-    emphasis: ['Sarcelles'],
+      "Né et élevé à Sarcelles, Val-d'Oise. La passion de la peinture remonte à l'enfance : vers dix ans, en vacances familiales au Maroc, je regarde un peintre travailler dans la rue. Quelque chose se met en place. Au retour, c'est le Posca avant le pinceau, le carnet avant la toile.",
+    emphasis: ['Sarcelles', 'Maroc'],
   },
   {
     body:
-      "En 2018, Prix Révélations Beaux-Arts. Mais la galerie n'a jamais remplacé le mur — elle l'a juste suivi. Les œuvres se sont mises en cadre sans rien perdre de leur origine : geste rapide, pigment franc, refus du décor.",
-    emphasis: ['Beaux-Arts'],
+      "Première exposition à seize ans, sous le pseudo Nacks. Plus tard, une carrière de technicien son et lumière — puis le choix de tout quitter pour peindre à temps plein. Autodidacte. C'est très compliqué de se faire un nom quand on n'y connaît rien : on apprend en faisant, en ratant, en recommençant.",
+    emphasis: ['seize ans', 'autodidacte'],
   },
   {
     body:
-      "Aujourd'hui, deux ateliers, deux villes. Sarcelles pour la fresque, le grand format, le mur. Paris pour les œuvres signées, certifiées, livrées. Chaque pièce est peinte à la main. Pas de série industrielle. Pas de campagne.",
+      "Le déclic, c'est Mr Brainwash dans le documentaire de Banksy : la culture pop comme matière première, le geste sans permission. En 2018, Prix Révélation des Beaux-Arts. Le geste de la rue entre dans la salle sans rien renier — POSCA, acrylique, spray, collage, stencil, dripping, brush.",
+    emphasis: ['Mr Brainwash', 'Prix Révélation'],
   },
   {
     body:
-      "Le travail d'abord. Le reste — la cote, les ventes, les chiffres — n'est que conséquence. JUST EXIST.",
-    emphasis: ['JUST EXIST'],
+      "Mickey, Snoopy, Goku, Pink Panther, les héros Marvel et DC : la culture pop comme territoire commun. Deux mots reviennent toujours — LOVE, JUST EXIST. Le travail d'abord ; le reste — la cote, les chiffres, les vues — n'est que conséquence.",
+    emphasis: ['LOVE', 'JUST EXIST'],
   },
 ];
 
@@ -53,63 +56,70 @@ const SUBPAGES = [
     href: '/atelier/presse',
     eyebrow: 'Médias',
     title: 'Presse',
-    body: 'Articles, interviews, reportages. Le Monde, Numéro art, Les Échos, Konbini.',
+    body: 'Articles, interviews, reportages. Le Parisien, AirZen Radio, POSCA officiel.',
   },
   {
     href: '/atelier/chronologie',
     eyebrow: 'Histoire',
     title: 'Chronologie',
-    body: 'De 2018 à aujourd\'hui — les jalons, les expositions, les rencontres.',
+    body: "De l'enfance au Maroc à aujourd'hui — les jalons, les expositions, les rencontres.",
   },
   {
     href: '/atelier/contact',
     eyebrow: 'Direct',
     title: 'Contact',
-    body: 'Presse, collab, événement, simple message — Naguy lit tout, répond sous 72 h.',
+    body: "Presse, collab, événement, simple message — Naguy lit tout, répond sous 48 h ouvrées.",
   },
 ] as const;
 
-/* ───────── Jalons (chronologie courte) ───────── */
+/* ───────── Jalons (chronologie courte — vrais jalons documentés) ───────── */
 const JALONS: ReadonlyArray<{
   year: string;
   label: string;
   detail: string;
 }> = [
   {
+    year: 'Enfance',
+    label: 'Le déclic au Maroc',
+    detail: "Vers dix ans, en vacances familiales, je regarde un peintre travailler. Quelque chose se met en place.",
+  },
+  {
+    year: '16 ans',
+    label: 'Première exposition',
+    detail: 'Sous le pseudonyme Nacks. Le travail commence à sortir du carnet.',
+  },
+  {
     year: '2018',
-    label: 'Prix Révélations Beaux-Arts',
-    detail: 'Premier signal institutionnel. Le geste de la rue entre dans la salle.',
+    label: 'Prix Révélation des Beaux-Arts',
+    detail: 'Premier signal institutionnel. Le geste de la rue entre dans la salle sans rien renier.',
   },
   {
     year: '2020',
-    label: 'Première exposition solo',
-    detail: 'Galerie Lafayette — la peinture sort du cadre, sans rien renier.',
+    label: 'Représentation Los Angeles',
+    detail: 'Artspace Warehouse Gallery — galerie représentante aux États-Unis.',
   },
   {
     year: '2022',
-    label: 'Mr Poppy series',
-    detail: 'Naissance du personnage signature. 10 originaux vendus à la communauté.',
+    label: 'Lancement Nacks Show',
+    detail: 'TikTok @nacksgalerie : fresques de prénoms en live, en duo avec La Voix Off.',
   },
   {
-    year: '2024',
-    label: 'Pop-up Los Angeles',
-    detail: 'Artspace Warehouse Gallery — sold-out en 48 h.',
-  },
-  {
-    year: '2025',
-    label: 'Foire de Paris + Posca',
-    detail: 'Première présence institutionnelle. Partenariat officiel Posca.',
-  },
-  {
-    year: '2026',
-    label: 'Galerie en ligne',
-    detail: 'nacksgalerie.com. Le royaume numérique est ouvert. Plus d\'intermédiaire.',
+    year: '2023',
+    label: 'Foire de Paris × IMAGINE for Margo',
+    detail: "Fresque «Partage» au POSCA pour le cancer pédiatrique. Membre du jury du 1er concours Street Art de la Foire.",
   },
 ];
 
 export default function AtelierPage() {
+  const personJsonLd = buildPerson();
   return (
     <PageShell>
+      {/* JSON-LD Schema.org Person — SEO + rich snippets */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
       {/* ═════════ Section 1 — Hero atelier (cream) ═════════ */}
       <section
         aria-label="L'atelier"
@@ -137,7 +147,7 @@ export default function AtelierPage() {
               margin: 0,
             }}
           >
-            L&apos;Atelier &middot; Depuis 2018
+            L&apos;Atelier &middot; Sarcelles, Val-d&apos;Oise
           </p>
 
           <h1
@@ -154,7 +164,7 @@ export default function AtelierPage() {
               maxWidth: '20ch',
             }}
           >
-            Un atelier, deux villes,
+            Un studio, deux mains,
             <br />
             une signature.
           </h1>
@@ -170,8 +180,9 @@ export default function AtelierPage() {
               margin: 0,
             }}
           >
-            Sarcelles pour les murs. Paris pour les œuvres et les rendez-vous.
-            Tout passe par la main.
+            Sarcelles. Studio partagé avec La Voix Off. Le Nacks Show diffuse
+            chaque semaine en direct sur TikTok — fresques de prénoms, POSCA,
+            spray. Tout passe par la main.
           </p>
         </div>
       </section>
@@ -227,9 +238,8 @@ export default function AtelierPage() {
                 &lsquo;Nacks&rsquo; Claude.
               </h2>
 
-              {/* Portrait illustré SVG — silhouette éditoriale, sobre */}
+              {/* Portrait — vraie photo atelier Sarcelles */}
               <figure
-                aria-hidden
                 className="mt-4"
                 style={{
                   width: '100%',
@@ -240,36 +250,17 @@ export default function AtelierPage() {
                   overflow: 'hidden',
                   position: 'relative',
                   boxShadow: '0 1px 1px rgba(0,0,0,0.06), 0 18px 40px -22px rgba(10,10,10,0.18)',
+                  margin: 0,
                 }}
               >
-                <svg
-                  viewBox="0 0 200 250"
-                  preserveAspectRatio="xMidYMid slice"
-                  className="absolute inset-0 h-full w-full"
-                >
-                  {/* Bg subtle gradient cream → paper */}
-                  <defs>
-                    <linearGradient id="bg-portrait" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#fafafa" />
-                      <stop offset="100%" stopColor="#efe9d9" />
-                    </linearGradient>
-                  </defs>
-                  <rect width="200" height="250" fill="url(#bg-portrait)" />
-                  {/* Silhouette tête + épaules */}
-                  <ellipse cx="100" cy="95" rx="38" ry="46" fill={INK} opacity="0.92" />
-                  <path
-                    d="M 40 250 L 40 200 Q 100 165 160 200 L 160 250 Z"
-                    fill={INK}
-                    opacity="0.92"
-                  />
-                  {/* Mini drip décoratif */}
-                  <path
-                    d="M 100 142 C 100 158 99 168 100 174 Q 100 178 101 174 C 101 168 100 158 100 142 Z"
-                    fill={INK}
-                    opacity="0.55"
-                  />
-                  <circle cx="100" cy="176" r="1.4" fill={INK} opacity="0.55" />
-                </svg>
+                <Image
+                  src="/photos/portrait/naguy-atelier-portrait.jpg"
+                  alt="Naguy 'Nacks' Claude debout dans son atelier de Sarcelles, devant l'œuvre Mickey en mots, POSCAs au premier plan"
+                  fill
+                  sizes="(min-width: 1024px) 20rem, 80vw"
+                  className="object-cover"
+                  loading="lazy"
+                />
               </figure>
 
               <p
@@ -327,7 +318,7 @@ export default function AtelierPage() {
                     color: 'rgba(10,10,10,0.5)',
                   }}
                 >
-                  Atelier &middot; Sarcelles &middot; Paris
+                  Atelier &middot; Sarcelles &middot; Val-d&apos;Oise
                 </span>
               </div>
             </div>

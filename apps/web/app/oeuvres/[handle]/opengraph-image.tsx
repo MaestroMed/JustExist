@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 import { OG_ALT, OG_COLORS, OG_CONTENT_TYPE, OG_SIZE, priceText } from '@/lib/og/shared';
 import { getArtwork, artworks } from '@/lib/content/artworks';
-import { getCharacter } from '@/lib/content/characters';
+import { getCharacterOrProject } from '@/lib/content/characters';
 
 export const alt = OG_ALT;
 export const size = OG_SIZE;
@@ -16,7 +16,7 @@ export default async function Image({ params }: { params: Promise<{ handle: stri
   const artwork = getArtwork(handle);
   if (!artwork) return fallback();
 
-  const character = artwork.character ? getCharacter(artwork.character) : null;
+  const character = artwork.character ? getCharacterOrProject(artwork.character) : null;
   const accent = character?.primaryColor ?? OG_COLORS.blood;
   const txtOnAccent = contrastOf(accent);
   const statusLabel = artwork.status === 'sold_out' ? 'Vendu' : artwork.status === 'coming' ? 'Bientôt' : 'Prix';

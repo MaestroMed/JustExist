@@ -7,15 +7,12 @@ import { UniversCardAnim } from './UniversHorizontalAnim';
 /**
  * SCÈNE — Univers (DA Zwirner / Hermès).
  *
- * Présentation calme et photo-first des 4 personnages signature de Nacks
- * comme une galerie d'artistes. Layout vertical, grid 4 cards, espace
- * négatif, typo serif italic + Inter, aucun spray fluo full-card.
+ * Présentation calme des univers culturels que Nacks revisite : Mickey,
+ * Simpsons, Dragon Ball, Pink Panther, Snoopy. Layout vertical, grid
+ * responsive 1 / 2 / 5 colonnes, espace négatif, typo serif italic.
  *
  * NB : nom de fichier conservé (UniversHorizontal) car page.tsx l'importe.
- * Layout effectif = vertical, grid responsive 1 / 2 / 4 colonnes.
- *
- * Server component shell (data + structure) + UniversCardAnim client
- * wrapper qui anime au scroll avec Motion `whileInView`.
+ * Server component shell + UniversCardAnim client wrapper.
  */
 
 const INK = '#0a0a0a';
@@ -66,9 +63,9 @@ export function UniversHorizontal() {
                 margin: 0,
               }}
             >
-              Quatre personnages.
+              Cinq univers.
               <br />
-              Mille histoires.
+              Une seule main.
             </h2>
           </div>
 
@@ -83,15 +80,16 @@ export function UniversHorizontal() {
                 margin: 0,
               }}
             >
-              Mr Poppy, Gorille, Renard, Lion — quatre figures récurrentes
-              qui peuplent les murs et les œuvres depuis 2018.
+              Mickey, Simpsons, Dragon Ball, Pink Panther, Snoopy — les icônes
+              pop culture que Nacks revisite au Posca, à l'aérosol, à
+              l'acrylique. Cinq vocabulaires, une même grammaire de la rue.
             </p>
           </div>
         </header>
 
-        {/* ── Grille 4 cards ── */}
+        {/* ── Grille 5 cards ── */}
         <ul
-          className="grid list-none grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+          className="grid list-none grid-cols-1 md:grid-cols-2 lg:grid-cols-5"
           style={{
             gap: 'clamp(1.5rem, 3vw, 2.5rem)',
             margin: 0,

@@ -163,7 +163,7 @@ export default function ContactPage() {
                     margin: 0,
                   }}
                 >
-                  Atelier de Paris.
+                  Sarcelles, Val-d&apos;Oise.
                 </p>
 
                 <p
@@ -176,7 +176,8 @@ export default function ContactPage() {
                     margin: 0,
                   }}
                 >
-                  Sur rendez-vous uniquement, du mardi au vendredi.
+                  Studio partagé avec La Voix Off. Visites sur rendez-vous
+                  uniquement, du mardi au vendredi.
                   <br />
                   Adresse communiquée à la confirmation.
                 </p>

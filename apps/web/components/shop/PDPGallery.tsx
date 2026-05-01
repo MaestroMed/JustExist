@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'motion/react';
+import Image from 'next/image';
 import { ArtPoster } from '@/components/art/ArtPoster';
 
 const PAPER = '#fafafa';
@@ -19,6 +20,7 @@ type Variant =
 type Props = {
   variant: Variant;
   title: string;
+  photo?: string;
 };
 
 /**
@@ -26,7 +28,7 @@ type Props = {
  * Image principale grande, thumbnails sous, fade transition au switch,
  * subtle hover scale. Background paper pour mettre l'œuvre en valeur.
  */
-export function PDPGallery({ variant, title }: Props) {
+export function PDPGallery({ variant, title, photo }: Props) {
   const [active, setActive] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-10%' });
@@ -75,11 +77,22 @@ export function PDPGallery({ variant, title }: Props) {
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="pdp-media-inner absolute inset-0"
           >
-            <ArtPoster
-              variant={variant}
-              label={`${title}${current.suffix}`}
-              className="absolute inset-0"
-            />
+            {photo && active === 0 ? (
+              <Image
+                src={photo}
+                alt={title}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 60vw"
+                className="object-cover"
+              />
+            ) : (
+              <ArtPoster
+                variant={variant}
+                label={`${title}${current.suffix}`}
+                className="absolute inset-0"
+              />
+            )}
           </motion.div>
         </AnimatePresence>
       </motion.div>
@@ -118,11 +131,21 @@ export function PDPGallery({ variant, title }: Props) {
                 cursor: 'pointer',
               }}
             >
-              <ArtPoster
-                variant={variant}
-                label={`${title} — ${v.label}`}
-                className="absolute inset-0"
-              />
+              {photo && i === 0 ? (
+                <Image
+                  src={photo}
+                  alt={`${title} — ${v.label}`}
+                  fill
+                  sizes="120px"
+                  className="object-cover"
+                />
+              ) : (
+                <ArtPoster
+                  variant={variant}
+                  label={`${title} — ${v.label}`}
+                  className="absolute inset-0"
+                />
+              )}
             </button>
           );
         })}

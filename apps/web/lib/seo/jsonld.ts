@@ -6,9 +6,27 @@
 
 import type { Artwork } from '@/lib/content/artworks';
 import type { Drop } from '@/lib/content/drops';
-import type { Character } from '@/lib/content/characters';
+import type {
+  Character,
+  ExperimentalProject,
+} from '@/lib/content/characters';
 import type { JournalPost } from '@/lib/content/journal';
 import { nacks } from '@/lib/content/nacks';
+import { SOCIAL_LINKS } from '@/lib/content/social';
+
+// Tous les profils externes — pour sameAs[] complet sur Person + Organization.
+const ALL_SAME_AS: readonly string[] = [
+  SOCIAL_LINKS.instagram,
+  SOCIAL_LINKS.tiktok,
+  SOCIAL_LINKS.youtube,
+  SOCIAL_LINKS.facebook,
+  SOCIAL_LINKS.linkedin,
+  SOCIAL_LINKS.artsy,
+  SOCIAL_LINKS.artsper,
+  SOCIAL_LINKS.artmajeur,
+  SOCIAL_LINKS.artspaceWarehouse,
+  SOCIAL_LINKS.firstDibs,
+];
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nacksgalerie.com';
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? 'Nacks Galerie';
@@ -28,11 +46,7 @@ export function buildOrganization(): JsonLd {
     founder: { '@type': 'Person', name: nacks.name, alternateName: nacks.alias },
     foundingDate: '2022',
     foundingLocation: { '@type': 'Place', name: nacks.birthplace },
-    sameAs: [
-      nacks.social.tiktok.url,
-      nacks.social.instagram.url,
-      nacks.social.youtube.url,
-    ],
+    sameAs: ALL_SAME_AS,
     contactPoint: {
       '@type': 'ContactPoint',
       email: 'contact@nacksgalerie.com',
@@ -40,6 +54,35 @@ export function buildOrganization(): JsonLd {
       areaServed: 'FR',
       availableLanguage: ['fr', 'en'],
     },
+  };
+}
+
+/**
+ * ArtGallery Schema — Nacks Galerie comme galerie d'art en ligne.
+ * Plus spécifique que Organization pour SEO local + rich snippets art.
+ */
+export function buildArtGallery(): JsonLd {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ArtGallery',
+    '@id': `${SITE_URL}/#artgallery`,
+    name: SITE_NAME,
+    alternateName: 'NACKS GALERIE',
+    description:
+      "Galerie en ligne officielle de Naguy Claude alias Nacks. Œuvres originales, customs sur commande, reproductions limitées. Pop Art × Street Art.",
+    url: SITE_URL,
+    image: `${SITE_URL}${nacks.portraitImage}`,
+    logo: `${SITE_URL}/icon.svg`,
+    founder: { '@id': `${SITE_URL}/atelier#person` },
+    artist: { '@id': `${SITE_URL}/atelier#person` },
+    foundingDate: '2022',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Sarcelles',
+      addressRegion: "Val-d'Oise",
+      addressCountry: 'FR',
+    },
+    sameAs: ALL_SAME_AS,
   };
 }
 
@@ -67,19 +110,35 @@ export function buildPerson(): JsonLd {
     '@id': `${SITE_URL}/atelier#person`,
     name: nacks.name,
     alternateName: nacks.alias,
+    givenName: 'Naguy',
+    familyName: 'Claude',
     url: `${SITE_URL}/atelier`,
+    image: `${SITE_URL}${nacks.portraitImage}`,
     jobTitle: 'Artiste peintre',
+    description: nacks.description,
+    nationality: { '@type': 'Country', name: 'France' },
     birthPlace: { '@type': 'Place', name: nacks.birthplace },
     workLocation: [
       { '@type': 'Place', name: 'Sarcelles, France' },
       { '@type': 'Place', name: 'Paris, France' },
       { '@type': 'Place', name: 'Los Angeles, United States' },
+      { '@type': 'Place', name: 'Casablanca, Morocco' },
     ],
-    sameAs: [
-      nacks.social.tiktok.url,
-      nacks.social.instagram.url,
-      nacks.social.youtube.url,
+    award: nacks.awards.map((a) => `${a.title} (${a.year})`),
+    knowsAbout: [
+      'Pop Art',
+      'Street Art',
+      'POSCA',
+      'Graffiti',
+      'Aerosol',
+      'Acrylic painting',
+      'Stencil',
+      'Mickey Mouse',
+      'Snoopy',
+      'Pop culture',
     ],
+    worksFor: { '@id': `${SITE_URL}/#artgallery` },
+    sameAs: ALL_SAME_AS,
   };
 }
 
@@ -100,7 +159,10 @@ export function buildBreadcrumb(items: { name: string; href: string }[]): JsonLd
 
 // ─────────── VisualArtwork / Product ───────────
 
-export function buildArtwork(artwork: Artwork, character?: Character | null): JsonLd[] {
+export function buildArtwork(
+  artwork: Artwork,
+  character?: Character | ExperimentalProject | null,
+): JsonLd[] {
   const id = `${SITE_URL}/oeuvres/${artwork.slug}#artwork`;
   const availability =
     artwork.status === 'in_stock'
