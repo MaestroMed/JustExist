@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { fontClassNames } from '@/lib/fonts';
-import { buildOrganization, buildWebSite, serializeJsonLd } from '@/lib/seo/jsonld';
+import { buildOrganization, buildWebSite, buildArtGallery, serializeJsonLd } from '@/lib/seo/jsonld';
 import { PlausibleScript } from '@/components/polish/PlausibleScript';
 import { Providers } from './providers';
 import './globals.css';
@@ -105,7 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
-            __html: serializeJsonLd([buildOrganization(), buildWebSite()]),
+            __html: serializeJsonLd([buildOrganization(), buildArtGallery(), buildWebSite()]),
           }}
         />
       </head>

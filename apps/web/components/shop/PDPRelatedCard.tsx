@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'motion/react';
 import type { Artwork } from '@/lib/content/artworks';
 import { formatPrice } from '@/lib/content/artworks';
+import Image from 'next/image';
 import { ArtPoster } from '@/components/art/ArtPoster';
 
 const INK = 'var(--color-ink, #0a0a0a)';
@@ -65,11 +66,21 @@ export function PDPRelatedCard({
           }}
         >
           <div className="pdp-related-img absolute inset-0">
-            <ArtPoster
-              variant={art.posterVariant}
-              label={art.title}
-              className="absolute inset-0"
-            />
+            {art.photo ? (
+              <Image
+                src={art.photo}
+                alt={art.title}
+                fill
+                sizes="(max-width: 768px) 50vw, 25vw"
+                className="object-cover"
+              />
+            ) : (
+              <ArtPoster
+                variant={art.posterVariant}
+                label={art.title}
+                className="absolute inset-0"
+              />
+            )}
           </div>
 
           {(isSoldOut || isComing) && (

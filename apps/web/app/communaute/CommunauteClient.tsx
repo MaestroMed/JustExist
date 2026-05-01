@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView, useReducedMotion } from 'motion/react';
 import { DripButton } from '@/components/ui/DripButton';
+import { SOCIAL_LINKS, SOCIAL_HANDLES } from '@/lib/content/social';
 
 /**
  * COMMUNAUTÉ — DA premium 2026.
@@ -140,11 +141,14 @@ type Stat = {
   label: string;
 };
 
+// Chiffres réels confirmés par Naguy Claude (Apr 2025).
+// Sources : article AirZen 2023 (450K TikTok), estimation Instagram propre.
+// Total réseaux cumulé ~500K abonnés.
 const STATS: Stat[] = [
-  { value: 824, suffix: 'K', label: 'Suiveurs Instagram' },
-  { value: 510, suffix: 'K', label: 'Abonnés TikTok' },
-  { value: 18, suffix: 'K', label: 'Newsletter Cercle' },
-  { value: 1240, label: 'Collectionneurs' },
+  { value: 450, suffix: 'K', label: 'Communauté TikTok' },
+  { value: 40, suffix: 'K', label: 'Abonnés Instagram' },
+  { value: 500, suffix: 'K', label: 'Total réseaux sociaux' },
+  { value: 5, label: 'Galeries partenaires' },
 ];
 
 function Stats() {
@@ -319,27 +323,30 @@ type Testimonial = {
   initials: string;
 };
 
+// TODO: vrais témoignages à fournir par client (collectionneurs réels,
+// journalistes ayant couvert Nacks, autres artistes du réseau).
+// Textes ci-dessous = placeholders neutres préservant le visuel.
 const TESTIMONIALS: Testimonial[] = [
   {
-    name: 'Camille R.',
-    role: 'Collectionneuse · Lyon',
-    initials: 'CR',
+    name: 'Collectionneur',
+    role: 'Témoignage à venir',
+    initials: 'NN',
     quote:
-      "J'ai accroché la pièce dans le couloir. Tous les matins, elle me rappelle pourquoi je suis passée du côté qui peint plutôt que du côté qui regarde.",
+      "Espace réservé pour un témoignage de collectionneur. Le format reste : une voix, une pièce, un mur. Le client fournira les retours réels avant publication.",
   },
   {
-    name: 'Léon Maréchal',
-    role: 'Journaliste · Beaux-Arts Magazine',
-    initials: 'LM',
+    name: 'Presse',
+    role: 'Témoignage à venir',
+    initials: 'NN',
     quote:
-      "Ce qui distingue Nacks, c'est la fidélité au geste premier. Le cadre n'a rien aseptisé. La rue est encore dedans, lisible au premier coup d'œil.",
+      "Espace réservé pour un retour presse. Les articles existants — AirZen, BFM, France Inter — pourront être cités ici une fois les autorisations confirmées.",
   },
   {
-    name: 'Yasmine D.',
-    role: "Artiste · Atelier Belleville",
-    initials: 'YD',
+    name: 'Artiste',
+    role: 'Témoignage à venir',
+    initials: 'NN',
     quote:
-      "On se croise au détour d'un mur. Lui sait pourquoi il peint, et il le rend visible. Cette communauté ne donne pas de leçons, elle invite à faire pareil.",
+      "Espace réservé pour un témoignage d'artiste du réseau. Voix de pair sur le geste, le mur, la communauté — à recueillir auprès des collaborateurs proches.",
   },
 ];
 
@@ -609,8 +616,12 @@ function Join() {
             Newsletter mensuelle
           </DripButton>
 
-          <DripButton href="https://instagram.com/nacks" variant="secondary" size="md">
+          <DripButton href={SOCIAL_LINKS.instagram} variant="secondary" size="md">
             Suivre sur Instagram
+          </DripButton>
+
+          <DripButton href={SOCIAL_LINKS.tiktok} variant="secondary" size="md">
+            Suivre sur TikTok
           </DripButton>
         </motion.div>
       </div>
@@ -624,18 +635,28 @@ function Join() {
 const SOCIALS: { label: string; href: string; handle: string }[] = [
   {
     label: 'Instagram',
-    href: 'https://instagram.com/nacks',
-    handle: '@nacks',
+    href: SOCIAL_LINKS.instagram,
+    handle: SOCIAL_HANDLES.instagram,
   },
   {
     label: 'TikTok',
-    href: 'https://tiktok.com/@nacks',
-    handle: '@nacks',
+    href: SOCIAL_LINKS.tiktok,
+    handle: SOCIAL_HANDLES.tiktok,
   },
   {
     label: 'YouTube',
-    href: 'https://youtube.com/@nacks',
-    handle: '/@nacks',
+    href: SOCIAL_LINKS.youtube,
+    handle: SOCIAL_HANDLES.youtube,
+  },
+  {
+    label: 'Facebook',
+    href: SOCIAL_LINKS.facebook,
+    handle: SOCIAL_HANDLES.facebook,
+  },
+  {
+    label: 'LinkedIn',
+    href: SOCIAL_LINKS.linkedin,
+    handle: SOCIAL_HANDLES.linkedin,
   },
 ];
 

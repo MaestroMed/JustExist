@@ -1,6 +1,5 @@
 'use client';
 
-import { useRef } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { PageShell } from '@/components/layouts/PageShell';
 
@@ -54,48 +53,90 @@ const KIT_ASSETS: ReadonlyArray<{
   },
 ];
 
-/* ───────── Mentions presse ───────── */
+/* ───────── Mentions presse — sources réelles documentées ───────── */
 const PRESS_MENTIONS: ReadonlyArray<{
   outlet: string;
   title: string;
   date: string;
   href: string;
+  quote?: string;
 }> = [
   {
-    outlet: 'Le Monde',
-    title: "Naguy Claude, le peintre qui fait passer la rue en galerie",
-    date: 'Mars 2026',
-    href: '#',
+    outlet: 'Le Parisien',
+    title:
+      "Nacks, l'artiste aux 500 000 abonnés sur TikTok peint pour les enfants malades à la Foire de Paris",
+    date: '25 avril 2023',
+    href: 'https://www.leparisien.fr/val-d-oise-95/nacks-lartiste-aux-500-000-abonnes-sur-tiktok-peint-pour-les-enfants-malades-a-la-foire-de-paris-25-04-2023-WHGZPRJRTVGZ5LFD3SZ7WE5QF4.php',
+    quote:
+      "Une fresque «Partage» peinte au POSCA pour IMAGINE for Margo, association de lutte contre le cancer pédiatrique.",
   },
   {
-    outlet: 'Beaux Arts Magazine',
-    title: "Mr Poppy ou la grammaire d'un personnage signature",
-    date: 'Février 2026',
-    href: '#',
+    outlet: 'AirZen Radio',
+    title:
+      "Paris : Nacks, l'artiste peintre aux 500 000 abonnés sur les réseaux",
+    date: '2023',
+    href: 'https://www.airzen.fr/paris-nacks-lartiste-peintre-aux-500-000-abonnes-sur-les-reseaux/',
+    quote:
+      "Portrait radio d'un peintre autodidacte du Val-d'Oise qui rassemble une communauté en ligne autour de ses fresques au POSCA.",
   },
   {
-    outlet: 'France Inter',
-    title: "L'invité culture — Nacks, atelier ouvert",
-    date: 'Janvier 2026',
-    href: '#',
+    outlet: 'POSCA',
+    title:
+      "Nacks & La Voix Off pour une fresque interactive à la Foire de Paris",
+    date: '2023',
+    href: 'https://www.posca.com/fr/communities/street-art/nacks-la-voix-off-fresque-foire-de-paris-2023/',
+    quote:
+      "Reportage officiel POSCA sur la performance live de Nacks et La Voix Off pendant la Foire de Paris.",
   },
   {
-    outlet: 'Konbini',
-    title: "Dans l'atelier parisien de Nacks",
-    date: 'Décembre 2025',
-    href: '#',
+    outlet: 'POSCA',
+    title:
+      "POSCA & Nacks à la Foire de Paris pour une fresque nommée «Partage»",
+    date: '2023',
+    href: 'https://www.posca.com/fr/communities/street-art/posca-nacks-a-la-foire-de-paris-posca-2023/',
+    quote:
+      "Plongée dans le making-of de la fresque «Partage», jury du 1er concours Street Art de la Foire.",
   },
   {
-    outlet: 'Numéro',
-    title: "Pop-up Los Angeles — sold out en 48 heures",
-    date: 'Novembre 2025',
-    href: '#',
+    outlet: 'POSCA',
+    title: 'NACKS, La Voix Off & TikTok — les fresques de prénoms',
+    date: '2022',
+    href: 'https://www.posca.com/fr/communities/life-custom-fr/nacks-la-voix-off-les-prenoms-tiktok2/',
+    quote:
+      "Le format «Nacks Show» décrypté : fresques de prénoms en live, communauté TikTok @nacksgalerie.",
   },
   {
-    outlet: 'Vogue France',
-    title: "Le nouveau langage de la peinture urbaine",
-    date: 'Octobre 2025',
-    href: '#',
+    outlet: 'IMAGINE for Margo',
+    title:
+      "Foire de Paris : l'artiste NACKS se mobilise pour l'association IMAGINE for Margo",
+    date: 'Avril 2023',
+    href: 'https://imagineformargo.org/foire-de-paris-lartiste-nacks-se-mobilise-pour-lassociation-imagine-for-margo-qui-lutte-contre-le-cancer-des-enfants/',
+    quote:
+      "L'association partenaire raconte l'engagement de Nacks pour la lutte contre le cancer des enfants.",
+  },
+  {
+    outlet: 'World Today News',
+    title: "Teal — Nacks' paintings and graffiti are popular",
+    date: '2023',
+    href: 'https://www.world-today-news.com/teal-nacks-paintings-and-graffiti-are-popular/',
+    quote:
+      "Coverage internationale de la trajectoire de Nacks, entre peinture, graffiti et reconnaissance des collectionneurs.",
+  },
+  {
+    outlet: 'Artspace Warehouse',
+    title: 'Naguy Claude — profil galerie, biographie, œuvres disponibles',
+    date: 'Depuis 2020',
+    href: 'https://www.artspacewarehouse.com/en/artist-naguy-claude',
+    quote:
+      "Galerie représentante à Los Angeles. Biographie complète, œuvres disponibles, group shows 2024.",
+  },
+  {
+    outlet: 'Artsy',
+    title: 'Naguy Claude — profil, œuvres, CV exposition',
+    date: '2025',
+    href: 'https://www.artsy.net/artist/naguy-claude',
+    quote:
+      "Référencement Artsy : œuvre «Street Life» (2025), CV d'expositions, biographie institutionnelle.",
   },
 ];
 
@@ -434,7 +475,7 @@ export function PresseClient() {
                     backgroundColor: 'transparent',
                     border: '1px solid rgba(245,241,232,0.12)',
                     borderRadius: '4px',
-                    minHeight: 'clamp(11rem, 16vh, 14rem)',
+                    minHeight: 'clamp(13rem, 20vh, 18rem)',
                   }}
                 >
                   <div className="flex flex-col gap-[clamp(0.75rem,1.5vh,1rem)]">
@@ -454,14 +495,27 @@ export function PresseClient() {
                         fontFamily: FONT_SERIF,
                         fontStyle: 'italic',
                         fontWeight: 400,
-                        fontSize: 'clamp(1.25rem, 1.8vw, 1.6rem)',
-                        lineHeight: 1.25,
+                        fontSize: 'clamp(1.15rem, 1.6vw, 1.45rem)',
+                        lineHeight: 1.3,
                         letterSpacing: '-0.015em',
                         color: CREAM,
                       }}
                     >
                       {m.title}
                     </span>
+                    {m.quote && (
+                      <span
+                        style={{
+                          fontFamily: FONT_BODY,
+                          fontSize: 'clamp(0.85rem, 0.95vw, 0.95rem)',
+                          lineHeight: 1.55,
+                          color: 'rgba(245,241,232,0.62)',
+                          marginTop: '0.5rem',
+                        }}
+                      >
+                        &laquo; {m.quote} &raquo;
+                      </span>
+                    )}
                   </div>
                   <div className="flex items-end justify-between gap-3">
                     <span

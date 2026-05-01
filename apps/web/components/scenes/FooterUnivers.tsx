@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Container } from '@nacks/ui';
+import { SOCIAL_LINKS, PARTNER_GALLERIES } from '@/lib/content/social';
 
 /**
  * SCÈNE 8 — FooterUnivers (DA pivot premium minimaliste).
@@ -64,10 +65,14 @@ const COLUMNS: Col[] = [
   },
 ];
 
-const SOCIALS: { href: string; label: string; icon: 'instagram' | 'tiktok' | 'youtube' }[] = [
-  { href: 'https://www.instagram.com/nacksgalerie', label: 'Instagram', icon: 'instagram' },
-  { href: 'https://www.tiktok.com/@nacksgalerie', label: 'TikTok', icon: 'tiktok' },
-  { href: 'https://www.youtube.com/@nacksgalerie', label: 'YouTube', icon: 'youtube' },
+type SocialIconName = 'instagram' | 'tiktok' | 'youtube' | 'facebook' | 'linkedin';
+
+const SOCIALS: { href: string; label: string; icon: SocialIconName }[] = [
+  { href: SOCIAL_LINKS.instagram, label: 'Instagram', icon: 'instagram' },
+  { href: SOCIAL_LINKS.tiktok, label: 'TikTok', icon: 'tiktok' },
+  { href: SOCIAL_LINKS.youtube, label: 'YouTube', icon: 'youtube' },
+  { href: SOCIAL_LINKS.facebook, label: 'Facebook', icon: 'facebook' },
+  { href: SOCIAL_LINKS.linkedin, label: 'LinkedIn', icon: 'linkedin' },
 ];
 
 const FONT_GRAFFITI = "var(--font-graffiti, 'Permanent Marker', system-ui, sans-serif)";
@@ -146,7 +151,7 @@ export function FooterUnivers() {
                 key={s.label}
                 href={s.href}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 aria-label={s.label}
                 className="text-[var(--color-cream-600)] transition-all duration-200 hover:scale-105 hover:text-[var(--color-cream)]"
                 style={{ display: 'inline-flex' }}
@@ -155,6 +160,38 @@ export function FooterUnivers() {
               </a>
             ))}
           </div>
+        </div>
+
+        {/* ═══════ Galeries partenaires — "Aussi disponible sur" ═══════ */}
+        <div
+          className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-[var(--color-cream-100)] md:gap-x-10"
+          style={{ paddingBlock: 'clamp(1.5rem, 3vh, 2rem)' }}
+        >
+          <p
+            className="uppercase tracking-[0.2em] text-[var(--color-cream-600)]"
+            style={{ fontSize: '0.75rem' }}
+          >
+            Aussi disponible sur
+          </p>
+          <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 md:gap-x-7">
+            {PARTNER_GALLERIES.map((gallery) => (
+              <li key={gallery.key}>
+                <a
+                  href={gallery.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="uppercase text-[var(--color-cream-600)] transition-colors duration-200 hover:text-[var(--color-cream)]"
+                  style={{
+                    fontSize: '0.7rem',
+                    letterSpacing: '0.18em',
+                    fontWeight: 500,
+                  }}
+                >
+                  {gallery.label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* ═══════ Legal row ═══════ */}
@@ -226,7 +263,7 @@ function FooterColumn({ col }: { col: Col }) {
 /* ──────────────────────────────────────────────────────────────────
  * Social icons — 24×24, stroke currentColor, hover via parent
  * ────────────────────────────────────────────────────────────────── */
-function SocialIcon({ name }: { name: 'instagram' | 'tiktok' | 'youtube' }) {
+function SocialIcon({ name }: { name: SocialIconName }) {
   const common = {
     width: 24,
     height: 24,
@@ -255,6 +292,25 @@ function SocialIcon({ name }: { name: 'instagram' | 'tiktok' | 'youtube' }) {
       <svg {...common}>
         <path d="M14 4v9.5a3.5 3.5 0 1 1-3.5-3.5" />
         <path d="M14 4c0 2.5 2 4.5 4.5 4.5" />
+      </svg>
+    );
+  }
+
+  if (name === 'facebook') {
+    return (
+      <svg {...common}>
+        <path d="M14 7.5h2.5V4.25h-2.5C12.07 4.25 10.5 5.82 10.5 7.75v2H8.5v3.25h2v6.75h3v-6.75h2.25l.5-3.25H13.5v-1.5c0-.41.34-.75.5-.75z" />
+      </svg>
+    );
+  }
+
+  if (name === 'linkedin') {
+    return (
+      <svg {...common}>
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <line x1="7.5" y1="10" x2="7.5" y2="17" />
+        <circle cx="7.5" cy="7" r="0.7" fill="currentColor" stroke="none" />
+        <path d="M11 17v-7M11 12.5c0-1.4 1-2.5 2.5-2.5s2.5 1.1 2.5 2.5V17" />
       </svg>
     );
   }

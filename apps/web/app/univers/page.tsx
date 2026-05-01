@@ -4,7 +4,12 @@ import { Container } from '@nacks/ui';
 import { PageShell } from '@/components/layouts/PageShell';
 import { CharacterPortrait } from '@/components/art/CharacterPortrait';
 import { DripButton } from '@/components/ui/DripButton';
-import { characters, type Character } from '@/lib/content/characters';
+import {
+  characters,
+  EXPERIMENTAL_PROJECTS,
+  type Character,
+  type ExperimentalProject,
+} from '@/lib/content/characters';
 import { getArtworksByCharacter } from '@/lib/content/artworks';
 import { UniversCardAnim } from '@/components/scenes/UniversHorizontalAnim';
 
@@ -23,9 +28,9 @@ import { UniversCardAnim } from '@/components/scenes/UniversHorizontalAnim';
  */
 
 export const metadata: Metadata = {
-  title: "L'univers Nacks — quatre personnages, une mythologie",
+  title: "L'univers Nacks — cinq icônes pop revisitées",
   description:
-    "Mr Poppy, Gorille de Rome, Renard de Paris, Lion d'Eiffel : quatre figures récurrentes de l'œuvre de Nacks depuis 2018. Chacune a son histoire, ses séries, ses œuvres.",
+    "Mickey, Simpsons, Dragon Ball, Pink Panther, Snoopy : les cinq univers pop culture que Nacks revisite au Posca, à l'aérosol et à l'acrylique. Chacun a son histoire, ses œuvres, ses séries.",
 };
 
 const INK = '#0a0a0a';
@@ -77,9 +82,9 @@ export default function UniversPage() {
                   margin: 'clamp(1.25rem, 2.4vh, 1.75rem) 0 0 0',
                 }}
               >
-                Quatre personnages.
+                Cinq univers.
                 <br />
-                Une mythologie.
+                Une seule main.
               </h1>
             </div>
 
@@ -94,9 +99,10 @@ export default function UniversPage() {
                   margin: 0,
                 }}
               >
-                Mr Poppy, Gorille de Rome, Renard de Paris, Lion d&apos;Eiffel —
-                quatre figures récurrentes qui peuplent les murs depuis 2018.
-                Chacun a son histoire, ses œuvres, ses séries.
+                Mickey, Simpsons, Dragon Ball, Pink Panther, Snoopy — les
+                icônes pop culture que Nacks revisite au Posca, à l&apos;aérosol,
+                à l&apos;acrylique. Réinterprétations d&apos;art transformatif,
+                pas de licence revendiquée.
               </p>
             </div>
           </UniversCardAnim>
@@ -129,6 +135,91 @@ export default function UniversPage() {
           </ul>
         </Container>
       </section>
+
+      {/* ── Projet expérimental — Mr Poppy ── */}
+      {EXPERIMENTAL_PROJECTS.length > 0 && (
+        <section
+          aria-label="Projet expérimental — création originale"
+          className="relative w-full"
+          style={{
+            backgroundColor: CREAM,
+            color: INK,
+            paddingTop: 'clamp(4rem, 8vh, 7rem)',
+            paddingBottom: 'clamp(5rem, 10vh, 9rem)',
+            borderTop: '1px solid rgba(10,10,10,0.12)',
+          }}
+        >
+          <Container size="full" style={{ maxWidth: '1440px' }}>
+            <UniversCardAnim index={0}>
+              <header className="mb-[clamp(2.5rem,5vh,4rem)] grid items-end gap-8 md:grid-cols-12">
+                <div className="md:col-span-7">
+                  <p
+                    style={{
+                      fontFamily: FONT_MONO,
+                      fontSize: '0.72rem',
+                      letterSpacing: '0.32em',
+                      textTransform: 'uppercase',
+                      color: 'rgba(10,10,10,0.55)',
+                      marginBottom: 'clamp(1rem, 2vh, 1.5rem)',
+                      margin: 0,
+                    }}
+                  >
+                    En marge — projet expérimental
+                  </p>
+                  <h2
+                    style={{
+                      fontFamily: FONT_SERIF,
+                      fontStyle: 'italic',
+                      fontWeight: 400,
+                      fontSize: 'clamp(2rem, 4vw, 3.6rem)',
+                      lineHeight: 1.02,
+                      letterSpacing: '-0.015em',
+                      color: INK,
+                      margin: 'clamp(1rem, 2vh, 1.5rem) 0 0 0',
+                    }}
+                  >
+                    Création originale de l&apos;artiste.
+                  </h2>
+                </div>
+                <div className="md:col-span-5 md:pb-2">
+                  <p
+                    style={{
+                      fontFamily: FONT_BODY,
+                      fontSize: 'clamp(0.95rem, 1.05vw, 1.1rem)',
+                      lineHeight: 1.6,
+                      color: 'rgba(10,10,10,0.72)',
+                      maxWidth: '34rem',
+                      margin: 0,
+                    }}
+                  >
+                    À côté du corpus pop culture, Nacks développe en parallèle
+                    des personnages dessinés de zéro. Pas d&apos;icônes
+                    revisitées : juste lui, l&apos;atelier, et un personnage
+                    qu&apos;il fait grandir à son rythme.
+                  </p>
+                </div>
+              </header>
+            </UniversCardAnim>
+
+            <ul
+              className="grid list-none grid-cols-1 md:grid-cols-2"
+              style={{
+                gap: 'clamp(2rem, 4vw, 4rem)',
+                margin: 0,
+                padding: 0,
+              }}
+            >
+              {EXPERIMENTAL_PROJECTS.map((p, i) => (
+                <li key={p.slug} className="flex">
+                  <UniversCardAnim index={i} className="flex w-full">
+                    <ExperimentalProjectCard project={p} index={i} />
+                  </UniversCardAnim>
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </section>
+      )}
 
       {/* ── CTA bas ── */}
       <section
@@ -196,6 +287,123 @@ export default function UniversPage() {
         </Container>
       </section>
     </PageShell>
+  );
+}
+
+/* ============================================================
+ *  ExperimentalProjectCard — variant de CharacterListingCard pour
+ *  les projets expérimentaux (Mr Poppy). Pas de Link (pas de page
+ *  dédiée pour l'instant), badge "Expérimental" au lieu du numero.
+ * ============================================================ */
+function ExperimentalProjectCard({
+  project,
+}: {
+  project: ExperimentalProject;
+  index: number;
+}) {
+  const { slug, name, tagline, lore, introducedAt, artworks } = project;
+  const description = lore[0] ?? '';
+
+  return (
+    <div className="flex w-full flex-col">
+      {/* Portrait — aspect 4/5, paper bg, soft shadow */}
+      <div
+        className="relative w-full overflow-hidden"
+        style={{
+          aspectRatio: '4 / 5',
+          backgroundColor: PAPER,
+          border: '1px solid rgba(10,10,10,0.08)',
+          boxShadow:
+            '0 1px 1px rgba(0,0,0,0.04), 0 10px 24px -14px rgba(0,0,0,0.20)',
+        }}
+      >
+        <CharacterPortrait
+          character={slug}
+          className="absolute inset-0 h-full w-full"
+        />
+
+        <span
+          className="absolute"
+          style={{
+            top: 'clamp(0.9rem, 1.6vw, 1.25rem)',
+            left: 'clamp(0.9rem, 1.6vw, 1.25rem)',
+            fontFamily: FONT_MONO,
+            fontSize: '0.68rem',
+            letterSpacing: '0.28em',
+            textTransform: 'uppercase',
+            color: 'rgba(10,10,10,0.55)',
+            backgroundColor: 'rgba(250,250,250,0.85)',
+            padding: '0.35rem 0.6rem',
+            border: '1px solid rgba(10,10,10,0.12)',
+          }}
+        >
+          Expérimental
+        </span>
+      </div>
+
+      <div
+        className="flex flex-1 flex-col"
+        style={{
+          paddingTop: 'clamp(1.25rem, 2.4vh, 1.75rem)',
+          gap: 'clamp(0.55rem, 1.1vh, 0.85rem)',
+        }}
+      >
+        <h3
+          style={{
+            fontFamily: FONT_SERIF,
+            fontStyle: 'italic',
+            fontWeight: 400,
+            fontSize: 'clamp(1.85rem, 2.8vw, 2.4rem)',
+            lineHeight: 1.05,
+            letterSpacing: '-0.015em',
+            color: INK,
+            margin: 0,
+          }}
+        >
+          {name}
+        </h3>
+
+        <p
+          style={{
+            fontFamily: FONT_BODY,
+            fontSize: 'clamp(0.95rem, 1.05vw, 1.05rem)',
+            lineHeight: 1.45,
+            color: 'rgba(10,10,10,0.72)',
+            margin: 0,
+          }}
+        >
+          {tagline}
+        </p>
+
+        {description && (
+          <p
+            style={{
+              fontFamily: FONT_BODY,
+              fontSize: 'clamp(0.9rem, 0.98vw, 0.98rem)',
+              lineHeight: 1.6,
+              color: 'rgba(10,10,10,0.65)',
+              margin: 'clamp(0.4rem, 0.8vh, 0.6rem) 0 0 0',
+              maxWidth: '46ch',
+            }}
+          >
+            {description}
+          </p>
+        )}
+
+        <span
+          style={{
+            fontFamily: FONT_MONO,
+            fontSize: '0.7rem',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: 'rgba(10,10,10,0.5)',
+            marginTop: 'clamp(0.6rem, 1.2vh, 0.9rem)',
+          }}
+        >
+          {artworks} œuvre{artworks > 1 ? 's' : ''} · Depuis {introducedAt}
+        </span>
+      </div>
+    </div>
   );
 }
 

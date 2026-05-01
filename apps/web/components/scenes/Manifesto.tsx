@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -35,29 +36,32 @@ const FONT_GRAFFITI =
 
 /**
  * Texte canonique du manifeste — 4 paragraphes.
- * Garde les mots-clés Sarcelles / Posca / spray / Beaux-Arts / JUST EXIST
- * (préservés depuis l'ancienne version + brief Agent 1).
+ * Vraie histoire Naguy 'Nacks' Claude :
+ *  (1) Sarcelles + Maroc + Posca origin story
+ *  (2) reconversion technicien son/lumière + autodidacte + 16 ans
+ *  (3) Mr Brainwash + Prix Révélation Beaux-Arts 2018
+ *  (4) JUST EXIST + LOVE — culture pop comme territoire
  */
 const PARAGRAPHS = [
   {
     body:
-      "Né à Sarcelles. Élevé entre les murs et les carnets. Le Posca avant le pinceau, le spray avant le cadre. Une enfance écrite sur ce qui voulait bien recevoir l'encre — bétons, marges, peaux de papier.",
+      "Né et élevé à Sarcelles, Val-d'Oise. La passion arrive vers dix ans, en vacances familiales au Maroc, devant un peintre qui travaille en silence. Un déclic. De retour, c'est le Posca avant le pinceau, le carnet avant la toile — apprendre la couleur sur ce qui voulait bien la recevoir.",
     emphasis: ['Sarcelles'],
   },
   {
     body:
-      "En 2018, le Prix Révélations Beaux-Arts. Mais la galerie n'a jamais remplacé le mur. Elle l'a juste suivi. Les œuvres se sont mises en cadre sans rien perdre de leur origine — geste rapide, pigment franc, refus du décor.",
-    emphasis: ['Beaux-Arts'],
+      "Ancien technicien son et lumière, j'ai quitté ce métier pour peindre à temps plein. Première exposition à seize ans, sous le pseudo Nacks. Autodidacte — c'est très compliqué de se faire un nom quand on n'y connaît rien. On apprend en faisant, en ratant, en recommençant.",
+    emphasis: ['autodidacte'],
   },
   {
     body:
-      "Aujourd'hui, l'atelier tient à Paris. Chaque pièce est peinte à la main, signée, certifiée. Pas de série industrielle, pas de campagne. Le travail d'abord ; le reste — la cote, les ventes — n'est que conséquence.",
-    emphasis: [],
+      "Le déclic d'image, c'est Mr Brainwash dans le documentaire de Banksy : la culture pop comme matière première, le geste sans permission. En 2018, Prix Révélation des Beaux-Arts. La galerie n'a pas remplacé le mur — elle l'a suivi. Acrylique, spray, Posca, collage, stencil, dripping : tout sert le sujet.",
+    emphasis: ['Mr Brainwash', 'Prix Révélation'],
   },
   {
     body:
-      "JUST EXIST. C'est tout ce qui compte. Si une œuvre te parle, c'est qu'elle a déjà fait sa part du chemin.",
-    emphasis: ['JUST EXIST'],
+      "Mickey, Snoopy, Goku, Pink Panther, les héros Marvel — la culture pop comme territoire commun. Deux mots reviennent toujours : LOVE et JUST EXIST. Si une œuvre te parle, c'est qu'elle a déjà fait sa part du chemin.",
+    emphasis: ['LOVE', 'JUST EXIST'],
   },
 ];
 
@@ -78,6 +82,7 @@ export function Manifesto() {
         root,
       );
       const drip = root.querySelector<SVGElement>('[data-mf-drip]');
+      const portrait = root.querySelector<HTMLElement>('[data-mf-portrait]');
       const paragraphs = gsap.utils.toArray<HTMLElement>(
         '[data-mf-para]',
         root,
@@ -85,7 +90,7 @@ export function Manifesto() {
       const signature = root.querySelector<HTMLElement>('[data-mf-sig]');
       const tag = root.querySelector<HTMLElement>('[data-mf-tag]');
 
-      const all = [eyebrow, ...titleLines, drip, ...paragraphs, signature, tag]
+      const all = [eyebrow, ...titleLines, drip, portrait, ...paragraphs, signature, tag]
         .filter(Boolean) as gsap.TweenTarget[];
 
       if (reduced) {
@@ -97,6 +102,7 @@ export function Manifesto() {
         opacity: 0,
         y: 24,
       });
+      if (portrait) gsap.set(portrait, { opacity: 0, y: 32 });
       if (drip) gsap.set(drip, { opacity: 0, scaleY: 0, transformOrigin: 'top center' });
       if (tag) gsap.set(tag, { opacity: 0 });
 
@@ -122,6 +128,14 @@ export function Manifesto() {
           drip,
           { opacity: 1, scaleY: 1, duration: 0.7, ease: 'power2.in' },
           0.7,
+        );
+      }
+
+      if (portrait) {
+        tl.to(
+          portrait,
+          { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' },
+          0.45,
         );
       }
 
@@ -269,7 +283,7 @@ export function Manifesto() {
                   color: 'rgba(10,10,10,0.55)',
                 }}
               >
-                Atelier · Paris
+                Atelier · Sarcelles
               </span>
             </div>
           </div>
@@ -303,6 +317,51 @@ export function Manifesto() {
         </div>
       </div>
 
+      {/* Editorial breakout — vraie photo atelier, full-width contenu */}
+      <figure
+        data-mf-portrait
+        className="relative mx-auto mt-[clamp(4rem,8vh,7rem)]"
+        style={{
+          maxWidth: 'var(--container-max, 1440px)',
+          paddingInline: 'clamp(1.5rem, 4vw, 5rem)',
+          margin: 'clamp(4rem,8vh,7rem) auto 0',
+        }}
+      >
+        <div
+          className="relative w-full overflow-hidden"
+          style={{
+            aspectRatio: '16 / 9',
+            backgroundColor: PAPER,
+            borderRadius: '4px',
+            boxShadow:
+              '0 1px 1px rgba(0,0,0,0.06), 0 24px 60px -28px rgba(10,10,10,0.22)',
+          }}
+        >
+          <Image
+            src="/photos/portrait/naguy-bureau-poscas.jpg"
+            alt="Naguy 'Nacks' Claude à son bureau d'atelier, sourire posé, POSCAs étalés devant lui, l'œuvre Mickey en mots en arrière-plan"
+            fill
+            sizes="(min-width: 1440px) 1280px, (min-width: 1024px) 92vw, 100vw"
+            className="object-cover"
+            loading="lazy"
+          />
+        </div>
+        <figcaption
+          className="mt-4 italic"
+          style={{
+            fontFamily: FONT_SERIF,
+            fontStyle: 'italic',
+            fontWeight: 400,
+            fontSize: 'clamp(0.85rem, 0.95vw, 1rem)',
+            lineHeight: 1.5,
+            color: 'rgba(10,10,10,0.55)',
+            textAlign: 'center',
+          }}
+        >
+          Naguy &lsquo;Nacks&rsquo; Claude — atelier de Sarcelles, 2025.
+        </figcaption>
+      </figure>
+
       {/* Filet horizontal bas — séparateur éditorial discret */}
       <div
         aria-hidden
@@ -319,8 +378,8 @@ export function Manifesto() {
 }
 
 /**
- * Wrap les mots emphasis (Sarcelles, JUST EXIST, Beaux-Arts) en italic bold ink.
- * Pas de blob coloré, pas de highlight — juste de la typo.
+ * Wrap les mots emphasis (Sarcelles, autodidacte, Mr Brainwash, JUST EXIST…)
+ * en italic bold ink. Pas de blob coloré, pas de highlight — juste de la typo.
  */
 function renderEmphasis(body: string, emphasis: string[]) {
   if (emphasis.length === 0) return body;

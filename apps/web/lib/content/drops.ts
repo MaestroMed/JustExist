@@ -3,7 +3,7 @@
  * Sprint 1 : data dummy, avec un drop `live` dont le countdown est calculé en relatif.
  */
 
-import type { CharacterSlug } from './characters';
+import type { ArtworkCharacterRef } from './characters';
 
 export type DropStatus = 'live' | 'upcoming' | 'sold_out' | 'past';
 
@@ -12,7 +12,7 @@ export type Drop = {
   title: string;
   subtitle: string;
   artworkSlug: string;
-  character: CharacterSlug | null;
+  character: ArtworkCharacterRef | null;
   type: 'serigraphie' | 'giclee' | 'figurine' | 'original';
   editionSize: number;
   sold: number;
@@ -40,76 +40,76 @@ function hoursFromNow(hours: number): Date {
 
 export const drops: readonly Drop[] = [
   {
-    slug: 'poppy-neon-night',
-    title: 'Poppy — Neon Night',
-    subtitle: 'Sérigraphie 5 couleurs, édition limitée 100 exemplaires',
-    artworkSlug: 'mr-poppy-neon-night',
-    character: 'mr-poppy',
-    type: 'serigraphie',
+    slug: 'mickey-tirage-edition',
+    title: 'OG Mickey — Tirage limité',
+    subtitle: 'Giclée signée numérotée, édition 100 exemplaires',
+    artworkSlug: 'mickey-tirage-edition',
+    character: 'mickey',
+    type: 'giclee',
     editionSize: 100,
-    sold: 77,
-    priceCents: 45000,
+    sold: 53,
+    priceCents: 32000,
     opensAt: hoursFromNow(-18),
     closesAt: null, // ferme au sold-out
     vipOpensAt: hoursFromNow(-42),
     status: 'live',
-    posterVariant: 'poppy-neon',
-    lore: "Peinte un lundi soir, tirée le mardi à l'atelier sérigraphie de Pantin, signée au Posca rouge. 100 exemplaires, un par personne. Quand c'est fini, c'est fini.",
+    posterVariant: 'poppy-classic',
+    lore: "Le tirage limité d'OG Mickey, pour rendre l'œuvre fondatrice accessible sans la diluer. Numéroté à la main, signé au Posca rouge, accompagné d'un certificat embossé.",
     spec: [
-      { label: 'Technique', value: 'Sérigraphie 5 couleurs' },
-      { label: 'Papier', value: 'Somerset Satin 410 g/m²' },
-      { label: 'Dimensions', value: '70 × 100 cm' },
+      { label: 'Technique', value: 'Giclée 11 couleurs' },
+      { label: 'Papier', value: 'Hahnemühle Photo Rag 308 g/m²' },
+      { label: 'Dimensions', value: '50 × 70 cm' },
       { label: 'Signature', value: 'Au Posca rouge, recto' },
-      { label: 'Numérotation', value: 'Au Posca noir, verso' },
+      { label: 'Numérotation', value: 'Au crayon graphite, verso' },
       { label: 'Certificat', value: 'COA papier avec embossage sec' },
       { label: 'Expédition', value: 'Tube renforcé, sous 7 jours ouvrés' },
     ],
   },
   {
-    slug: 'poppy-lama-collab',
-    title: 'Poppy & Lama — Collab',
-    subtitle: 'Giclée signée, édition 120 exemplaires',
-    artworkSlug: 'poppy-lama-collab',
-    character: 'mr-poppy',
-    type: 'giclee',
-    editionSize: 120,
+    slug: 'pink-panther-print',
+    title: 'Pink Attitude — Tirage',
+    subtitle: 'Sérigraphie 4 couleurs fluo, édition 75 exemplaires',
+    artworkSlug: 'pink-panther-print',
+    character: 'pink-panther',
+    type: 'serigraphie',
+    editionSize: 75,
     sold: 0,
-    priceCents: 32000,
+    priceCents: 38000,
     opensAt: daysFromNow(9),
     closesAt: daysFromNow(12),
     vipOpensAt: daysFromNow(8),
     status: 'upcoming',
     posterVariant: 'poppy-neon',
-    lore: "Mr Poppy rencontre son lama Fortnite. Un pastiche, un hommage, un coup de bombe. Pour la première fois, deux personnages sur la même toile.",
+    lore: "La sérigraphie Pink Panther — encres fluo posées en quatre passes successives. Une édition courte pour ceux qui veulent du rose qui ne fane pas.",
     spec: [
-      { label: 'Technique', value: 'Giclée 11 couleurs' },
-      { label: 'Papier', value: 'Hahnemühle Photo Rag 308 g/m²' },
-      { label: 'Dimensions', value: '70 × 100 cm' },
-      { label: 'Signature', value: 'Au Posca rouge' },
+      { label: 'Technique', value: 'Sérigraphie 4 couleurs fluo' },
+      { label: 'Papier', value: 'Somerset Satin 410 g/m²' },
+      { label: 'Dimensions', value: '50 × 70 cm' },
+      { label: 'Signature', value: 'Au Posca, recto' },
       { label: 'Numérotation', value: 'Au crayon graphite' },
       { label: 'Certificat', value: 'COA papier numéroté' },
     ],
   },
   {
-    slug: 'lion-eiffel-gold',
-    title: 'Lion d\'Eiffel — Gold',
-    subtitle: 'Drop original unique, vendu le 3 mars 2026',
-    artworkSlug: 'lion-eiffel-gold',
-    character: 'lion-d-eiffel',
+    slug: 'goku-saiyan-pose-drop',
+    title: 'Goku — Saiyan Pose',
+    subtitle: 'Drop original unique, feuille d\'or 18 ct',
+    artworkSlug: 'goku-saiyan-pose',
+    character: 'dragon-ball',
     type: 'original',
     editionSize: 1,
     sold: 1,
-    priceCents: 320000,
+    priceCents: 285000,
     opensAt: new Date('2026-03-03T20:00:00Z'),
     closesAt: new Date('2026-03-03T20:02:15Z'),
     vipOpensAt: new Date('2026-03-02T20:00:00Z'),
     status: 'past',
-    posterVariant: 'lion-eiffel',
-    lore: "Pièce unique 100 × 150 cm, acrylique + feuille d'or 18 carats. Vendue en 2 min 15 à un collectionneur anonyme. Le prochain Lion sera différent.",
+    posterVariant: 'gorille-gold',
+    lore: "Pièce unique 100 × 130 cm — Goku en pose de transformation, aura peinte à la feuille d'or 18 carats. Vendue en 2 min 15 à un collectionneur anonyme.",
     spec: [
       { label: 'Technique', value: 'Acrylique, Posca, feuille d\'or' },
       { label: 'Support', value: 'Toile lin 400 g/m²' },
-      { label: 'Dimensions', value: '100 × 150 cm' },
+      { label: 'Dimensions', value: '100 × 130 cm' },
       { label: 'Signature', value: 'Au dos, encre indélébile' },
       { label: 'Certificat', value: 'COA papier + enregistrement Artsy' },
     ],

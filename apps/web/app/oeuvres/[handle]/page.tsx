@@ -8,7 +8,10 @@ import { PDPActions } from '@/components/shop/PDPActions';
 import { PDPDetails } from '@/components/shop/PDPDetails';
 import { PDPRelatedCard } from '@/components/shop/PDPRelatedCard';
 import { artworks, formatPrice, getArtwork } from '@/lib/content/artworks';
-import { getCharacter } from '@/lib/content/characters';
+import {
+  getCharacterOrProject,
+  isExperimentalProject,
+} from '@/lib/content/characters';
 import {
   buildArtwork,
   buildBreadcrumb,
@@ -80,7 +83,10 @@ export default async function ArtworkPage({ params }: { params: Params }) {
   const artwork = getArtwork(handle);
   if (!artwork) notFound();
 
-  const character = artwork.character ? getCharacter(artwork.character) : null;
+  const character = artwork.character ? getCharacterOrProject(artwork.character) : null;
+  const characterIsExperimental = artwork.character
+    ? isExperimentalProject(artwork.character)
+    : false;
 
   // Œuvres de la même série / même personnage
   const sameSeries = artworks.filter(
@@ -164,6 +170,7 @@ export default async function ArtworkPage({ params }: { params: Params }) {
               <PDPGallery
                 variant={artwork.posterVariant}
                 title={artwork.title}
+                photo={artwork.photo}
               />
             </div>
 
@@ -355,8 +362,43 @@ export default async function ArtworkPage({ params }: { params: Params }) {
                 ]}
               />
 
-              {/* Lien personnage si applicable */}
-              {character && (
+              {/* Lien univers / projet expérimental si applicable */}
+              {character && characterIsExperimental ? (
+                <div
+                  className="flex items-center justify-between"
+                  style={{
+                    marginTop: 'clamp(0.5rem, 1vh, 0.75rem)',
+                    paddingBlock: '1rem',
+                    borderTop: '1px solid rgba(10,10,10,0.12)',
+                    color: INK,
+                    gap: '1rem',
+                  }}
+                >
+                  <div className="flex flex-col" style={{ gap: '0.2rem' }}>
+                    <span
+                      style={{
+                        fontFamily: FONT_BODY,
+                        fontSize: '0.7rem',
+                        letterSpacing: '0.22em',
+                        textTransform: 'uppercase',
+                        color: 'rgba(10,10,10,0.55)',
+                      }}
+                    >
+                      Projet expérimental
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: FONT_SERIF,
+                        fontStyle: 'italic',
+                        fontSize: 'clamp(1.05rem, 1.2vw, 1.2rem)',
+                        color: INK,
+                      }}
+                    >
+                      {character.name}
+                    </span>
+                  </div>
+                </div>
+              ) : character && (
                 <Link
                   href={`/univers/${character.slug}`}
                   data-cursor="link"
@@ -381,7 +423,7 @@ export default async function ArtworkPage({ params }: { params: Params }) {
                         color: 'rgba(10,10,10,0.55)',
                       }}
                     >
-                      Personnage
+                      Univers
                     </span>
                     <span
                       style={{

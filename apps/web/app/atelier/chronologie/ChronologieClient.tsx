@@ -15,6 +15,8 @@ import { PageShell } from '@/components/layouts/PageShell';
  * prefers-reduced-motion respect.
  *
  * Inspiration David Zwirner career timeline / Hauser & Wirth bio pages.
+ *
+ * Données : faits réels documentés, validés par Naguy 'Nacks' Claude.
  */
 
 const INK = 'var(--color-ink, #0a0a0a)';
@@ -23,7 +25,7 @@ const CREAM = 'var(--color-cream, #f5f1e8)';
 const FONT_SERIF = "var(--font-serif, 'Playfair Display', Georgia, serif)";
 const FONT_BODY = "var(--font-body, Inter, system-ui, sans-serif)";
 
-/* ───────── Jalons exhaustifs 2018 → 2026 ───────── */
+/* ───────── Jalons réels — adolescence → 2026 ───────── */
 type Jalon = {
   year: string;
   label: string;
@@ -33,67 +35,81 @@ type Jalon = {
 
 const TIMELINE: ReadonlyArray<Jalon> = [
   {
+    year: 'Enfance',
+    label: 'Le déclic au Maroc',
+    detail:
+      "Vers dix ans, en vacances familiales, je regarde un peintre travailler dans la rue. Quelque chose se met en place — au retour, c'est le Posca avant le pinceau, le carnet avant la toile.",
+    place: 'Maroc',
+  },
+  {
+    year: '16 ans',
+    label: 'Première exposition sous le nom Nacks',
+    detail:
+      "Adolescence, premier accrochage public. Le pseudonyme se fixe. Le travail commence à sortir du carnet et à exister hors de l'atelier.",
+    place: 'Île-de-France',
+  },
+  {
+    year: 'Avant 2018',
+    label: 'Technicien son et lumière — puis tout quitter',
+    detail:
+      "Job alimentaire de jour, peinture la nuit. Choix de tout quitter pour peindre à temps plein. Autodidacte, on apprend en faisant, en ratant, en recommençant.",
+    place: 'Paris',
+  },
+  {
     year: '2018',
     label: 'Prix Révélations Beaux-Arts',
     detail:
-      "Premier signal institutionnel. Le geste de la rue entre dans la salle. La galerie ne remplace pas le mur — elle l'accompagne.",
+      "Premier signal institutionnel. Le geste de la rue entre dans la salle sans rien renier — POSCA, acrylique, spray, collage, stencil. Les portes commencent à s'ouvrir.",
     place: 'Paris',
   },
   {
     year: '2019',
-    label: 'Première fresque commandée',
+    label: 'Solo — Truffaut Paris',
     detail:
-      "Mairie de Sarcelles. Mur de quartier, format monumental. Le retour aux origines, mais avec un cadre officiel cette fois.",
-    place: 'Sarcelles',
-  },
-  {
-    year: '2020',
-    label: '« Murs et carnets » — solo show',
-    detail:
-      "Galerie 47, Paris. Première exposition solo. Acrylique, Posca, aérosol. Refus du décor, présence du geste.",
+      "Première grande exposition solo dans un espace parisien. Le travail trouve son public hors des galeries traditionnelles, dans un lieu de passage.",
     place: 'Paris',
   },
   {
-    year: '2021',
-    label: 'Pop-up Hong Kong',
+    year: '2020',
+    label: 'Trois solos parisiens · Représentation Los Angeles',
     detail:
-      "Collaboration avec la fondation HK Arts. Trois semaines de résidence et de présence. Ouverture asiatique.",
-    place: 'Hong Kong',
+      "Paname Art Café et Legacy Store du Fouquet's à Paris. Début de la représentation par Artspace Warehouse Gallery, Los Angeles — relation continue depuis. L'année où la trajectoire s'accélère.",
+    place: 'Paris · Los Angeles',
+  },
+  {
+    year: '2021',
+    label: 'Casart Urban Gallery — Casablanca',
+    detail:
+      "Première exposition à l'étranger après LA. Retour symbolique au Maroc, là où l'enfance avait planté la graine. Le cercle commence à se boucler.",
+    place: 'Casablanca',
   },
   {
     year: '2022',
-    label: 'Lancement de la série Mr Poppy',
+    label: 'Lancement TikTok @nacksgalerie · Nacks Show',
     detail:
-      "Naissance du personnage signature. 10 originaux vendus à la communauté en quelques jours. Le langage devient lexique.",
-    place: 'Atelier',
+      "Juin 2022, démarrage du compte avec La Voix Off. Naissance du format Nacks Show : fresques interactives en live, prénoms des viewers peints en direct au POSCA. Le studio devient scène.",
+    place: 'Sarcelles · TikTok',
   },
   {
     year: '2023',
-    label: '« JUST EXIST » — Reims & livre',
+    label: 'Foire de Paris · IMAGINE for Margo · 500 000 abonnés',
     detail:
-      "Exposition manifeste à Reims. Publication du livre éponyme aux éditions Skira — première monographie. Le titre devient devise.",
-    place: 'Reims',
+      "27 avril → 7 mai, fresque «Partage» Mickey au POSCA pour l'association IMAGINE for Margo, qui lutte contre le cancer pédiatrique. Membre du jury du 1er concours Street Art de la Foire. Cap des 500 000 abonnés franchi sur les réseaux.",
+    place: 'Paris',
   },
   {
     year: '2024',
-    label: 'Pop-up Los Angeles · Lion d\'Eiffel',
+    label: 'Group shows Artspace Warehouse — Los Angeles',
     detail:
-      "Artspace Warehouse Gallery, Culver City. Sold out en 48 h au vernissage. Lancement de la série Lion d'Eiffel.",
+      "«Top Throwback Character Art» et «Gentle Graffiti», deux expositions collectives à Culver City. Confirmation de la place chez les collectionneurs internationaux.",
     place: 'Los Angeles',
   },
   {
-    year: '2025',
-    label: 'Mise en ligne nacksgalerie.com',
-    detail:
-      "Le royaume numérique s'ouvre au monde. Vente directe, sans intermédiaire. Acquisition assistée, certificats d'authenticité.",
-    place: 'Online',
-  },
-  {
     year: '2026',
-    label: 'Tour Casablanca + Dijon',
+    label: 'Lancement nacksgalerie.com',
     detail:
-      "Deux pop-ups, deux territoires. Casablanca pour le Maghreb, Dijon pour la France des régions. La galerie continue de bouger.",
-    place: 'Casablanca · Dijon',
+      "Galerie en ligne officielle. Vente directe, sans intermédiaire. Commissions sur mesure, originaux numérotés, certificats d'authenticité. Le studio devient adresse.",
+    place: 'Online',
   },
 ];
 
@@ -139,7 +155,7 @@ export function ChronologieClient() {
               margin: 0,
             }}
           >
-            Chronologie / Depuis 2018
+            Chronologie / De l&apos;enfance à 2026
           </motion.p>
 
           <motion.h1
@@ -180,16 +196,16 @@ export function ChronologieClient() {
               margin: 0,
             }}
           >
-            Neuf années, un fil. Du Prix Révélations à la galerie en ligne, des
-            murs de Sarcelles aux pop-ups de Los Angeles. Lecture verticale,
-            sans coupure.
+            Du déclic d&apos;enfance au Maroc à la galerie en ligne. Du Prix
+            Révélations Beaux-Arts à la Foire de Paris, de Casablanca à Los
+            Angeles, de Sarcelles à TikTok. Un fil, sans coupure.
           </motion.p>
         </div>
       </section>
 
       {/* ═════════ Section 2 — Timeline (cream) ═════════ */}
       <section
-        aria-label="Timeline 2018-2026"
+        aria-label="Timeline carrière"
         className="relative w-full"
         style={{
           backgroundColor: CREAM,

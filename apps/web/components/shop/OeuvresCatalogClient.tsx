@@ -8,6 +8,7 @@ import {
   type Artwork,
   type ArtworkType,
 } from '@/lib/content/artworks';
+import Image from 'next/image';
 import { ArtPoster } from '@/components/art/ArtPoster';
 import { DripButton } from '@/components/ui/DripButton';
 
@@ -378,11 +379,21 @@ function CatalogCard({ art }: { art: Artwork }) {
           className="oeuvres-card-img"
           style={{ position: 'absolute', inset: 0 }}
         >
-          <ArtPoster
-            variant={art.posterVariant}
-            label={art.title}
-            className="absolute inset-0"
-          />
+          {art.photo ? (
+            <Image
+              src={art.photo}
+              alt={art.title}
+              fill
+              sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              className="object-cover"
+            />
+          ) : (
+            <ArtPoster
+              variant={art.posterVariant}
+              label={art.title}
+              className="absolute inset-0"
+            />
+          )}
         </div>
 
         {(isSoldOut || isComing) && (
