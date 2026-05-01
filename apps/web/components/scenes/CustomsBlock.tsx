@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
+import Image from 'next/image';
 import { motion, useReducedMotion } from 'motion/react';
 import { DripButton } from '@/components/ui/DripButton';
 
@@ -40,29 +41,33 @@ type CustomItem = {
   client: string;
   format: string;
   accent: string;
+  photo?: string;
 };
 
 const CUSTOMS: ReadonlyArray<CustomItem> = [
   {
     id: '001',
-    title: 'Mr Poppy — Salon privé',
-    client: 'Collectionneur · Paris 16e',
-    format: 'Toile 80 × 100 cm',
+    title: 'Triptyque salon privé',
+    client: 'Collectionneur · Paris',
+    format: 'Trois toiles encadrées',
     accent: 'var(--color-spray-pink, #ff1f8f)',
+    photo: '/photos/artworks/triptyque-bugs-mickey-snoopy-mockup.jpg',
   },
   {
     id: '002',
-    title: 'Fresque entrée bureau',
-    client: 'Studio créatif · Pantin',
-    format: 'Mur 4 × 2,5 m',
+    title: 'Mickey King — N&B',
+    client: 'Loft industriel · Paris',
+    format: 'Toile 120 × 90 cm',
     accent: 'var(--color-spray-yellow, #fae600)',
+    photo: '/photos/artworks/mickey-king-noir-mockup.jpg',
   },
   {
     id: '003',
-    title: 'Sneakers signées',
-    client: 'Cadeau anniversaire',
-    format: 'Air Force 1 — paire',
+    title: 'Sneakers customs',
+    client: 'Pièce unique · cadeau',
+    format: 'Une paire signée à la main',
     accent: 'var(--color-spray-blue, #0044ff)',
+    photo: '/photos/portrait/naguy-mickey-bowling.jpg',
   },
 ];
 
@@ -286,7 +291,7 @@ function CustomThumb({
       }}
       style={{ margin: 0 }}
     >
-      {/* Photo placeholder — aspect 4/5 */}
+      {/* Photo réelle ou placeholder SVG — aspect adaptatif */}
       <div
         className="relative w-full overflow-hidden"
         style={{
@@ -295,45 +300,51 @@ function CustomThumb({
           borderRadius: '4px',
         }}
       >
-        {/* Mini drip décoratif coloré à la couleur d'accent */}
-        <svg
-          aria-hidden
-          className="absolute inset-0 h-full w-full"
-          viewBox="0 0 100 125"
-          preserveAspectRatio="none"
-        >
-          {/* Base diagonal subtle */}
-          <path
-            d="M 0 0 L 100 0 L 100 50 L 0 90 Z"
-            fill="rgba(10,10,10,0.04)"
+        {item.photo ? (
+          <Image
+            src={item.photo}
+            alt={item.title}
+            fill
+            sizes="(max-width: 1024px) 100vw, 35vw"
+            className="object-cover"
           />
-          {/* Drip principal centré */}
-          <path
-            d={
-              isFeature
-                ? 'M 50 8 C 50 32 49 50 50 62 Q 50 70 51 62 C 51 50 50 32 50 8 Z'
-                : 'M 30 10 C 30 28 29 38 30 46 Q 30 52 31 46 C 31 38 30 28 30 10 Z'
-            }
-            fill={item.accent}
-            opacity="0.85"
-          />
-          <circle
-            cx={isFeature ? 50.5 : 30.5}
-            cy={isFeature ? 65 : 49}
-            r={isFeature ? 1.6 : 1.3}
-            fill={item.accent}
-          />
-          {/* Drip secondaire offset */}
-          <path
-            d={
-              isFeature
-                ? 'M 72 14 C 72 26 71 36 72 42 Q 72 46 73 42 C 73 36 72 26 72 14 Z'
-                : 'M 65 18 C 65 30 64 38 65 44 Q 65 48 66 44 C 66 38 65 30 65 18 Z'
-            }
-            fill={INK}
-            opacity="0.55"
-          />
-        </svg>
+        ) : (
+          <svg
+            aria-hidden
+            className="absolute inset-0 h-full w-full"
+            viewBox="0 0 100 125"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M 0 0 L 100 0 L 100 50 L 0 90 Z"
+              fill="rgba(10,10,10,0.04)"
+            />
+            <path
+              d={
+                isFeature
+                  ? 'M 50 8 C 50 32 49 50 50 62 Q 50 70 51 62 C 51 50 50 32 50 8 Z'
+                  : 'M 30 10 C 30 28 29 38 30 46 Q 30 52 31 46 C 31 38 30 28 30 10 Z'
+              }
+              fill={item.accent}
+              opacity="0.85"
+            />
+            <circle
+              cx={isFeature ? 50.5 : 30.5}
+              cy={isFeature ? 65 : 49}
+              r={isFeature ? 1.6 : 1.3}
+              fill={item.accent}
+            />
+            <path
+              d={
+                isFeature
+                  ? 'M 72 14 C 72 26 71 36 72 42 Q 72 46 73 42 C 73 36 72 26 72 14 Z'
+                  : 'M 65 18 C 65 30 64 38 65 44 Q 65 48 66 44 C 66 38 65 30 65 18 Z'
+              }
+              fill={INK}
+              opacity="0.55"
+            />
+          </svg>
+        )}
 
         {/* Numéro custom — coin bas-gauche */}
         <span
