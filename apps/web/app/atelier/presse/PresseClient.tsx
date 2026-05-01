@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion, useReducedMotion } from 'motion/react';
 import { PageShell } from '@/components/layouts/PageShell';
 
@@ -265,6 +266,37 @@ export function PresseClient() {
           </motion.p>
         </div>
       </section>
+
+      {/* ═════════ Banner journalistique — photo atelier ═════════ */}
+      <motion.figure
+        {...fadeUp}
+        className="relative w-full overflow-hidden"
+        style={{ margin: 0, aspectRatio: '21 / 9', maxHeight: '60vh' }}
+      >
+        <Image
+          src="/photos/portrait/naguy-painting-mickey.jpg"
+          alt="Naguy Claude en train de peindre une fresque Mickey en mots dans son atelier de Sarcelles"
+          fill
+          sizes="100vw"
+          priority={false}
+          className="object-cover"
+        />
+        <figcaption
+          className="absolute"
+          style={{
+            bottom: 'clamp(1rem, 2vh, 1.5rem)',
+            left: 'clamp(1.5rem, 4vw, 5rem)',
+            fontFamily: FONT_BODY,
+            fontSize: 'clamp(0.7rem, 0.78vw, 0.82rem)',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.95)',
+            textShadow: '0 1px 3px rgba(0,0,0,0.7)',
+          }}
+        >
+          Naguy &laquo;&nbsp;Nacks&nbsp;&raquo; Claude — atelier de Sarcelles
+        </figcaption>
+      </motion.figure>
 
       {/* ═════════ Section 2 — Kit presse (cream split) ═════════ */}
       <section

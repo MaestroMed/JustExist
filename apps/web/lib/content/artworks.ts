@@ -241,6 +241,40 @@ export const artworks: readonly Artwork[] = [
     posterVariant: 'poppy-neon',
     lore: "La sérigraphie qui accompagne la pièce originale. Encres fluo, papier épais, séchage longue durée — un objet qui vieillit bien.",
   },
+  {
+    slug: 'snoopy-lunettes',
+    title: 'Snoopy — Lunettes',
+    subtitle: 'Original Posca & acrylique sur planches bois',
+    type: 'original',
+    character: 'snoopy',
+    dimensions: '90 × 120 cm',
+    year: 2025,
+    materials: 'Posca, acrylique et spray sur planches bois recyclé',
+    priceCents: 220000,
+    status: 'in_stock',
+    featured: true,
+    posterVariant: 'fox-paris',
+    photo: '/photos/artworks/snoopy-lunettes.jpg',
+    aspectRatio: 0.75, // 90 / 120 — portrait
+    lore: "Snoopy en lunettes noires, attitude de king. Sur planches de bois recyclé, le grain du support traverse les couches Posca — la matière compte autant que le motif.",
+  },
+  {
+    slug: 'mickey-king-noir',
+    title: 'Mickey — King N&B',
+    subtitle: 'Original noir et blanc sur toile',
+    type: 'original',
+    character: 'mickey',
+    dimensions: '120 × 90 cm',
+    year: 2024,
+    materials: 'Acrylique, Posca et spray noir sur toile montée sur châssis',
+    priceCents: 245000,
+    status: 'in_stock',
+    featured: true,
+    posterVariant: 'poppy-classic',
+    photo: '/photos/artworks/mickey-king-noir-mockup.jpg',
+    aspectRatio: 1.333, // 120 / 90 — paysage
+    lore: "Mickey en monochrome, lettrages KING et WORK HARD en spray graff. Une pièce sur la dignité du dessin animé devenu icône — quand on retire la couleur, il reste la silhouette.",
+  },
 ] as const;
 
 export function getArtwork(slug: string): Artwork | undefined {

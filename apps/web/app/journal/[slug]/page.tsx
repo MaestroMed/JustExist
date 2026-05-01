@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Container } from '@nacks/ui';
 import { PageShell } from '@/components/layouts/PageShell';
@@ -285,10 +286,13 @@ export default async function ArticlePage({ params }: { params: Params }) {
                   backgroundColor: '#fafafa',
                 }}
               >
-                <ArtPoster
-                  variant="poppy-classic"
-                  label="Naguy Claude"
-                  className="absolute inset-0"
+                <Image
+                  src="/photos/portrait/naguy-bureau-profile.jpg"
+                  alt="Naguy 'Nacks' Claude"
+                  fill
+                  sizes="88px"
+                  className="object-cover"
+                  style={{ borderRadius: '50%' }}
                 />
               </div>
               <div className="flex flex-col gap-[0.5rem]">
