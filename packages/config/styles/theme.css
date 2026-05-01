@@ -19,6 +19,18 @@
   --color-fortnite: #7c3aed;
   --color-cyan: #06b6d4;
 
+  /* ────────── Palette graffiti street art ────────── */
+  --color-spray-pink: #ff1f8f; /* fluo magenta capture */
+  --color-spray-yellow: #fae600; /* fluo yellow capture */
+  --color-spray-blue: #0044ff; /* royal blue capture */
+  --color-spray-green: #1ddc6f; /* acid green capture */
+  --color-paint-black: #050505; /* noir profond peinture */
+  --color-paint-white: #fafafa; /* blanc papier */
+  --color-brass-light: #d4a056; /* brass plaque highlight */
+  --color-brass-dark: #6b4d24; /* brass plaque shadow */
+  --color-concrete-warm: #c8c2b8; /* mur béton chaud */
+  --color-concrete-cool: #a8a29a; /* mur béton ombre */
+
   /* ────────── Neutres dérivés (pour surfaces, disabled, focus) ────────── */
   --color-ink-50: rgba(10, 10, 10, 0.04);
   --color-ink-100: rgba(10, 10, 10, 0.08);
@@ -38,6 +50,11 @@
   --font-display: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+
+  /* Graffiti / street art typographies */
+  --font-graffiti: 'Permanent Marker', 'Bangers', system-ui, sans-serif;
+  --font-tag: 'Caveat', 'Permanent Marker', cursive;
+  --font-serif: 'Playfair Display', 'Lora', Georgia, serif;
 
   /* Échelle fluide — clamp(min, ideal, max) */
   --text-xs: clamp(0.75rem, 0.71rem + 0.17vw, 0.875rem);
@@ -72,6 +89,11 @@
   --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
   --ease-nacks: cubic-bezier(0.19, 1, 0.22, 1); /* signature doux */
 
+  /* Graffiti easings */
+  --ease-spray: cubic-bezier(0.68, -0.55, 0.27, 1.55); /* back.out — splash explosion */
+  --ease-drip: cubic-bezier(0.55, 0.085, 0.68, 0.53); /* power2.in — drips qui coulent */
+  --ease-paint: cubic-bezier(0.65, 0, 0.35, 1); /* power3.out — stroke painting */
+
   --duration-fast: 150ms;
   --duration-base: 300ms;
   --duration-slow: 600ms;
@@ -93,6 +115,50 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-glow-blood: 0 0 60px rgb(230 57 70 / 0.4);
   --shadow-glow-bubble: 0 0 60px rgb(255 212 59 / 0.4);
+
+  /* Graffiti shadows */
+  --shadow-paint-glow: 0 0 30px rgb(255 31 143 / 0.3); /* glow pink subtle */
+  --shadow-spray-soft: 0 0 20px rgb(0 0 0 / 0.15); /* ombre tag posé */
+  --shadow-brass:
+    inset 0 2px 4px rgb(255 255 255 / 0.3), inset 0 -2px 4px rgb(0 0 0 / 0.3),
+    0 4px 8px rgb(0 0 0 / 0.2);
+}
+
+/* ────────── Reduced motion (accessibility) ────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ────────── Utilities graffiti ────────── */
+/* Texture spray paint via filter SVG (l'élément <filter id="spray-noise">
+   doit être présent quelque part dans le DOM, généralement dans un <svg>
+   décoratif au layout root). */
+.spray-texture {
+  filter: url(#spray-noise);
+}
+
+/* Paint stroke — texte ou bordure peinte (effet contour épais) */
+.paint-stroke {
+  paint-order: stroke;
+  -webkit-text-stroke: 1px currentColor;
+}
+
+/* Drip on hover — drips qui coulent au survol.
+   Le composant React peut s'appuyer sur cet état pour déclencher une
+   animation GSAP / Motion. Garde la classe sémantique pour le ciblage. */
+.drip-on-hover {
+  position: relative;
+  transition: transform var(--duration-base) var(--ease-paint);
+}
+.drip-on-hover:hover {
+  transform: translateY(2px);
 }
 
 /* ────────── Dark mode / palette inversion futures ────────── */

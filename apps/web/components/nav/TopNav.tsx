@@ -1,109 +1,211 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { motion, useMotionTemplate, useScroll, useTransform } from 'motion/react';
-import { Container } from '@nacks/ui';
-import { LogoSignature } from '@/components/easter/LogoSignature';
+import { useEffect, useState } from 'react';
 import { openCartDrawer } from '@/components/shop/CartDrawer';
-import { LiveDropBadge } from './LiveDropBadge';
-
-type NavLink = { label: string; href: string; liveable?: boolean };
-
-const NAV_LINKS: readonly NavLink[] = [
-  { label: 'Œuvres', href: '/oeuvres' },
-  { label: 'Drops', href: '/drops', liveable: true },
-  { label: 'Univers', href: '/univers' },
-  { label: 'Journal', href: '/journal' },
-  { label: 'Atelier', href: '/atelier' },
-  { label: 'Cercle', href: '/communaute' },
-];
 
 /**
- * Navigation sticky — transparente au top, tint ink-80 au scroll.
- * Badge pulsant rouge à côté de "Drops" si un drop est live.
+ * TopNav NACKS GALERIE — version simple, fidèle à la capture.
+ * Logo gauche, 5 liens fluo au milieu, panier droite. Pas d'easter egg,
+ * pas de drips SVG overlay sur les liens (le Permanent Marker fait déjà
+ * tout le boulot graffiti). Mobile = burger + overlay full-screen.
  */
-export function TopNav({ hasLiveDrop = false }: { hasLiveDrop?: boolean }) {
-  const { scrollY } = useScroll();
-  const bgOpacity = useTransform(scrollY, [0, 100], [0, 0.85]);
-  const borderOpacity = useTransform(scrollY, [0, 100], [0, 0.1]);
-  const bgColor = useMotionTemplate`rgba(10, 10, 10, ${bgOpacity})`;
-  const borderColor = useMotionTemplate`1px solid rgba(245, 241, 232, ${borderOpacity})`;
-  const pathname = usePathname();
+
+type TopNavProps = {
+  hasLiveDrop?: boolean;
+  cartCount?: number;
+};
+
+const NAV_LINKS = [
+  { label: 'Œuvres', href: '/oeuvres', color: 'var(--color-spray-pink, #ff1493)' },
+  { label: 'Séries', href: '/drops', color: 'var(--color-spray-yellow, #fae100)' },
+  { label: 'Custom', href: '/atelier/commission', color: 'var(--color-spray-blue, #0044ff)' },
+  { label: 'Expositions', href: '/atelier/presse', color: 'var(--color-spray-green, #1ddc6f)' },
+  { label: 'Atelier', href: '/atelier', color: 'var(--color-paint-white, #fafafa)' },
+] as const;
+
+const FONT_GRAFFITI = "var(--font-graffiti, 'Permanent Marker', cursive)";
+const CREAM = 'var(--color-paint-white, #fafafa)';
+
+export function TopNav({ cartCount = 0 }: TopNavProps) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    document.documentElement.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => {
+      document.documentElement.style.overflow = '';
+    };
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileOpen(false);
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [mobileOpen]);
+
+  const handleCartClick = () => {
+    setMobileOpen(false);
+    openCartDrawer();
+  };
 
   return (
-    <motion.header
-      className="fixed left-0 right-0 top-0 z-[var(--z-sticky)] backdrop-blur-[6px]"
-      style={{ backgroundColor: bgColor, borderBottom: borderColor }}
-    >
-      <Container size="full" as="nav" className="flex items-center justify-between py-5">
-        <LogoSignature>
+    <>
+      <header
+        className="fixed left-0 right-0 top-0 z-50"
+        style={{ pointerEvents: 'none' }}
+      >
+        <nav
+          className="flex w-full items-center justify-between"
+          style={{
+            padding: 'clamp(1rem, 2vh, 1.6rem) clamp(1.5rem, 3vw, 3rem)',
+            pointerEvents: 'auto',
+          }}
+        >
+          {/* LOGO */}
           <Link
             href="/"
-            className="select-none font-[var(--font-display)] text-lg font-[600] tracking-[-0.02em] text-[var(--color-cream)] transition-opacity hover:opacity-70"
-            data-cursor="link"
-            data-cursor-label="Accueil"
+            className="select-none whitespace-nowrap leading-none"
+            style={{
+              fontFamily: FONT_GRAFFITI,
+              color: CREAM,
+              fontSize: 'clamp(1.3rem, 1.5vw, 1.9rem)',
+              letterSpacing: '0.02em',
+              textShadow: '0 2px 0 rgba(0,0,0,0.35)',
+            }}
           >
-            NACKS
+            NACKS GALERIE
           </Link>
-        </LogoSignature>
 
-        <ul className="hidden items-center gap-7 font-[var(--font-display)] text-xs uppercase tracking-[0.2em] text-[var(--color-cream-600)] md:flex">
-          {NAV_LINKS.map((link) => {
-            const isActive = pathname.startsWith(link.href);
-            return (
+          {/* NAV DESKTOP */}
+          <ul
+            className="hidden items-center md:flex"
+            style={{ gap: 'clamp(1rem, 2.2vw, 2.4rem)' }}
+          >
+            {NAV_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="group relative transition-colors hover:text-[var(--color-cream)]"
-                  data-cursor="link"
+                  className="select-none whitespace-nowrap uppercase leading-none transition-transform hover:scale-[1.06]"
+                  style={{
+                    fontFamily: FONT_GRAFFITI,
+                    color: link.color,
+                    fontSize: 'clamp(0.95rem, 1.1vw, 1.25rem)',
+                    letterSpacing: '0.04em',
+                    textShadow: '0 1px 0 rgba(0,0,0,0.35)',
+                    display: 'inline-block',
+                  }}
                 >
-                  <span className={isActive ? 'text-[var(--color-cream)]' : ''}>{link.label}</span>
-                  {link.liveable && hasLiveDrop && <LiveDropBadge />}
-                  <span
-                    className={`absolute -bottom-1 left-0 h-[1px] bg-[var(--color-blood)] transition-[width] duration-[var(--duration-base)] ${
-                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                    }`}
-                  />
+                  {link.label}
                 </Link>
               </li>
-            );
-          })}
-        </ul>
+            ))}
+          </ul>
 
-        <div className="flex items-center gap-4 font-[var(--font-mono)] text-xs">
-          <Link
-            href="/compte"
-            className="hidden text-[var(--color-cream-600)] transition-colors hover:text-[var(--color-cream)] md:block"
-            data-cursor="link"
-          >
-            Compte
-          </Link>
+          {/* CART + BURGER */}
+          <div className="flex items-center" style={{ gap: '1rem' }}>
+            <button
+              type="button"
+              onClick={handleCartClick}
+              aria-label="Ouvrir le panier"
+              className="select-none whitespace-nowrap leading-none transition-transform hover:scale-[1.06]"
+              style={{
+                fontFamily: FONT_GRAFFITI,
+                color: CREAM,
+                fontSize: 'clamp(0.95rem, 1.1vw, 1.25rem)',
+                letterSpacing: '0.04em',
+                textShadow: '0 1px 0 rgba(0,0,0,0.35)',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+              }}
+            >
+              Panier ({cartCount})
+            </button>
+
+            {/* Burger mobile */}
+            <button
+              type="button"
+              className="md:hidden"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label={mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '0.25rem 0.5rem',
+                color: CREAM,
+              }}
+            >
+              <svg width="28" height="22" viewBox="0 0 28 22" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                {mobileOpen ? (
+                  <>
+                    <line x1="4" y1="4" x2="24" y2="20" />
+                    <line x1="24" y1="4" x2="4" y2="20" />
+                  </>
+                ) : (
+                  <>
+                    <line x1="3" y1="4" x2="25" y2="4" />
+                    <line x1="3" y1="11" x2="25" y2="11" />
+                    <line x1="3" y1="18" x2="25" y2="18" />
+                  </>
+                )}
+              </svg>
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {/* MOBILE OVERLAY */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 flex flex-col items-center justify-center md:hidden"
+          style={{
+            background: 'rgba(10,10,10,0.96)',
+            gap: '2rem',
+          }}
+        >
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+              className="uppercase"
+              style={{
+                fontFamily: FONT_GRAFFITI,
+                color: link.color,
+                fontSize: '2.5rem',
+                letterSpacing: '0.04em',
+                textShadow: '0 2px 0 rgba(0,0,0,0.5)',
+              }}
+            >
+              {link.label}
+            </Link>
+          ))}
           <button
             type="button"
-            onClick={openCartDrawer}
-            aria-label="Ouvrir le panier"
-            className="flex items-center gap-2 text-[var(--color-cream)] transition-opacity hover:opacity-70"
-            data-cursor="link"
-            data-cursor-label="Panier"
-            data-no-ripple=""
+            onClick={handleCartClick}
+            className="uppercase"
+            style={{
+              fontFamily: FONT_GRAFFITI,
+              color: CREAM,
+              fontSize: '2.5rem',
+              letterSpacing: '0.04em',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 0,
+              textShadow: '0 2px 0 rgba(0,0,0,0.5)',
+            }}
           >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              aria-hidden="true"
-            >
-              <path d="M3 6h18l-2 13H5L3 6z" />
-              <path d="M8 6V4a4 4 0 1 1 8 0v2" />
-            </svg>
-            <span className="tabular-nums">0</span>
+            Panier ({cartCount})
           </button>
         </div>
-      </Container>
-    </motion.header>
+      )}
+    </>
   );
 }
