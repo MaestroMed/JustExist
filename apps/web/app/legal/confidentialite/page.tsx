@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { LegalLayout, LegalSection } from '@/components/layouts/LegalLayout';
 
 export const metadata: Metadata = {
-  title: 'Politique de confidentialité',
+  title: 'Confidentialité',
   description: 'Comment Nacks Galerie traite tes données personnelles.',
   robots: { index: true, follow: true },
 };
@@ -10,14 +10,10 @@ export const metadata: Metadata = {
 export default function ConfidentialitePage() {
   return (
     <LegalLayout
-      eyebrow="Données personnelles"
       title="Confidentialité"
-      lastUpdated="22 avril 2026"
-      neighbors={[
-        { href: '/legal/cgv', label: 'CGV' },
-        { href: '/legal/mentions', label: 'Mentions légales' },
-        { href: '/legal/retours', label: 'Retours' },
-      ]}
+      subtitle="Aucun pixel Meta, aucun GA, aucun tracker tiers. Voici précisément ce que je collecte, pourquoi, et combien de temps."
+      lastUpdate="2026-04-22"
+      currentHref="/legal/confidentialite"
     >
       <p>
         Ce site est construit pour <strong>respecter tes données</strong>. Il n'y a aucun pixel

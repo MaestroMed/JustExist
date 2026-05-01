@@ -131,3 +131,13 @@ export function getPastDrops(): readonly Drop[] {
 export function getDrop(slug: string): Drop | undefined {
   return drops.find((d) => d.slug === slug);
 }
+
+/** Alias clean pour la nouvelle DA "Séries" (Phase 3). */
+export function getAllDrops(): readonly Drop[] {
+  return drops;
+}
+
+/** Alias clean pour la nouvelle DA "Séries" (Phase 3). */
+export function getDropBySlug(slug: string): Drop | undefined {
+  return getDrop(slug);
+}

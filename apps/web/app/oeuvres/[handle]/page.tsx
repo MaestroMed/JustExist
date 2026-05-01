@@ -3,12 +3,10 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@nacks/ui';
 import { PageShell } from '@/components/layouts/PageShell';
-import { ArtworkCard } from '@/components/shop/ArtworkCard';
-import { ArtPoster } from '@/components/art/ArtPoster';
-import { ProductAccordion } from '@/components/shop/ProductAccordion';
-import { ArtworkGallery } from '@/components/shop/ArtworkGallery';
-import { SplitHeading } from '@/components/polish/SplitHeading';
-import { ShareButtons } from '@/components/polish/ShareButtons';
+import { PDPGallery } from '@/components/shop/PDPGallery';
+import { PDPActions } from '@/components/shop/PDPActions';
+import { PDPDetails } from '@/components/shop/PDPDetails';
+import { PDPRelatedCard } from '@/components/shop/PDPRelatedCard';
 import { artworks, formatPrice, getArtwork } from '@/lib/content/artworks';
 import { getCharacter } from '@/lib/content/characters';
 import {
@@ -18,9 +16,27 @@ import {
   serializeJsonLd,
 } from '@/lib/seo/jsonld';
 
+/**
+ * PDP — Page détail œuvre. DA premium gallery (Zwirner / Hermès / Acne Studios).
+ * Photo-first, calme, hierarchie info claire, certifications mises en valeur.
+ *
+ * Server component pour data fetching + SEO. Les sous-composants client
+ * (PDPGallery, PDPActions, PDPDetails) gèrent l'interactivité.
+ */
+
+const INK = 'var(--color-ink, #0a0a0a)';
+const CREAM = 'var(--color-cream, #f5f1e8)';
+
+const FONT_SERIF = "var(--font-serif, 'Playfair Display', Georgia, serif)";
+const FONT_BODY = "var(--font-body, Inter, system-ui, sans-serif)";
+
 type Params = Promise<{ handle: string }>;
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Params;
+}): Promise<Metadata> {
   const { handle } = await params;
   const artwork = getArtwork(handle);
   if (!artwork) return { title: 'Œuvre introuvable' };
@@ -50,292 +66,576 @@ export async function generateStaticParams() {
   return artworks.map((a) => ({ handle: a.slug }));
 }
 
+const TYPE_LABEL: Record<string, string> = {
+  original: 'Original',
+  giclee: 'Tirage limité',
+  serigraphie: 'Sérigraphie limitée',
+  poster: 'Open edition',
+  figurine: 'Figurine éditée',
+  merch: 'Merch',
+};
+
 export default async function ArtworkPage({ params }: { params: Params }) {
   const { handle } = await params;
   const artwork = getArtwork(handle);
   if (!artwork) notFound();
 
   const character = artwork.character ? getCharacter(artwork.character) : null;
-  const related = artworks
-    .filter((a) => a.slug !== artwork.slug && (a.character === artwork.character || a.type === artwork.type))
-    .slice(0, 3);
 
-  const soldOut = artwork.status === 'sold_out';
-  const coming = artwork.status === 'coming';
+  // Œuvres de la même série / même personnage
+  const sameSeries = artworks.filter(
+    (a) =>
+      a.slug !== artwork.slug &&
+      artwork.character &&
+      a.character === artwork.character,
+  );
+  const fallback = artworks.filter(
+    (a) => a.slug !== artwork.slug && a.type === artwork.type,
+  );
+  const related = (sameSeries.length >= 3 ? sameSeries : [...sameSeries, ...fallback])
+    .filter((a, i, arr) => arr.findIndex((b) => b.slug === a.slug) === i)
+    .slice(0, 4);
+
+  const eyebrow = TYPE_LABEL[artwork.type] ?? artwork.type;
+  const isComing = artwork.status === 'coming';
+  const isSoldOut = artwork.status === 'sold_out';
+
+  // Description fallback : on combine subtitle + lore en 2-3 paragraphes éditoriaux
+  const descriptionParas = buildDescription(artwork);
 
   return (
     <PageShell>
-      <Container size="full" className="pt-10 md:pt-14">
-        {/* Breadcrumb */}
-        <nav className="mb-10 flex items-center gap-2 font-[var(--font-mono)] text-[10px] uppercase tracking-[0.25em] text-[var(--color-cream-600)]">
-          <Link href="/oeuvres" className="hover:text-[var(--color-cream)]" data-cursor="link">Œuvres</Link>
-          <span>/</span>
-          <span className="truncate text-[var(--color-cream)]">{artwork.title}</span>
-        </nav>
+      {/* ==========================================================
+       *  Section 1 — Galerie + Info (split cream)
+       * ========================================================== */}
+      <section
+        aria-label={`${artwork.title} — galerie et information`}
+        className="relative"
+        style={{
+          backgroundColor: CREAM,
+          color: INK,
+          paddingBlock: 'clamp(2.5rem, 5vh, 4.5rem)',
+        }}
+      >
+        <Container size="full">
+          {/* Breadcrumb */}
+          <nav
+            aria-label="Fil d'Ariane"
+            className="mb-[clamp(2rem,3.5vh,3rem)] flex items-center"
+            style={{
+              gap: '0.5rem',
+              fontFamily: FONT_BODY,
+              fontSize: '0.7rem',
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: 'rgba(10,10,10,0.55)',
+            }}
+          >
+            <Link
+              href="/"
+              data-cursor="link"
+              className="hover:text-[var(--color-ink)]"
+              style={{ color: 'inherit', textDecoration: 'none' }}
+            >
+              Accueil
+            </Link>
+            <span aria-hidden>/</span>
+            <Link
+              href="/oeuvres"
+              data-cursor="link"
+              className="hover:text-[var(--color-ink)]"
+              style={{ color: 'inherit', textDecoration: 'none' }}
+            >
+              Œuvres
+            </Link>
+            <span aria-hidden>/</span>
+            <span style={{ color: INK }} className="truncate">
+              {artwork.title}
+            </span>
+          </nav>
 
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-          {/* Gauche : image + lightbox (client component) */}
-          <div className="lg:col-span-7">
-            <ArtworkGallery variant={artwork.posterVariant} title={artwork.title} />
-          </div>
+          {/* Split */}
+          <div
+            className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr]"
+            style={{ gap: 'clamp(2rem, 4vw, 5rem)' }}
+          >
+            {/* ── Colonne gauche : galerie ── */}
+            <div className="lg:sticky lg:top-[calc(var(--spacing,1px)*0+6rem)] lg:self-start">
+              <PDPGallery
+                variant={artwork.posterVariant}
+                title={artwork.title}
+              />
+            </div>
 
-          {/* Droite : info sticky */}
-          <aside className="lg:col-span-5 lg:sticky lg:top-28 lg:self-start">
-            <div className="flex flex-col gap-6">
-              {/* Type */}
-              <p className="font-[var(--font-mono)] text-xs uppercase tracking-[0.3em] text-[var(--color-blood)]">
-                {typeLabel(artwork.type)}
-                {artwork.edition && ` · édition ${artwork.edition.size}`}
+            {/* ── Colonne droite : info & action ── */}
+            <aside
+              className="flex flex-col"
+              style={{ gap: 'clamp(1.25rem, 2vh, 1.75rem)' }}
+            >
+              {/* Eyebrow */}
+              <p
+                style={{
+                  fontFamily: FONT_BODY,
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.28em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(10,10,10,0.55)',
+                  margin: 0,
+                }}
+              >
+                {eyebrow}
+                {artwork.edition && ` · n° à attribuer / ${artwork.edition.size}`}
               </p>
 
               {/* Titre */}
               <h1
-                className="font-[var(--font-display)] font-[500] leading-[0.95] tracking-[-0.03em] text-[var(--color-cream)]"
-                style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)' }}
+                style={{
+                  fontFamily: FONT_SERIF,
+                  fontStyle: 'italic',
+                  fontWeight: 400,
+                  fontSize: 'clamp(2.2rem, 4.5vw, 3.6rem)',
+                  lineHeight: 1.02,
+                  letterSpacing: '-0.015em',
+                  color: INK,
+                  margin: 0,
+                }}
+                className="text-balance"
               >
                 {artwork.title}
               </h1>
-              <p className="font-[var(--font-body)] text-base text-[var(--color-cream-600)]">
-                {artwork.subtitle}
-              </p>
 
-              {/* Lore */}
-              <p className="font-[var(--font-body)] text-sm italic leading-[1.6] text-[var(--color-cream-600)]">
-                « {artwork.lore} »
+              {/* Year + dimensions + materials */}
+              <p
+                style={{
+                  fontFamily: FONT_BODY,
+                  fontSize: '0.92rem',
+                  lineHeight: 1.6,
+                  color: 'rgba(10,10,10,0.65)',
+                  margin: 0,
+                }}
+              >
+                {artwork.year} · {artwork.dimensions} · {artwork.materials}
               </p>
 
               {/* Prix */}
-              <div className="flex items-baseline justify-between gap-4 border-y border-[var(--color-cream-100)] py-6">
-                <span className="font-[var(--font-mono)] text-xs uppercase tracking-[0.25em] text-[var(--color-cream-600)]">
-                  {coming ? 'Date à venir' : soldOut ? 'Vendu' : 'Prix'}
+              <div
+                className="flex items-baseline justify-between"
+                style={{
+                  marginTop: 'clamp(0.5rem, 1vh, 1rem)',
+                  paddingBlock: 'clamp(0.75rem, 1.4vh, 1rem)',
+                  borderTop: '1px solid rgba(10,10,10,0.12)',
+                  borderBottom: '1px solid rgba(10,10,10,0.12)',
+                  gap: '1rem',
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: FONT_BODY,
+                    fontSize: '0.72rem',
+                    letterSpacing: '0.22em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(10,10,10,0.55)',
+                  }}
+                >
+                  {isComing ? 'Date à venir' : isSoldOut ? 'Vendue' : 'Prix'}
                 </span>
-                <span className="font-[var(--font-mono)] text-3xl font-[500] tabular-nums text-[var(--color-cream)]">
-                  {coming ? '—' : formatPrice(artwork.priceCents)}
+                <span
+                  style={{
+                    fontFamily: FONT_SERIF,
+                    fontStyle: 'italic',
+                    fontWeight: 400,
+                    fontSize: 'clamp(1.6rem, 2.4vw, 2.1rem)',
+                    color: INK,
+                    fontVariantNumeric: 'tabular-nums',
+                    letterSpacing: '-0.01em',
+                  }}
+                >
+                  {isComing ? '—' : formatPrice(artwork.priceCents)}
                 </span>
               </div>
 
-              {/* Stock / édition */}
-              {artwork.edition && !soldOut && !coming && (
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-baseline justify-between font-[var(--font-mono)] text-xs uppercase tracking-[0.2em] text-[var(--color-cream-600)]">
-                    <span>Restants</span>
-                    <span>{artwork.edition.remaining} / {artwork.edition.size}</span>
-                  </div>
-                  <div className="h-[2px] overflow-hidden bg-[var(--color-cream-100)]">
+              {/* Édition */}
+              {artwork.edition && !isComing && (
+                <div className="flex flex-col" style={{ gap: '0.6rem' }}>
+                  <p
+                    style={{
+                      fontFamily: FONT_BODY,
+                      fontSize: '0.78rem',
+                      lineHeight: 1.55,
+                      color: 'rgba(10,10,10,0.65)',
+                      margin: 0,
+                    }}
+                  >
+                    Édition limitée · {artwork.edition.size} exemplaires ·
+                    Numérotée et signée à la main · {artwork.edition.remaining}{' '}
+                    restant{artwork.edition.remaining > 1 ? 's' : ''}
+                  </p>
+                  <div
+                    aria-hidden
+                    style={{
+                      height: 2,
+                      backgroundColor: 'rgba(10,10,10,0.08)',
+                      overflow: 'hidden',
+                    }}
+                  >
                     <div
-                      className="h-full bg-[var(--color-blood)]"
-                      style={{ width: `${((artwork.edition.size - artwork.edition.remaining) / artwork.edition.size) * 100}%` }}
+                      style={{
+                        height: '100%',
+                        backgroundColor: INK,
+                        width: `${
+                          ((artwork.edition.size - artwork.edition.remaining) /
+                            artwork.edition.size) *
+                          100
+                        }%`,
+                      }}
                     />
                   </div>
                 </div>
               )}
 
-              {/* CTA */}
-              {!coming && !soldOut && (
-                <button
-                  type="button"
-                  disabled
-                  className="group inline-flex w-full items-center justify-between bg-[var(--color-cream)] px-8 py-5 font-[var(--font-display)] text-sm font-[500] uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-blood)] hover:text-[var(--color-cream)] disabled:cursor-not-allowed disabled:opacity-70"
-                  data-cursor="buy"
-                  data-cursor-label="Ajouter"
-                  title="Sprint 2 : Stripe Payment Intents"
-                >
-                  <span>Ajouter au panier</span>
-                  <span>→</span>
-                </button>
-              )}
+              {/* Actions (CTA + wishlist + status) */}
+              <PDPActions
+                slug={artwork.slug}
+                title={artwork.title}
+                status={artwork.status}
+              />
 
-              {soldOut && (
-                <div className="flex flex-col gap-2 border border-[var(--color-cream-100)] p-6 text-center">
-                  <p className="font-[var(--font-display)] text-lg text-[var(--color-cream)]">Pièce vendue</p>
-                  <p className="font-[var(--font-body)] text-sm text-[var(--color-cream-600)]">
-                    Rejoins le cercle pour être prévenu des prochains drops similaires.
+              {/* Description courte (preview au-dessus du fold) */}
+              <div
+                className="flex flex-col"
+                style={{
+                  gap: 'clamp(0.6rem, 1vh, 0.85rem)',
+                  marginTop: 'clamp(0.5rem, 1vh, 1rem)',
+                }}
+              >
+                {descriptionParas.slice(0, 2).map((p, i) => (
+                  <p
+                    key={i}
+                    style={{
+                      fontFamily: FONT_SERIF,
+                      fontStyle: 'italic',
+                      fontWeight: 400,
+                      fontSize: 'clamp(0.95rem, 1.05vw, 1.05rem)',
+                      lineHeight: 1.6,
+                      color: 'rgba(10,10,10,0.78)',
+                      margin: 0,
+                    }}
+                    className="text-balance"
+                  >
+                    {p}
                   </p>
-                </div>
-              )}
-
-              {coming && (
-                <div className="flex flex-col gap-2 border border-[var(--color-blood)] p-6 text-center">
-                  <p className="font-[var(--font-display)] text-lg text-[var(--color-blood)]">Drop à venir</p>
-                  <p className="font-[var(--font-body)] text-sm text-[var(--color-cream-600)]">
-                    Ouverture bientôt. Date exacte dans la prochaine newsletter.
-                  </p>
-                </div>
-              )}
-
-              {/* Spécifications */}
-              <div className="mt-4 flex flex-col gap-3 border-t border-[var(--color-cream-100)] pt-6">
-                <h3 className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.3em] text-[var(--color-cream-600)]">
-                  Spécifications
-                </h3>
-                <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-3 font-[var(--font-body)] text-sm">
-                  <dt className="font-[var(--font-mono)] text-xs uppercase tracking-[0.2em] text-[var(--color-cream-600)]">Dimensions</dt>
-                  <dd className="text-[var(--color-cream)]">{artwork.dimensions}</dd>
-                  <dt className="font-[var(--font-mono)] text-xs uppercase tracking-[0.2em] text-[var(--color-cream-600)]">Année</dt>
-                  <dd className="text-[var(--color-cream)]">{artwork.year}</dd>
-                  <dt className="font-[var(--font-mono)] text-xs uppercase tracking-[0.2em] text-[var(--color-cream-600)]">Matériaux</dt>
-                  <dd className="text-[var(--color-cream)]">{artwork.materials}</dd>
-                  <dt className="font-[var(--font-mono)] text-xs uppercase tracking-[0.2em] text-[var(--color-cream-600)]">Signature</dt>
-                  <dd className="text-[var(--color-cream)]">Au Posca, au recto</dd>
-                  <dt className="font-[var(--font-mono)] text-xs uppercase tracking-[0.2em] text-[var(--color-cream-600)]">Certificat</dt>
-                  <dd className="text-[var(--color-cream)]">COA papier avec embossage</dd>
-                  <dt className="font-[var(--font-mono)] text-xs uppercase tracking-[0.2em] text-[var(--color-cream-600)]">Expédition</dt>
-                  <dd className="text-[var(--color-cream)]">7 jours ouvrés, tube renforcé</dd>
-                </dl>
+                ))}
               </div>
 
-              {/* Share */}
-              <div className="mt-2 border-t border-[var(--color-cream-100)] pt-6">
-                <ShareButtons
-                  url={`/oeuvres/${artwork.slug}`}
-                  title={`${artwork.title} — Nacks Galerie`}
-                  description={artwork.subtitle}
-                />
-              </div>
+              {/* Détails techniques expandable */}
+              <PDPDetails
+                rows={[
+                  { label: 'Technique', value: artwork.materials },
+                  { label: 'Support', value: supportLabel(artwork.type) },
+                  { label: 'Année', value: String(artwork.year) },
+                  { label: 'Dimensions', value: artwork.dimensions },
+                  ...(artwork.edition
+                    ? [
+                        {
+                          label: 'Édition',
+                          value: `${artwork.edition.size} exemplaires numérotés`,
+                        },
+                      ]
+                    : []),
+                  {
+                    label: 'Certificat',
+                    value:
+                      "Certificat d'authenticité signé au Posca, embossé, numéro unique",
+                  },
+                  {
+                    label: 'Livraison',
+                    value:
+                      'France 35 € · International sur devis · Tube renforcé, 7 j ouvrés',
+                  },
+                ]}
+              />
 
+              {/* Lien personnage si applicable */}
               {character && (
                 <Link
                   href={`/univers/${character.slug}`}
-                  className="mt-6 flex items-center justify-between gap-4 border border-[var(--color-cream-100)] px-6 py-4 transition-colors hover:border-[var(--color-cream)]"
                   data-cursor="link"
+                  data-cursor-label="Univers"
+                  className="pdp-character-link group flex items-center justify-between"
+                  style={{
+                    marginTop: 'clamp(0.5rem, 1vh, 0.75rem)',
+                    paddingBlock: '1rem',
+                    borderTop: '1px solid rgba(10,10,10,0.12)',
+                    color: INK,
+                    textDecoration: 'none',
+                    gap: '1rem',
+                  }}
                 >
-                  <div>
-                    <p className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.3em] text-[var(--color-cream-600)]">
+                  <div className="flex flex-col" style={{ gap: '0.2rem' }}>
+                    <span
+                      style={{
+                        fontFamily: FONT_BODY,
+                        fontSize: '0.7rem',
+                        letterSpacing: '0.22em',
+                        textTransform: 'uppercase',
+                        color: 'rgba(10,10,10,0.55)',
+                      }}
+                    >
                       Personnage
-                    </p>
-                    <p className="mt-1 font-[var(--font-display)] text-lg text-[var(--color-cream)]">
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: FONT_SERIF,
+                        fontStyle: 'italic',
+                        fontSize: 'clamp(1.05rem, 1.2vw, 1.2rem)',
+                        color: INK,
+                      }}
+                    >
                       {character.name}
-                    </p>
+                    </span>
                   </div>
-                  <span className="text-[var(--color-cream-600)]">→</span>
+                  <span
+                    aria-hidden
+                    style={{
+                      fontFamily: FONT_BODY,
+                      color: 'rgba(10,10,10,0.55)',
+                      transition: 'transform 320ms cubic-bezier(0.22,1,0.36,1)',
+                    }}
+                    className="pdp-character-arrow"
+                  >
+                    →
+                  </span>
+                  <style>{`
+                    .pdp-character-link:hover .pdp-character-arrow {
+                      transform: translateX(4px);
+                      color: ${INK};
+                    }
+                  `}</style>
                 </Link>
               )}
-            </div>
-          </aside>
-        </div>
-
-        {/* Accordion coloré : FAQ / Livraison / Authenticité / Contact */}
-        <section className="mx-auto mt-20 max-w-3xl">
-          <SplitHeading
-            text="Tout ce qu'il faut savoir."
-            as="h2"
-            className="mb-8 block font-[var(--font-display)] font-[500] leading-[1] tracking-[-0.025em] text-[var(--color-cream)]"
-            style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)' }}
-            mode="words"
-            stagger={0.03}
-            blur
-          />
-          <ProductAccordion
-            items={[
-              {
-                id: 'authenticite',
-                title: "Authenticité & certificat",
-                tone: 'peach',
-                content: (
-                  <>
-                    <p>
-                      Chaque pièce est accompagnée d'un certificat d'authenticité (COA) papier, signé au
-                      Posca par Nacks, avec embossage sec et numéro unique. La provenance est aussi
-                      enregistrée dans un registre numérique consultable à tout moment.
-                    </p>
-                    <p className="mt-2">
-                      Pour les éditions limitées, le numéro de série est peint à la main au dos de la
-                      pièce.
-                    </p>
-                  </>
-                ),
-              },
-              {
-                id: 'livraison',
-                title: 'Livraison & emballage',
-                tone: 'blue',
-                content: (
-                  <>
-                    <p>
-                      <strong>France métropolitaine :</strong> Colissimo Suivi, 3 à 7 jours ouvrés.
-                      Frais offerts dès 300 €.
-                    </p>
-                    <p className="mt-1">
-                      <strong>International :</strong> UPS ou DHL selon destination (5 à 12 jours).
-                      Douanes à la charge de l'acheteur.
-                    </p>
-                    <p className="mt-1">
-                      <strong>Retrait atelier :</strong> Sarcelles, sur rendez-vous, gratuit.
-                    </p>
-                    <p className="mt-2">
-                      Emballage : carton rigide, papier de soie, coins renforcés. Assurance incluse à
-                      hauteur de la valeur déclarée.
-                    </p>
-                  </>
-                ),
-              },
-              {
-                id: 'retours',
-                title: 'Retours & remboursement',
-                tone: 'rose',
-                content: (
-                  <>
-                    <p>
-                      14 jours pour se rétracter sans justification, conformément au Code de la
-                      consommation. L'œuvre doit revenir dans son emballage d'origine, état parfait,
-                      frais de retour à ta charge sauf défaut.
-                    </p>
-                    <p className="mt-2">
-                      Remboursement intégral sous 10 jours après réception et inspection, sur la carte
-                      utilisée pour l'achat.
-                    </p>
-                  </>
-                ),
-              },
-              {
-                id: 'support',
-                title: 'Contact & support',
-                tone: 'acid',
-                content: (
-                  <>
-                    <p>
-                      Une question avant l'achat, un doute sur le format, une demande de devis
-                      personnalisé ? Écris directement :
-                    </p>
-                    <p className="mt-2 font-[var(--font-mono)] text-sm">
-                      <a href="mailto:contact@nacksgalerie.com" className="underline">
-                        contact@nacksgalerie.com
-                      </a>
-                    </p>
-                    <p className="mt-2">Réponse sous 48 à 72 heures ouvrées, par Nacks.</p>
-                  </>
-                ),
-              },
-            ]}
-          />
-        </section>
-      </Container>
-
-      {related.length > 0 && (
-        <Container size="full" className="py-24">
-          <div className="mb-10 flex items-end justify-between">
-            <h2
-              className="font-[var(--font-display)] font-[500] leading-[1] tracking-[-0.02em] text-[var(--color-cream)]"
-              style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}
-            >
-              Tu aimeras aussi
-            </h2>
-            <Link
-              href="/oeuvres"
-              className="font-[var(--font-mono)] text-xs uppercase tracking-[0.25em] text-[var(--color-cream-600)] hover:text-[var(--color-cream)]"
-              data-cursor="link"
-            >
-              Toutes les œuvres →
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {related.map((a) => (
-              <ArtworkCard key={a.slug} artwork={a} />
-            ))}
+            </aside>
           </div>
         </Container>
+      </section>
+
+      {/* ==========================================================
+       *  Section 2 — L'œuvre (story, ink alternance)
+       * ========================================================== */}
+      <section
+        aria-label={`${artwork.title} — l'œuvre`}
+        className="relative"
+        style={{
+          backgroundColor: INK,
+          color: CREAM,
+          paddingBlock: 'clamp(5rem, 9vh, 9rem)',
+        }}
+      >
+        <Container size="full">
+          <div
+            className="mx-auto"
+            style={{
+              maxWidth: 'min(900px, 100%)',
+            }}
+          >
+            <p
+              style={{
+                fontFamily: FONT_BODY,
+                fontSize: '0.72rem',
+                letterSpacing: '0.28em',
+                textTransform: 'uppercase',
+                color: 'rgba(245,241,232,0.55)',
+                marginBottom: 'clamp(1rem, 2vh, 1.5rem)',
+              }}
+            >
+              L&apos;œuvre
+            </p>
+
+            <h2
+              style={{
+                fontFamily: FONT_SERIF,
+                fontStyle: 'italic',
+                fontWeight: 400,
+                fontSize: 'clamp(2rem, 4vw, 3.5rem)',
+                lineHeight: 1.05,
+                letterSpacing: '-0.015em',
+                color: CREAM,
+                margin: 0,
+                marginBottom: 'clamp(2rem, 3.5vh, 3rem)',
+              }}
+              className="text-balance"
+            >
+              {storyHeadline(artwork)}
+            </h2>
+
+            <div
+              className="flex flex-col"
+              style={{ gap: 'clamp(1rem, 1.6vh, 1.25rem)' }}
+            >
+              {descriptionParas.map((p, i) => (
+                <p
+                  key={i}
+                  style={{
+                    fontFamily: FONT_SERIF,
+                    fontStyle: 'italic',
+                    fontWeight: 400,
+                    fontSize: 'clamp(1rem, 1.15vw, 1.2rem)',
+                    lineHeight: 1.65,
+                    color: 'rgba(245,241,232,0.82)',
+                    margin: 0,
+                  }}
+                  className="text-balance"
+                >
+                  {p}
+                </p>
+              ))}
+            </div>
+
+            {/* Pull-quote style éditorial */}
+            <blockquote
+              style={{
+                marginTop: 'clamp(2.5rem, 4vh, 3.5rem)',
+                paddingLeft: 'clamp(1.5rem, 3vw, 2.5rem)',
+                borderLeft: '2px solid rgba(245,241,232,0.35)',
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: FONT_SERIF,
+                  fontStyle: 'italic',
+                  fontWeight: 400,
+                  fontSize: 'clamp(1.4rem, 2.4vw, 2rem)',
+                  lineHeight: 1.3,
+                  letterSpacing: '-0.01em',
+                  color: CREAM,
+                  margin: 0,
+                }}
+                className="text-balance"
+              >
+                « {artwork.lore} »
+              </p>
+              <cite
+                style={{
+                  display: 'block',
+                  fontFamily: FONT_BODY,
+                  fontStyle: 'normal',
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.22em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(245,241,232,0.5)',
+                  marginTop: 'clamp(1rem, 1.5vh, 1.25rem)',
+                }}
+              >
+                Notes d&apos;atelier — Nacks
+              </cite>
+            </blockquote>
+
+            {/* Mini certificat block */}
+            <div
+              className="grid"
+              style={{
+                marginTop: 'clamp(3rem, 5vh, 4rem)',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: 'clamp(1.5rem, 3vw, 2.5rem)',
+                paddingTop: 'clamp(2rem, 3vh, 2.5rem)',
+                borderTop: '1px solid rgba(245,241,232,0.12)',
+              }}
+            >
+              <CertCell
+                label="Certificat"
+                value="Authentifié, embossé, signé au Posca"
+              />
+              <CertCell
+                label="Provenance"
+                value="Atelier Nacks — Sarcelles, 95"
+              />
+              <CertCell
+                label="Retours"
+                value="14 jours, conformément au Code de la consommation"
+              />
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* ==========================================================
+       *  Section 3 — Œuvres dans la même série (cream alternance)
+       * ========================================================== */}
+      {related.length > 0 && (
+        <section
+          aria-label="Œuvres similaires"
+          className="relative"
+          style={{
+            backgroundColor: CREAM,
+            color: INK,
+            paddingBlock: 'clamp(5rem, 9vh, 9rem)',
+          }}
+        >
+          <Container size="full">
+            <header className="mb-[clamp(3rem,5vh,4rem)] grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
+              <div>
+                <p
+                  style={{
+                    fontFamily: FONT_BODY,
+                    fontSize: '0.72rem',
+                    letterSpacing: '0.28em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(10,10,10,0.55)',
+                    marginBottom: 'clamp(1rem, 2vh, 1.5rem)',
+                  }}
+                >
+                  À découvrir
+                </p>
+                <h2
+                  style={{
+                    fontFamily: FONT_SERIF,
+                    fontStyle: 'italic',
+                    fontWeight: 400,
+                    fontSize: 'clamp(2rem, 4.2vw, 3.4rem)',
+                    lineHeight: 1.05,
+                    letterSpacing: '-0.015em',
+                    color: INK,
+                    margin: 0,
+                  }}
+                  className="text-balance"
+                >
+                  {character
+                    ? `Œuvres dans la même série.`
+                    : `Œuvres similaires.`}
+                </h2>
+              </div>
+
+              <Link
+                href="/oeuvres"
+                data-cursor="link"
+                data-cursor-label="Galerie"
+                className="group inline-flex items-center self-end whitespace-nowrap pdp-related-cta"
+                style={{
+                  fontFamily: FONT_SERIF,
+                  fontStyle: 'italic',
+                  fontSize: 'clamp(1rem, 1.05vw, 1.15rem)',
+                  color: INK,
+                  paddingBottom: '4px',
+                  borderBottom: '1px solid rgba(10,10,10,0.35)',
+                  textDecoration: 'none',
+                }}
+              >
+                <span>Toutes les œuvres&nbsp;→</span>
+              </Link>
+            </header>
+
+            <div
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+              style={{ gap: 'clamp(1rem, 2.5vw, 2rem)' }}
+            >
+              {related.map((a, i) => (
+                <PDPRelatedCard key={a.slug} art={a} index={i} />
+              ))}
+            </div>
+          </Container>
+        </section>
       )}
-      {/* JSON-LD — VisualArtwork + Product + BreadcrumbList + FAQPage */}
+
+      {/* ── JSON-LD — VisualArtwork + Product + BreadcrumbList + FAQPage ── */}
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
@@ -354,12 +654,12 @@ export default async function ArtworkPage({ params }: { params: Params }) {
                   "Oui. Chaque œuvre est accompagnée d'un certificat d'authenticité papier signé au Posca, avec embossage sec et numéro unique.",
               },
               {
-                question: "Quels sont les délais de livraison ?",
+                question: 'Quels sont les délais de livraison ?',
                 answer:
-                  "France : 3 à 7 jours ouvrés via Colissimo Suivi. International : 5 à 12 jours via UPS ou DHL.",
+                  'France : 3 à 7 jours ouvrés via Colissimo Suivi. International : 5 à 12 jours via UPS ou DHL.',
               },
               {
-                question: "Puis-je me rétracter ?",
+                question: 'Puis-je me rétracter ?',
                 answer:
                   "Oui, 14 jours à compter de la réception, conformément au Code de la consommation français. L'œuvre doit revenir en parfait état.",
               },
@@ -371,14 +671,77 @@ export default async function ArtworkPage({ params }: { params: Params }) {
   );
 }
 
-function typeLabel(t: string) {
+/* ============================================================
+ *  Helpers
+ * ============================================================ */
+
+function CertCell({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex flex-col" style={{ gap: '0.4rem' }}>
+      <p
+        style={{
+          fontFamily: FONT_BODY,
+          fontSize: '0.7rem',
+          letterSpacing: '0.22em',
+          textTransform: 'uppercase',
+          color: 'rgba(245,241,232,0.5)',
+          margin: 0,
+        }}
+      >
+        {label}
+      </p>
+      <p
+        style={{
+          fontFamily: FONT_SERIF,
+          fontStyle: 'italic',
+          fontWeight: 400,
+          fontSize: '0.95rem',
+          lineHeight: 1.5,
+          color: 'rgba(245,241,232,0.82)',
+          margin: 0,
+        }}
+      >
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function supportLabel(type: string): string {
   const map: Record<string, string> = {
-    original: 'Original',
-    giclee: 'Giclée',
-    serigraphie: 'Sérigraphie',
-    poster: 'Poster',
-    figurine: 'Figurine',
-    merch: 'Merch',
+    original: 'Toile montée sur châssis bois',
+    giclee: 'Papier Hahnemühle Photo Rag 308 g',
+    serigraphie: 'Papier Somerset Satin 410 g',
+    poster: 'Papier couché 200 g',
+    figurine: 'Résine époxy peinte main',
+    merch: 'Coton biologique',
   };
-  return map[t] ?? t;
+  return map[type] ?? '—';
+}
+
+function storyHeadline(artwork: { title: string; type: string }): string {
+  if (artwork.type === 'original') return 'Une pièce unique, peinte à la main.';
+  if (artwork.type === 'serigraphie')
+    return 'Sérigraphie tirée à la main, signée et numérotée.';
+  if (artwork.type === 'giclee')
+    return 'Tirage limité, papier d\'art, signature originale.';
+  if (artwork.type === 'figurine')
+    return 'Figurine éditée, peinte main, numérotée.';
+  if (artwork.type === 'poster') return 'Poster open edition, à accrocher.';
+  return artwork.title;
+}
+
+function buildDescription(artwork: {
+  subtitle: string;
+  lore: string;
+  type: string;
+  materials: string;
+  dimensions: string;
+}): string[] {
+  // Lore principal + une phrase contextualisante sur la matérialité
+  const para1 = artwork.lore;
+  const para2 = `${artwork.subtitle}, ${artwork.dimensions}. Réalisé en ${artwork.materials.toLowerCase()}.`;
+  const para3 =
+    'Chaque pièce est accompagnée de son certificat d\'authenticité — papier embossé, signé au Posca, avec un numéro unique enregistré dans le registre de l\'atelier.';
+  return [para1, para2, para3];
 }

@@ -2,22 +2,18 @@ import type { Metadata } from 'next';
 import { LegalLayout, LegalSection } from '@/components/layouts/LegalLayout';
 
 export const metadata: Metadata = {
-  title: 'Retours & remboursements',
-  description: 'Politique de retours de Nacks Galerie.',
+  title: 'Livraison & retours',
+  description: 'Politique de livraison et de retours de Nacks Galerie.',
   robots: { index: true, follow: true },
 };
 
 export default function RetoursPage() {
   return (
     <LegalLayout
-      eyebrow="Retours & remboursements"
-      title="Si elle ne te plaît pas."
-      lastUpdated="22 avril 2026"
-      neighbors={[
-        { href: '/legal/cgv', label: 'CGV' },
-        { href: '/legal/confidentialite', label: 'Confidentialité' },
-        { href: '/legal/mentions', label: 'Mentions légales' },
-      ]}
+      title="Livraison & retours"
+      subtitle="14 jours pour changer d'avis, emballage musée pour chaque envoi. Voici comment ça se passe, des deux côtés."
+      lastUpdate="2026-04-22"
+      currentHref="/legal/retours"
     >
       <p>
         Je veux que chaque acheteur vive avec son œuvre comme avec un ami de longue date. Si ce n'est

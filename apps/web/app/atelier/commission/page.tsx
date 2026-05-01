@@ -1,83 +1,244 @@
 import type { Metadata } from 'next';
-import { Container } from '@nacks/ui';
-import { PageShell, PageHeader } from '@/components/layouts/PageShell';
-import { CommissionForm } from '@/components/forms/CommissionForm';
+import { PageShell } from '@/components/layouts/PageShell';
+import { CommissionFormBespoke } from '@/components/forms/CommissionFormBespoke';
 
 export const metadata: Metadata = {
-  title: 'Commande personnalisée',
+  title: 'Commission — Naguy "Nacks" Claude',
   description:
-    "Commander une œuvre Nacks sur-mesure — candidature filtrée, 2 à 3 projets par mois, à partir de 1 500 €.",
+    "Une œuvre, à votre histoire. Demande de commission Nacks Galerie : esquisse, signature, livraison en 4 à 8 semaines. Devis gratuit sous 48h.",
 };
+
+const INK = 'var(--color-ink, #0a0a0a)';
+const CREAM = 'var(--color-cream, #f5f1e8)';
+const PAPER = 'var(--color-paint-white, #fafafa)';
+
+const FONT_SERIF = "var(--font-serif, 'Playfair Display', Georgia, serif)";
+const FONT_BODY = "var(--font-body, Inter, system-ui, sans-serif)";
+
+/* ───────── Process steps ───────── */
+const STEPS: ReadonlyArray<{ n: string; label: string; body: string }> = [
+  {
+    n: '01',
+    label: 'Vous me racontez',
+    body: 'Quelques minutes pour décrire le projet, l\'émotion, la pièce.',
+  },
+  {
+    n: '02',
+    label: 'Je réponds sous 48 h',
+    body: 'Devis détaillé, calendrier, premières pistes d\'esquisse.',
+  },
+  {
+    n: '03',
+    label: 'Trois sessions de revue',
+    body: 'Esquisse, mi-parcours, signature. Pas de validation à chaque coup de pinceau.',
+  },
+  {
+    n: '04',
+    label: 'Livraison & certificat',
+    body: 'Expédition assurée ou remise en atelier. COA + dédicace manuscrite.',
+  },
+];
 
 export default function CommissionPage() {
   return (
     <PageShell>
-      <Container size="wide" className="py-20 md:py-24">
-        <PageHeader
-          eyebrow="Commande personnalisée"
-          title="Une œuvre, pour toi."
-          subtitle="2 à 3 commandes par mois. Candidature obligatoire — je choisis les projets qui me parlent. Prix à partir de 1 500 €."
-        />
+      {/* ═════════ Section 1 — Header (cream) ═════════ */}
+      <section
+        aria-label="Commission — sur commande"
+        className="relative w-full overflow-hidden"
+        style={{
+          backgroundColor: CREAM,
+          color: INK,
+          paddingBlock: 'clamp(5rem, 12vh, 10rem)',
+        }}
+      >
+        <div
+          className="relative mx-auto"
+          style={{
+            maxWidth: 'var(--container-max, 1440px)',
+            paddingInline: 'clamp(1.5rem, 4vw, 5rem)',
+          }}
+        >
+          <p
+            className="uppercase"
+            style={{
+              fontFamily: FONT_BODY,
+              fontSize: 'clamp(0.7rem, 0.78vw, 0.82rem)',
+              letterSpacing: '0.28em',
+              color: 'rgba(10,10,10,0.55)',
+              margin: 0,
+            }}
+          >
+            Customs &middot; Sur commande
+          </p>
 
-        <div className="mt-16 grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
-          <div>
-            <CommissionForm />
-          </div>
+          <h1
+            className="mt-[clamp(1.5rem,3vh,2.5rem)] text-balance"
+            style={{
+              fontFamily: FONT_SERIF,
+              fontStyle: 'italic',
+              fontWeight: 400,
+              fontSize: 'clamp(3rem, 8vw, 7rem)',
+              lineHeight: 0.96,
+              letterSpacing: '-0.025em',
+              color: INK,
+              margin: 0,
+              maxWidth: '18ch',
+            }}
+          >
+            Une œuvre,
+            <br />à votre histoire.
+          </h1>
 
-          <aside className="flex flex-col gap-10 lg:sticky lg:top-28 lg:self-start">
-            <div>
-              <p className="font-[var(--font-mono)] text-xs uppercase tracking-[0.3em] text-[var(--color-blood)]">
-                Comment ça se passe
-              </p>
-              <ol className="mt-6 flex flex-col gap-4 font-[var(--font-body)] text-[var(--color-cream)]">
-                <Step n={1} label="Tu remplis le formulaire" body="Prends 5 minutes. Plus c'est précis, plus je peux te dire vite si c'est faisable." />
-                <Step n={2} label="Je te réponds sous 72 h" body="Si ton projet me parle, on passe en appel. Si ce n'est pas le bon moment, je te le dis clairement." />
-                <Step n={3} label="Devis + acompte 30 %" body="On cale le cahier des charges, je bloque le créneau dans l'atelier." />
-                <Step n={4} label="Création, 4 à 8 semaines" body="Je t'envoie 2 photos mi-parcours. Pas de validation par étape — ça casse le geste." />
-                <Step n={5} label="Livraison, certificat, signature dédiée" body="Expédition assurée ou remise en atelier. COA + ta dédicace manuscrite au dos." />
-              </ol>
-            </div>
+          <p
+            className="mt-[clamp(1.5rem,3vh,2.5rem)]"
+            style={{
+              fontFamily: FONT_BODY,
+              fontSize: 'clamp(1rem, 1.15vw, 1.25rem)',
+              lineHeight: 1.6,
+              color: 'rgba(10,10,10,0.7)',
+              maxWidth: '38rem',
+              margin: 0,
+            }}
+          >
+            De l&apos;esquisse à la signature, en moyenne 4 à 8 semaines.
+            Trois sessions de revue. Formats libres — toile, mur, sneakers,
+            cuir, peau.
+          </p>
 
-            <div>
-              <p className="font-[var(--font-mono)] text-xs uppercase tracking-[0.3em] text-[var(--color-cream-600)]">
-                Ce que je refuse
-              </p>
-              <ul className="mt-6 flex flex-col gap-3 font-[var(--font-body)] text-sm text-[var(--color-cream-600)]">
-                <li className="flex items-start gap-3">
-                  <span className="mt-2 h-1 w-3 flex-shrink-0 bg-[var(--color-blood)]" />
-                  Les copies d'œuvres existantes (les miennes ou celles d'autres artistes).
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-2 h-1 w-3 flex-shrink-0 bg-[var(--color-blood)]" />
-                  Les délais absurdes (moins de 4 semaines).
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-2 h-1 w-3 flex-shrink-0 bg-[var(--color-blood)]" />
-                  Les briefs trop contrôlants (validation à chaque étape).
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-2 h-1 w-3 flex-shrink-0 bg-[var(--color-blood)]" />
-                  Les projets sans dimension humaine (logos, mascottes d'entreprise).
-                </li>
-              </ul>
-            </div>
-          </aside>
+          <p
+            className="mt-[clamp(0.75rem,1.5vh,1.25rem)]"
+            style={{
+              fontFamily: FONT_BODY,
+              fontWeight: 600,
+              fontSize: 'clamp(0.78rem, 0.85vw, 0.9rem)',
+              color: 'rgba(10,10,10,0.55)',
+              margin: 0,
+            }}
+          >
+            À partir de 800&nbsp;€ &middot; Devis gratuit sous 48&nbsp;h
+          </p>
         </div>
-      </Container>
-    </PageShell>
-  );
-}
+      </section>
 
-function Step({ n, label, body }: { n: number; label: string; body: string }) {
-  return (
-    <li className="flex items-start gap-5 border-b border-[var(--color-cream-100)] pb-4">
-      <span className="font-[var(--font-mono)] text-2xl font-[500] tabular-nums text-[var(--color-blood)]">
-        0{n}
-      </span>
-      <div className="flex-1">
-        <p className="font-[var(--font-display)] text-lg font-[500]">{label}</p>
-        <p className="mt-1 font-[var(--font-body)] text-sm text-[var(--color-cream-600)]">{body}</p>
-      </div>
-    </li>
+      {/* ═════════ Section 2 — Form (cream + card paper) ═════════ */}
+      <section
+        aria-label="Formulaire de demande"
+        className="relative w-full overflow-hidden"
+        style={{
+          backgroundColor: CREAM,
+          color: INK,
+          paddingBottom: 'clamp(5rem, 10vh, 10rem)',
+        }}
+      >
+        <div
+          className="relative mx-auto"
+          style={{
+            maxWidth: '52rem',
+            paddingInline: 'clamp(1rem, 4vw, 2rem)',
+          }}
+        >
+          <CommissionFormBespoke />
+        </div>
+      </section>
+
+      {/* ═════════ Section 3 — Process (ink) ═════════ */}
+      <section
+        aria-label="Comment se déroule une commission"
+        className="relative w-full overflow-hidden"
+        style={{
+          backgroundColor: INK,
+          color: CREAM,
+          paddingBlock: 'clamp(5rem, 10vh, 10rem)',
+        }}
+      >
+        <div
+          className="relative mx-auto"
+          style={{
+            maxWidth: 'var(--container-max, 1440px)',
+            paddingInline: 'clamp(1.5rem, 4vw, 5rem)',
+          }}
+        >
+          <p
+            className="uppercase"
+            style={{
+              fontFamily: FONT_BODY,
+              fontSize: 'clamp(0.7rem, 0.78vw, 0.82rem)',
+              letterSpacing: '0.28em',
+              color: 'rgba(245,241,232,0.55)',
+              margin: 0,
+            }}
+          >
+            Comment ça se passe
+          </p>
+
+          <h2
+            className="mt-[clamp(1rem,2vh,1.75rem)]"
+            style={{
+              fontFamily: FONT_SERIF,
+              fontStyle: 'italic',
+              fontWeight: 400,
+              fontSize: 'clamp(2.25rem, 5vw, 4rem)',
+              lineHeight: 1,
+              letterSpacing: '-0.025em',
+              color: CREAM,
+              margin: 0,
+            }}
+          >
+            Quatre étapes, sans bruit.
+          </h2>
+
+          <ol
+            className="mt-[clamp(2.5rem,5vh,4rem)] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[clamp(1rem,2vw,2rem)]"
+            style={{ listStyle: 'none', padding: 0, margin: 0 }}
+          >
+            {STEPS.map((s) => (
+              <li
+                key={s.n}
+                className="flex flex-col gap-[clamp(0.75rem,1.5vh,1.25rem)]"
+                style={{
+                  padding: 'clamp(1.5rem, 2.5vw, 2rem)',
+                  borderTop: '1px solid rgba(245,241,232,0.18)',
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: FONT_SERIF,
+                    fontStyle: 'italic',
+                    fontWeight: 400,
+                    fontSize: 'clamp(1.75rem, 2.6vw, 2.25rem)',
+                    lineHeight: 1,
+                    color: 'rgba(245,241,232,0.6)',
+                  }}
+                >
+                  {s.n}
+                </span>
+                <span
+                  style={{
+                    fontFamily: FONT_BODY,
+                    fontWeight: 600,
+                    fontSize: 'clamp(1rem, 1.1vw, 1.15rem)',
+                    lineHeight: 1.3,
+                    color: CREAM,
+                  }}
+                >
+                  {s.label}
+                </span>
+                <span
+                  style={{
+                    fontFamily: FONT_BODY,
+                    fontSize: 'clamp(0.88rem, 0.95vw, 1rem)',
+                    lineHeight: 1.55,
+                    color: 'rgba(245,241,232,0.65)',
+                  }}
+                >
+                  {s.body}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+    </PageShell>
   );
 }

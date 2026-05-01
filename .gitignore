@@ -55,6 +55,9 @@ drizzle/meta/
 # Vercel
 .vercel
 
+# Claude Code local settings
+.claude/settings.local.json
+
 # Temp
 .tmp/
 tmp/
