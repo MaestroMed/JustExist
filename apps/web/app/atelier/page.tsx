@@ -326,6 +326,68 @@ export default function AtelierPage() {
         </div>
       </section>
 
+      {/* ═════════ Mosaïque vie d'atelier (cream) ═════════ */}
+      <section
+        aria-label="Vie d'atelier"
+        className="relative w-full overflow-hidden"
+        style={{
+          backgroundColor: CREAM,
+          paddingBlock: 'clamp(3rem, 6vh, 6rem)',
+        }}
+      >
+        <div
+          className="relative mx-auto"
+          style={{
+            maxWidth: 'var(--container-max, 1440px)',
+            paddingInline: 'clamp(1.5rem, 4vw, 5rem)',
+          }}
+        >
+          <p
+            className="uppercase"
+            style={{
+              fontFamily: FONT_BODY,
+              fontSize: 'clamp(0.7rem, 0.78vw, 0.82rem)',
+              letterSpacing: '0.28em',
+              color: 'rgba(10,10,10,0.55)',
+              margin: '0 0 clamp(1.25rem, 2.5vh, 2rem) 0',
+            }}
+          >
+            En atelier · Sarcelles
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4" style={{ gap: 'clamp(0.5rem, 1.2vw, 1rem)' }}>
+            {[
+              { src: '/photos/portrait/naguy-livepainting-words.jpg', alt: 'Naguy en live painting — fresque de prénoms', ratio: '3 / 4' },
+              { src: '/photos/portrait/naguy-goku-dbz.jpg', alt: 'Naguy devant un Goku Dragon Ball Z en mots', ratio: '3 / 4' },
+              { src: '/photos/portrait/naguy-mickey-bowling.jpg', alt: 'Naguy avec un Mickey custom bowling', ratio: '3 / 4' },
+              { src: '/photos/portrait/naguy-naruto-bio.jpg', alt: 'Naguy peignant un Naruto en mots', ratio: '3 / 4' },
+              { src: '/photos/portrait/naguy-mickey-tiktok.jpg', alt: 'Naguy en TikTok live avec œuvre Mickey', ratio: '3 / 4' },
+              { src: '/photos/portrait/naguy-mickey-words-studio.png', alt: "Naguy devant l'œuvre OG Mickey en mots, atelier complet", ratio: '3 / 4' },
+              { src: '/photos/portrait/naguy-atelier-portrait.jpg', alt: "Portrait studio de Naguy avec POSCAs au premier plan", ratio: '3 / 4' },
+              { src: '/photos/branding/banner-artiste-pop-art.jpg', alt: 'Identité ARTISTE NACKS POP ART', ratio: '3 / 4' },
+            ].map((p) => (
+              <figure
+                key={p.src}
+                className="relative w-full overflow-hidden"
+                style={{
+                  margin: 0,
+                  aspectRatio: p.ratio,
+                  backgroundColor: PAPER,
+                  border: '1px solid rgba(10,10,10,0.06)',
+                }}
+              >
+                <Image
+                  src={p.src}
+                  alt={p.alt}
+                  fill
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  className="object-cover"
+                />
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═════════ Section 3 — Chronologie (ink) ═════════ */}
       <section
         aria-label="Quelques jalons"
