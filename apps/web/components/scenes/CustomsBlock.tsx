@@ -1,8 +1,8 @@
 'use client';
 
 import { useRef } from 'react';
-import Link from 'next/link';
 import { motion, useReducedMotion } from 'motion/react';
+import { DripButton } from '@/components/ui/DripButton';
 
 /**
  * CUSTOMS BLOCK — DA editorial premium 2028.
@@ -204,38 +204,16 @@ export function CustomsBlock() {
               sneaker, tatouage cuir.
             </motion.p>
 
-            {/* CTA primary — pill cream/light, serif italic */}
+            {/* CTA primary — DripButton glow pink */}
             <motion.div
               {...fadeUp}
               viewport={{ once: true, margin: '-10% 0px' }}
               transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="mt-2 self-start"
             >
-              <Link
-                href="/atelier/commission"
-                className="group relative inline-flex items-center transition-transform hover:scale-[1.02]"
-                style={{
-                  fontFamily: FONT_SERIF,
-                  fontStyle: 'italic',
-                  fontSize: 'clamp(1rem, 1.1vw, 1.2rem)',
-                  color: INK,
-                  backgroundColor: PAPER,
-                  padding: 'clamp(0.85rem,1.6vh,1.15rem) clamp(1.6rem,2.6vw,2.4rem)',
-                  borderRadius: '999px',
-                  boxShadow:
-                    '0 1px 1px rgba(0,0,0,0.18), 0 18px 40px -18px rgba(255,255,255,0.18)',
-                }}
-              >
-                <span className="relative z-10">
-                  Démarrer un projet&nbsp;
-                  <span
-                    aria-hidden
-                    className="inline-block transition-transform duration-300 group-hover:translate-x-1"
-                  >
-                    →
-                  </span>
-                </span>
-              </Link>
+              <DripButton href="/atelier/commission" variant="primary" glow="pink" size="md">
+                Démarrer un projet
+              </DripButton>
             </motion.div>
 
             <motion.p

@@ -3,6 +3,7 @@ import { Container } from '@nacks/ui';
 import { ArtPoster } from '@/components/art/ArtPoster';
 import { getFeaturedPosts, type JournalPost } from '@/lib/content/journal';
 import { JournalTeaseAnim } from './JournalTeaseAnim';
+import { DripButton } from '@/components/ui/DripButton';
 
 /**
  * SCÈNE — Journal Tease (DA editorial premium).
@@ -91,23 +92,11 @@ export function JournalTease() {
             </p>
           </div>
 
-          <Link
-            href="/journal"
-            data-cursor="link"
-            data-cursor-label="Journal"
-            className="group inline-flex items-center self-end whitespace-nowrap"
-            style={{
-              fontFamily: FONT_SERIF,
-              fontStyle: 'italic',
-              fontSize: 'clamp(1rem, 1.05vw, 1.15rem)',
-              color: CREAM,
-              paddingBottom: '4px',
-              borderBottom: '1px solid rgba(245,241,232,0.35)',
-              transition: 'border-color 280ms ease',
-            }}
-          >
-            <span className="journal-tease-cta">Voir tout le journal&nbsp;→</span>
-          </Link>
+          <div className="self-end">
+            <DripButton href="/journal" variant="ghost" size="sm">
+              Voir tout le journal
+            </DripButton>
+          </div>
         </header>
 
         {/* ── Grille articles (animée client-side) ── */}
@@ -118,16 +107,6 @@ export function JournalTease() {
         </JournalTeaseAnim>
       </Container>
 
-      <style>{`
-        .journal-tease-cta {
-          background-image: linear-gradient(currentColor, currentColor);
-          background-size: 100% 1px;
-          background-position: 0 100%;
-          background-repeat: no-repeat;
-          transition: background-size 320ms cubic-bezier(0.65,0,0.35,1);
-        }
-        a:hover .journal-tease-cta { background-size: 0% 1px; background-position: 100% 100%; }
-      `}</style>
     </section>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PageShell } from '@/components/layouts/PageShell';
+import { DripButton } from '@/components/ui/DripButton';
 import { nacks } from '@/lib/content/nacks';
 
 export const metadata: Metadata = {
@@ -531,59 +532,14 @@ export default function AtelierPage() {
             </div>
 
             {/* CTAs — pill ink + ghost ink */}
-            <div className="flex flex-col gap-3">
-              <Link
-                href="/atelier/contact"
-                className="group relative inline-flex items-center justify-center transition-transform hover:scale-[1.02]"
-                data-cursor="link"
-                style={{
-                  fontFamily: FONT_SERIF,
-                  fontStyle: 'italic',
-                  fontSize: 'clamp(1rem, 1.1vw, 1.2rem)',
-                  color: CREAM,
-                  backgroundColor: INK,
-                  padding: 'clamp(0.95rem,1.8vh,1.25rem) clamp(1.6rem,2.6vw,2.4rem)',
-                  borderRadius: '999px',
-                  boxShadow:
-                    '0 1px 1px rgba(10,10,10,0.18), 0 18px 40px -18px rgba(10,10,10,0.28)',
-                }}
-              >
-                <span className="relative z-10">
-                  Prendre rendez-vous&nbsp;
-                  <span
-                    aria-hidden
-                    className="inline-block transition-transform duration-300 group-hover:translate-x-1"
-                  >
-                    →
-                  </span>
-                </span>
-              </Link>
+            <div className="flex flex-col items-start gap-3">
+              <DripButton href="/atelier/contact" variant="primary" glow="pink" size="md">
+                Prendre rendez-vous
+              </DripButton>
 
-              <Link
-                href="/atelier/commission"
-                className="group relative inline-flex items-center justify-center transition-colors"
-                data-cursor="link"
-                style={{
-                  fontFamily: FONT_SERIF,
-                  fontStyle: 'italic',
-                  fontSize: 'clamp(1rem, 1.1vw, 1.2rem)',
-                  color: INK,
-                  backgroundColor: 'transparent',
-                  padding: 'clamp(0.95rem,1.8vh,1.25rem) clamp(1.6rem,2.6vw,2.4rem)',
-                  borderRadius: '999px',
-                  border: '1px solid rgba(10,10,10,0.18)',
-                }}
-              >
-                <span className="relative z-10">
-                  Demander un custom&nbsp;
-                  <span
-                    aria-hidden
-                    className="inline-block transition-transform duration-300 group-hover:translate-x-1"
-                  >
-                    →
-                  </span>
-                </span>
-              </Link>
+              <DripButton href="/atelier/commission" variant="secondary" size="md">
+                Demander un custom
+              </DripButton>
             </div>
           </div>
         </div>

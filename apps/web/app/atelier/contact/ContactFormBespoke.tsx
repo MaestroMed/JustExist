@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
+import { DripButton } from '@/components/ui/DripButton';
 
 const INK = 'var(--color-ink, #0a0a0a)';
 const CREAM = 'var(--color-cream, #f5f1e8)';
@@ -200,41 +201,16 @@ export function ContactFormBespoke() {
               Données supprimées après réponse.
             </p>
 
-            <button
+            <DripButton
               type="submit"
               disabled={status === 'loading'}
-              data-cursor="link"
-              data-cursor-label="Envoyer"
-              className="group relative inline-flex items-center justify-center transition-transform hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
-              style={{
-                fontFamily: FONT_SERIF,
-                fontStyle: 'italic',
-                fontSize: 'clamp(1rem, 1.1vw, 1.15rem)',
-                color: CREAM,
-                backgroundColor: INK,
-                padding: 'clamp(0.85rem,1.6vh,1.1rem) clamp(1.5rem,2.4vw,2.2rem)',
-                borderRadius: '999px',
-                boxShadow:
-                  '0 1px 1px rgba(10,10,10,0.18), 0 18px 40px -18px rgba(10,10,10,0.28)',
-                border: 'none',
-                cursor: status === 'loading' ? 'wait' : 'pointer',
-              }}
+              variant="primary"
+              glow="pink"
+              size="md"
+              arrow={status !== 'loading'}
             >
-              <span className="relative z-10">
-                {status === 'loading' ? 'Envoi…' : 'Envoyer'}
-                {status !== 'loading' && (
-                  <>
-                    {' '}
-                    <span
-                      aria-hidden
-                      className="inline-block transition-transform duration-300 group-hover:translate-x-1"
-                    >
-                      →
-                    </span>
-                  </>
-                )}
-              </span>
-            </button>
+              {status === 'loading' ? 'Envoi…' : 'Envoyer'}
+            </DripButton>
           </div>
 
           {status === 'error' && (

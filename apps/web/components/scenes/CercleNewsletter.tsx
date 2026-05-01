@@ -10,6 +10,7 @@ import {
 import { motion, useInView, useReducedMotion } from 'motion/react';
 import { Container } from '@nacks/ui';
 import { isEmail } from '@/lib/validation';
+import { DripButton } from '@/components/ui/DripButton';
 
 /**
  * SCÈNE 7 — Newsletter (DA premium minimaliste).
@@ -292,7 +293,7 @@ export function CercleNewsletter() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
- *  SubmitButton — pill cream avec texte ink serif italic
+ *  SubmitButton — DripButton primary glow pink
  * ═══════════════════════════════════════════════════════════════════ */
 function SubmitButton({
   status,
@@ -301,30 +302,18 @@ function SubmitButton({
   status: Status;
   disabled: boolean;
 }) {
-  const label = status === 'loading' ? 'Envoi…' : 'Rejoindre →';
+  const label = status === 'loading' ? 'Envoi…' : 'Rejoindre';
 
   return (
-    <button
+    <DripButton
       type="submit"
+      variant="primary"
+      glow="pink"
+      size="md"
       disabled={disabled}
-      data-cursor="link"
-      data-cursor-label="Rejoindre"
-      className="group relative inline-flex shrink-0 items-center justify-center transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-40 hover:-translate-y-px"
-      style={{
-        fontFamily: FONT_SERIF,
-        fontStyle: 'italic',
-        fontWeight: 500,
-        fontSize: 'clamp(0.95rem, 1.05vw, 1.05rem)',
-        color: INK,
-        backgroundColor: CREAM,
-        padding:
-          'clamp(0.95rem, 1.6vh, 1.15rem) clamp(1.6rem, 2.4vw, 2rem)',
-        borderRadius: '999px',
-        border: '1px solid transparent',
-      }}
     >
-      <span>{label}</span>
-    </button>
+      {label}
+    </DripButton>
   );
 }
 

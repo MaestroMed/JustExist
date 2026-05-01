@@ -9,6 +9,7 @@ import {
   type ArtworkType,
 } from '@/lib/content/artworks';
 import { ArtPoster } from '@/components/art/ArtPoster';
+import { DripButton } from '@/components/ui/DripButton';
 
 /**
  * CATALOGUE /oeuvres — DA cream / ink, photo-first, editorial.
@@ -507,24 +508,15 @@ function EmptyState({ onReset }: { onReset: () => void }) {
       >
         Aucune œuvre dans cette catégorie.
       </p>
-      <button
+      <DripButton
         type="button"
+        variant="primary"
+        glow="pink"
+        size="md"
         onClick={onReset}
-        data-cursor="link"
-        style={{
-          fontFamily: FONT_SERIF,
-          fontStyle: 'italic',
-          fontSize: 'clamp(1rem, 1.05vw, 1.15rem)',
-          color: INK,
-          background: 'transparent',
-          border: 'none',
-          paddingBottom: '4px',
-          borderBottom: '1px solid rgba(10,10,10,0.35)',
-          cursor: 'pointer',
-        }}
       >
-        Voir toutes les œuvres&nbsp;→
-      </button>
+        Voir toutes les œuvres
+      </DripButton>
     </div>
   );
 }
@@ -562,37 +554,14 @@ function FooterCTA() {
         Pas trouvé ce que vous cherchez&nbsp;?
       </p>
 
-      <Link
+      <DripButton
         href="/atelier/commission"
-        data-cursor="link"
-        data-cursor-label="Custom"
-        className="oeuvres-cta-link"
-        style={{
-          fontFamily: FONT_SERIF,
-          fontStyle: 'italic',
-          fontSize: 'clamp(1rem, 1.05vw, 1.15rem)',
-          color: INK,
-          paddingBottom: '4px',
-          borderBottom: '1px solid rgba(10,10,10,0.35)',
-          textDecoration: 'none',
-        }}
+        variant="primary"
+        glow="pink"
+        size="md"
       >
-        <span className="oeuvres-cta-text">Demandez un custom&nbsp;→</span>
-      </Link>
-
-      <style>{`
-        .oeuvres-cta-text {
-          background-image: linear-gradient(currentColor, currentColor);
-          background-size: 100% 1px;
-          background-position: 0 100%;
-          background-repeat: no-repeat;
-          transition: background-size 320ms cubic-bezier(0.65,0,0.35,1);
-        }
-        .oeuvres-cta-link:hover .oeuvres-cta-text {
-          background-size: 0% 1px;
-          background-position: 100% 100%;
-        }
-      `}</style>
+        Demandez un custom
+      </DripButton>
     </div>
   );
 }

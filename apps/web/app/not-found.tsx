@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { Container } from '@nacks/ui';
 import { PageShell } from '@/components/layouts/PageShell';
+import { DripButton } from '@/components/ui/DripButton';
 
 const INK = 'var(--color-ink, #0a0a0a)';
 const CREAM = 'var(--color-cream, #f5f1e8)';
@@ -17,12 +17,6 @@ export const metadata = {
     "Cette adresse ne mène nulle part. Peut-être un lien ancien ou une typo.",
   robots: { index: false, follow: false },
 };
-
-const CTAS: Array<{ href: string; label: string }> = [
-  { href: '/', label: "Retour à l'accueil" },
-  { href: '/oeuvres', label: 'Voir les œuvres' },
-  { href: '/atelier', label: "Voir l'atelier" },
-];
 
 /**
  * 404 — Page introuvable.
@@ -159,32 +153,15 @@ export default function NotFound() {
               marginTop: 'clamp(1rem, 2vh, 1.5rem)',
             }}
           >
-            {CTAS.map((cta, idx) => (
-              <Link
-                key={cta.href}
-                href={cta.href}
-                data-cursor="link"
-                data-cursor-label={cta.label}
-                className="inline-flex items-center transition-transform hover:scale-[1.02]"
-                style={{
-                  fontFamily: FONT_SERIF,
-                  fontStyle: 'italic',
-                  fontSize: 'clamp(0.95rem, 1.05vw, 1.15rem)',
-                  color: idx === 0 ? CREAM : INK,
-                  backgroundColor: idx === 0 ? INK : 'transparent',
-                  padding:
-                    'clamp(0.75rem, 1.4vh, 1rem) clamp(1.5rem, 2.4vw, 2rem)',
-                  borderRadius: '999px',
-                  boxShadow:
-                    idx === 0 ? 'none' : 'inset 0 0 0 1.5px rgba(10,10,10,0.85)',
-                  textDecoration: 'none',
-                  whiteSpace: 'nowrap',
-                  transition: 'background-color 200ms ease, color 200ms ease',
-                }}
-              >
-                <span>{cta.label}&nbsp;→</span>
-              </Link>
-            ))}
+            <DripButton href="/" variant="primary" glow="pink" size="md">
+              Retour à l&apos;accueil
+            </DripButton>
+            <DripButton href="/oeuvres" variant="secondary" size="md">
+              Voir les œuvres
+            </DripButton>
+            <DripButton href="/atelier" variant="secondary" size="md">
+              Voir l&apos;atelier
+            </DripButton>
           </nav>
         </Container>
       </section>

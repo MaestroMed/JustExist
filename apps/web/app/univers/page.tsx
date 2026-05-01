@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Container } from '@nacks/ui';
 import { PageShell } from '@/components/layouts/PageShell';
 import { CharacterPortrait } from '@/components/art/CharacterPortrait';
+import { DripButton } from '@/components/ui/DripButton';
 import { characters, type Character } from '@/lib/content/characters';
 import { getArtworksByCharacter } from '@/lib/content/artworks';
 import { UniversCardAnim } from '@/components/scenes/UniversHorizontalAnim';
@@ -180,14 +181,15 @@ export default function UniversPage() {
               </div>
 
               <div
-                className="flex flex-wrap items-end gap-x-10 gap-y-4"
+                className="flex flex-wrap items-center gap-[clamp(0.75rem,1.5vw,1.25rem)]"
                 style={{ paddingBottom: '0.25rem' }}
               >
-                <CTALink href="/oeuvres" label="Voir le catalogue" />
-                <CTALink
-                  href="/atelier/commission"
-                  label="Demander un custom"
-                />
+                <DripButton href="/oeuvres" variant="primary" glow="pink" size="md">
+                  Voir le catalogue
+                </DripButton>
+                <DripButton href="/atelier/commission" variant="secondary" size="md">
+                  Demander un custom
+                </DripButton>
               </div>
             </div>
           </UniversCardAnim>
@@ -374,43 +376,3 @@ function CharacterListingCard({
   );
 }
 
-/* ============================================================
- *  CTALink — italic underline animé, identique pattern home
- * ============================================================ */
-function CTALink({ href, label }: { href: string; label: string }) {
-  return (
-    <Link
-      href={href}
-      data-cursor="link"
-      data-cursor-label={label}
-      className="cta-link group inline-flex items-center"
-      style={{
-        fontFamily: FONT_SERIF,
-        fontStyle: 'italic',
-        fontSize: 'clamp(1.05rem, 1.15vw, 1.25rem)',
-        color: INK,
-        textDecoration: 'none',
-      }}
-    >
-      <span className="cta-link-text">{label}&nbsp;→</span>
-      <style>{`
-        .cta-link-text {
-          background-image: linear-gradient(currentColor, currentColor);
-          background-size: 100% 1px;
-          background-position: 0 100%;
-          background-repeat: no-repeat;
-          padding-bottom: 4px;
-          transition: background-size 360ms cubic-bezier(0.65,0,0.35,1);
-        }
-        .cta-link:hover .cta-link-text {
-          background-size: 0% 1px;
-          background-position: 100% 100%;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .cta-link-text { transition: none; }
-          .cta-link:hover .cta-link-text { background-size: 100% 1px; }
-        }
-      `}</style>
-    </Link>
-  );
-}
