@@ -6,6 +6,7 @@ import { motion, useInView } from 'motion/react';
 import { Container } from '@nacks/ui';
 import { PageShell } from '@/components/layouts/PageShell';
 import { ArtPoster } from '@/components/art/ArtPoster';
+import { DripButton } from '@/components/ui/DripButton';
 import { useWishlist } from '@/lib/hooks/useWishlist';
 import { artworks, formatPrice, type Artwork } from '@/lib/content/artworks';
 
@@ -298,33 +299,11 @@ function EmptyState() {
         </p>
       </div>
 
-      <Link
-        href="/oeuvres"
-        data-cursor="link"
-        data-cursor-label="Voir"
-        className="wl-empty-cta inline-flex items-center gap-2"
-        style={{
-          fontFamily: FONT_BODY,
-          fontSize: '0.88rem',
-          letterSpacing: '0.04em',
-          color: CREAM,
-          backgroundColor: INK,
-          border: '1px solid ' + INK,
-          borderRadius: '999px',
-          padding: '0.7rem 1.5rem',
-          marginTop: 'clamp(0.5rem, 1vh, 0.75rem)',
-          transition: 'background-color 280ms ease, color 280ms ease',
-        }}
-      >
-        Voir les &oelig;uvres &rarr;
-      </Link>
-
-      <style>{`
-        .wl-empty-cta:hover {
-          background-color: ${PAPER};
-          color: ${INK};
-        }
-      `}</style>
+      <div style={{ marginTop: 'clamp(0.5rem, 1vh, 0.75rem)' }}>
+        <DripButton href="/oeuvres" variant="primary" glow="pink" size="md">
+          Voir les œuvres
+        </DripButton>
+      </div>
     </section>
   );
 }

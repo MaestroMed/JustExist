@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { DripButton } from '@/components/ui/DripButton';
 
 gsap.registerPlugin(useGSAP);
 
@@ -153,59 +154,12 @@ function CTAs() {
       className="flex flex-wrap items-center"
       style={{ gap: 'clamp(0.7rem,1.3vw,1.2rem)' }}
     >
-      <a
-        href="/oeuvres"
-        className="group relative inline-flex items-center transition-transform hover:scale-[1.02]"
-        style={{
-          fontFamily: FONT_SERIF,
-          fontStyle: 'italic',
-          fontSize: 'clamp(0.95rem,1.05vw,1.15rem)',
-          color: PAPER,
-          backgroundColor: INK,
-          padding: 'clamp(0.85rem,1.6vh,1.15rem) clamp(1.6rem,2.6vw,2.2rem)',
-          borderRadius: '999px',
-        }}
-      >
-        <span className="relative z-10">Voir les œuvres&nbsp;→</span>
-        {/* Drips sous le bouton noir */}
-        <svg
-          aria-hidden
-          className="pointer-events-none absolute left-0 right-0"
-          style={{ top: '88%', height: '32px', overflow: 'visible' }}
-          viewBox="0 0 200 40"
-          preserveAspectRatio="none"
-        >
-          {[28, 60, 95, 130, 165, 185].map((cx, i) => {
-            const len = 14 + ((i * 6) % 20);
-            return (
-              <g key={i} transform={`translate(${cx},0)`}>
-                <path
-                  d={`M-1.4,0 C-1.6,${len * 0.4} -1.8,${len * 0.7} -1,${len * 0.9} Q0,${len} 1,${len * 0.9} C1.8,${len * 0.7} 1.6,${len * 0.4} 1.4,0 Z`}
-                  fill={INK}
-                />
-                <circle cx="0" cy={len} r="1.7" fill={INK} />
-              </g>
-            );
-          })}
-        </svg>
-      </a>
-
-      <a
-        href="/atelier/commission"
-        className="relative inline-flex items-center transition-colors hover:bg-black hover:text-white"
-        style={{
-          fontFamily: FONT_SERIF,
-          fontStyle: 'italic',
-          fontSize: 'clamp(0.95rem,1.05vw,1.15rem)',
-          color: INK,
-          backgroundColor: PAPER,
-          padding: 'clamp(0.85rem,1.6vh,1.15rem) clamp(1.6rem,2.6vw,2.2rem)',
-          borderRadius: '999px',
-          boxShadow: 'inset 0 0 0 1.5px rgba(0,0,0,0.85)',
-        }}
-      >
-        Demander un custom&nbsp;→
-      </a>
+      <DripButton href="/oeuvres" variant="primary" glow="pink" size="md">
+        Voir les œuvres
+      </DripButton>
+      <DripButton href="/atelier/commission" variant="secondary" size="md">
+        Demander un custom
+      </DripButton>
     </div>
   );
 }

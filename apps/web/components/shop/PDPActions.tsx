@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { DripButton } from '@/components/ui/DripButton';
 import { useWishlist } from '@/lib/hooks/useWishlist';
 import { openCartDrawer } from './CartDrawer';
 
@@ -81,41 +82,18 @@ export function PDPActions({ slug, title, status }: Props) {
       {/* ── CTAs ── */}
       {!soldOut && !coming && (
         <div className="flex items-stretch" style={{ gap: '0.75rem' }}>
-          <button
-            type="button"
-            onClick={onAdd}
-            className="pdp-cta-primary group relative flex flex-1 items-center justify-center"
-            data-cursor="buy"
-            data-cursor-label="Ajouter"
-            style={{
-              fontFamily: FONT_SERIF,
-              fontStyle: 'italic',
-              fontWeight: 400,
-              fontSize: 'clamp(1rem, 1.05vw, 1.1rem)',
-              color: CREAM,
-              backgroundColor: INK,
-              padding: 'clamp(1rem, 1.6vh, 1.15rem) clamp(1.5rem, 2.5vw, 2rem)',
-              borderRadius: '9999px',
-              border: '1px solid transparent',
-              cursor: 'pointer',
-              transition:
-                'background-color 320ms ease, color 320ms ease, border-color 320ms ease, transform 320ms cubic-bezier(0.22,1,0.36,1)',
-              willChange: 'transform',
-            }}
-          >
-            <span>Ajouter au panier</span>
-            <span
-              aria-hidden
-              style={{
-                marginLeft: '0.6rem',
-                transition: 'transform 320ms cubic-bezier(0.22,1,0.36,1)',
-                display: 'inline-block',
-              }}
-              className="pdp-cta-arrow"
+          <div className="flex flex-1">
+            <DripButton
+              type="button"
+              onClick={onAdd}
+              variant="primary"
+              glow="pink"
+              size="lg"
+              fullWidth
             >
-              →
-            </span>
-          </button>
+              Ajouter au panier
+            </DripButton>
+          </div>
 
           <WishlistHeart
             slug={slug}
@@ -195,27 +173,14 @@ export function PDPActions({ slug, title, status }: Props) {
       )}
 
       {/* ── CTA secondaire — toujours présent ── */}
-      <a
+      <DripButton
         href="mailto:contact@nacksgalerie.com?subject=Demande%20de%20photos%20supplémentaires"
-        className="pdp-cta-secondary group inline-flex items-center justify-center"
-        data-cursor="link"
-        style={{
-          fontFamily: FONT_SERIF,
-          fontStyle: 'italic',
-          fontWeight: 400,
-          fontSize: 'clamp(0.95rem, 1vw, 1.05rem)',
-          color: INK,
-          backgroundColor: 'transparent',
-          padding: 'clamp(0.85rem, 1.4vh, 1rem) clamp(1.5rem, 2.5vw, 2rem)',
-          borderRadius: '9999px',
-          border: '1px solid rgba(10,10,10,0.85)',
-          textDecoration: 'none',
-          cursor: 'pointer',
-          transition: 'background-color 280ms ease, color 280ms ease',
-        }}
+        variant="secondary"
+        size="md"
+        fullWidth
       >
         Demander des photos supplémentaires
-      </a>
+      </DripButton>
 
       {/* ── Mention livraison ── */}
       <p
@@ -263,27 +228,6 @@ export function PDPActions({ slug, title, status }: Props) {
         )}
       </AnimatePresence>
 
-      <style>{`
-        .pdp-cta-primary:hover {
-          background-color: ${CREAM} !important;
-          color: ${INK} !important;
-          border-color: ${INK} !important;
-        }
-        .pdp-cta-primary:hover .pdp-cta-arrow {
-          transform: translateX(4px);
-        }
-        .pdp-cta-secondary:hover {
-          background-color: ${INK} !important;
-          color: ${CREAM} !important;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .pdp-cta-primary,
-          .pdp-cta-arrow,
-          .pdp-cta-secondary {
-            transition: none !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

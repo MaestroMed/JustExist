@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
+import { DripButton } from '@/components/ui/DripButton';
 
 /**
  * COMMISSION FORM — Bespoke edition (DA cream/card paper).
@@ -387,34 +388,16 @@ export function CommissionFormBespoke() {
                 aucune revente. RGPD-compatible.
               </p>
 
-              <button
+              <DripButton
                 type="submit"
                 disabled={status === 'loading'}
-                className="group inline-flex items-center justify-center transition-transform hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
-                style={{
-                  fontFamily: FONT_SERIF,
-                  fontStyle: 'italic',
-                  fontSize: 'clamp(0.95rem, 1.05vw, 1.1rem)',
-                  color: CREAM,
-                  backgroundColor: INK,
-                  padding: 'clamp(0.85rem, 1.6vh, 1.15rem) clamp(1.6rem, 2.6vw, 2.4rem)',
-                  borderRadius: '999px',
-                  border: 'none',
-                  cursor: status === 'loading' ? 'wait' : 'pointer',
-                  boxShadow:
-                    '0 1px 1px rgba(10,10,10,0.18), 0 18px 40px -18px rgba(10,10,10,0.28)',
-                }}
+                variant="primary"
+                glow="pink"
+                size="md"
+                arrow={status !== 'loading'}
               >
-                <span>
-                  {status === 'loading' ? 'Envoi…' : 'Envoyer ma demande'}&nbsp;
-                  <span
-                    aria-hidden
-                    className="inline-block transition-transform duration-300 group-hover:translate-x-1"
-                  >
-                    →
-                  </span>
-                </span>
-              </button>
+                {status === 'loading' ? 'Envoi…' : 'Envoyer ma demande'}
+              </DripButton>
             </div>
           </motion.form>
         )}

@@ -3,6 +3,7 @@ import { Container } from '@nacks/ui';
 import { getFeaturedArtworks, formatPrice, type Artwork } from '@/lib/content/artworks';
 import { ArtPoster } from '@/components/art/ArtPoster';
 import { NacksShowAnim } from './NacksShowAnim';
+import { DripButton } from '@/components/ui/DripButton';
 
 /**
  * SCÈNE — ŒUVRES PHARES (NacksShow).
@@ -81,23 +82,11 @@ export function NacksShow() {
             </p>
           </div>
 
-          <Link
-            href="/oeuvres"
-            data-cursor="link"
-            data-cursor-label="Galerie"
-            className="group inline-flex items-center self-end whitespace-nowrap"
-            style={{
-              fontFamily: FONT_SERIF,
-              fontStyle: 'italic',
-              fontSize: 'clamp(1rem, 1.05vw, 1.15rem)',
-              color: INK,
-              paddingBottom: '4px',
-              borderBottom: '1px solid rgba(10,10,10,0.35)',
-              transition: 'border-color 280ms ease',
-            }}
-          >
-            <span className="nacks-show-cta">Voir toutes les œuvres&nbsp;→</span>
-          </Link>
+          <div className="self-end">
+            <DripButton href="/oeuvres" variant="ghost" size="sm">
+              Voir toutes les œuvres
+            </DripButton>
+          </div>
         </header>
 
         {/* ── Grille des œuvres (animée client-side) ── */}
@@ -108,17 +97,6 @@ export function NacksShow() {
         </NacksShowAnim>
       </Container>
 
-      <style>{`
-        .nacks-show-cta {
-          background-image: linear-gradient(currentColor, currentColor);
-          background-size: 100% 1px;
-          background-position: 0 100%;
-          background-repeat: no-repeat;
-          transition: background-size 320ms cubic-bezier(0.65,0,0.35,1);
-        }
-        a:hover .nacks-show-cta { background-size: 0% 1px; background-position: 100% 100%; }
-        a:hover .nacks-show-cta::after { content: none; }
-      `}</style>
     </section>
   );
 }

@@ -5,6 +5,7 @@ import { Container } from '@nacks/ui';
 import { PageShell } from '@/components/layouts/PageShell';
 import { CharacterPortrait } from '@/components/art/CharacterPortrait';
 import { ArtPoster } from '@/components/art/ArtPoster';
+import { DripButton } from '@/components/ui/DripButton';
 import {
   characters,
   getCharacter,
@@ -328,24 +329,14 @@ export default async function CharacterPage({ params }: { params: Params }) {
               </div>
 
               {artworks.length > 0 && (
-                <div className="md:col-span-5 md:self-end md:pb-2 md:text-right">
-                  <Link
+                <div className="md:col-span-5 md:flex md:justify-end md:self-end md:pb-2">
+                  <DripButton
                     href={`/oeuvres?character=${data.slug}`}
-                    data-cursor="link"
-                    data-cursor-label="Galerie"
-                    className="inline-flex items-center"
-                    style={{
-                      fontFamily: FONT_SERIF,
-                      fontStyle: 'italic',
-                      fontSize: 'clamp(1rem, 1.05vw, 1.15rem)',
-                      color: INK,
-                      paddingBottom: '4px',
-                      borderBottom: '1px solid rgba(10,10,10,0.35)',
-                      textDecoration: 'none',
-                    }}
+                    variant="secondary"
+                    size="md"
                   >
-                    Voir toutes les œuvres&nbsp;→
-                  </Link>
+                    {`Voir les œuvres avec ${data.name}`}
+                  </DripButton>
                 </div>
               )}
             </header>

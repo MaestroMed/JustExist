@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
+import { DripButton } from '@/components/ui/DripButton';
 import { useWishlist } from '@/lib/hooks/useWishlist';
 import { formatPrice } from '@/lib/content/artworks';
 import { ArtPoster } from '@/components/art/ArtPoster';
@@ -108,22 +109,9 @@ export function CompteDashboardClient({ artworks }: Props) {
               >
                 {wishlistCount} œuvre{wishlistCount > 1 ? 's' : ''}
               </span>
-              <Link
-                href="/compte/wishlist"
-                data-cursor="link"
-                data-cursor-label="Wishlist"
-                style={{
-                  fontFamily: FONT_SERIF,
-                  fontStyle: 'italic',
-                  fontSize: '1rem',
-                  color: INK,
-                  borderBottom: '1px solid rgba(10,10,10,0.35)',
-                  paddingBottom: '2px',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                Voir tout&nbsp;→
-              </Link>
+              <DripButton href="/compte/wishlist" variant="ghost" size="sm">
+                Voir tout
+              </DripButton>
             </div>
           )}
         </div>
@@ -415,21 +403,9 @@ function EmptyCard({
       >
         {title}
       </p>
-      <Link
-        href={cta.href}
-        data-cursor="link"
-        data-cursor-label={cta.label}
-        style={{
-          fontFamily: FONT_SERIF,
-          fontStyle: 'italic',
-          fontSize: '1rem',
-          color: INK,
-          borderBottom: '1px solid rgba(10,10,10,0.35)',
-          paddingBottom: '2px',
-        }}
-      >
-        {cta.label}&nbsp;→
-      </Link>
+      <DripButton href={cta.href} variant="primary" glow="pink" size="sm">
+        {cta.label}
+      </DripButton>
     </div>
   );
 }

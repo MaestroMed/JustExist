@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { Container } from '@nacks/ui';
 import { PageShell } from '@/components/layouts/PageShell';
+import { DripButton } from '@/components/ui/DripButton';
 import { artworks } from '@/lib/content/artworks';
 import { CompteDashboardClient } from '@/components/compte/CompteDashboardClient';
 
@@ -169,22 +169,9 @@ export default function ComptePage() {
                 Pour toute question sur une commande ou un certificat, écrivez-nous —
                 nous répondons sous 48h.
               </p>
-              <Link
-                href="/contact"
-                data-cursor="link"
-                data-cursor-label="Contact"
-                style={{
-                  fontFamily: FONT_SERIF,
-                  fontStyle: 'italic',
-                  fontSize: '1rem',
-                  color: INK,
-                  borderBottom: '1px solid rgba(10,10,10,0.35)',
-                  paddingBottom: '2px',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                Nous contacter&nbsp;→
-              </Link>
+              <DripButton href="/contact" variant="ghost" size="sm">
+                Nous contacter
+              </DripButton>
             </div>
           </footer>
         </Container>

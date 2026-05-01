@@ -1,9 +1,9 @@
 'use client';
 
 import { useMemo, useState, type FormEvent } from 'react';
-import Link from 'next/link';
 import { motion, useReducedMotion } from 'motion/react';
 import { ArtPoster } from '@/components/art/ArtPoster';
+import { DripButton } from '@/components/ui/DripButton';
 import { useCart } from '@/lib/hooks/useCart';
 import { formatPrice } from '@/lib/content/artworks';
 
@@ -24,7 +24,6 @@ import { formatPrice } from '@/lib/content/artworks';
  */
 
 const INK = 'var(--color-ink, #0a0a0a)';
-const CREAM = 'var(--color-cream, #f5f1e8)';
 const PAPER = 'var(--color-paint-white, #fafafa)';
 
 const FONT_SERIF = "var(--font-serif, 'Playfair Display', Georgia, serif)";
@@ -191,26 +190,11 @@ export function CheckoutClient() {
               Le tunnel de paiement s’active dès qu’une œuvre rejoint votre
               panier.
             </p>
-            <Link
-              href="/oeuvres"
-              data-cursor="link"
-              className="checkout-pill"
-              style={{
-                marginTop: '0.5rem',
-                fontFamily: FONT_SERIF,
-                fontStyle: 'italic',
-                fontSize: 'clamp(0.95rem, 1.05vw, 1.1rem)',
-                color: CREAM,
-                backgroundColor: INK,
-                padding: 'clamp(0.85rem, 1.6vh, 1.15rem) clamp(1.6rem, 2.6vw, 2.4rem)',
-                borderRadius: '999px',
-                textDecoration: 'none',
-                boxShadow:
-                  '0 1px 1px rgba(10,10,10,0.18), 0 18px 40px -18px rgba(10,10,10,0.28)',
-              }}
-            >
-              Voir les œuvres&nbsp;→
-            </Link>
+            <div style={{ marginTop: '0.5rem' }}>
+              <DripButton href="/oeuvres" variant="primary" glow="pink" size="md">
+                Voir les œuvres
+              </DripButton>
+            </div>
           </motion.div>
         </div>
         <CheckoutStyles />
@@ -279,26 +263,11 @@ export function CheckoutClient() {
               un email de confirmation, le certificat d’authenticité et un suivi
               d’expédition dès que la pièce quitte l’atelier.
             </p>
-            <Link
-              href="/oeuvres"
-              data-cursor="link"
-              className="checkout-pill"
-              style={{
-                marginTop: '0.5rem',
-                fontFamily: FONT_SERIF,
-                fontStyle: 'italic',
-                fontSize: 'clamp(0.95rem, 1.05vw, 1.1rem)',
-                color: CREAM,
-                backgroundColor: INK,
-                padding: 'clamp(0.85rem, 1.6vh, 1.15rem) clamp(1.6rem, 2.6vw, 2.4rem)',
-                borderRadius: '999px',
-                textDecoration: 'none',
-                boxShadow:
-                  '0 1px 1px rgba(10,10,10,0.18), 0 18px 40px -18px rgba(10,10,10,0.28)',
-              }}
-            >
-              Continuer la visite&nbsp;→
-            </Link>
+            <div style={{ marginTop: '0.5rem' }}>
+              <DripButton href="/oeuvres" variant="primary" glow="green" size="md">
+                Continuer la visite
+              </DripButton>
+            </div>
           </motion.div>
         </div>
         <CheckoutStyles />
@@ -1099,40 +1068,21 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
- *  SubmitButton — pill ink full-width
+ *  SubmitButton — pill ink full-width (DripButton primary green)
  * ═══════════════════════════════════════════════════════════════ */
 function SubmitButton({ status }: { status: Status }) {
   const loading = status === 'loading';
   return (
-    <button
+    <DripButton
       type="submit"
+      variant="primary"
+      glow="green"
+      size="md"
+      fullWidth
       disabled={loading}
-      data-cursor="buy"
-      className="checkout-submit"
-      style={{
-        width: '100%',
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '0.5rem',
-        fontFamily: FONT_SERIF,
-        fontStyle: 'italic',
-        fontSize: 'clamp(1rem, 1.1vw, 1.15rem)',
-        color: CREAM,
-        backgroundColor: INK,
-        padding: 'clamp(1rem, 1.8vh, 1.3rem) clamp(1.5rem, 2.6vw, 2.4rem)',
-        borderRadius: '999px',
-        border: '1px solid transparent',
-        cursor: loading ? 'wait' : 'pointer',
-        opacity: loading ? 0.6 : 1,
-        transition: 'background-color 280ms ease, color 280ms ease, border-color 280ms ease',
-        boxShadow:
-          '0 1px 1px rgba(10,10,10,0.18), 0 18px 40px -18px rgba(10,10,10,0.28)',
-      }}
     >
       {loading ? 'Traitement…' : 'Confirmer et payer'}
-      <span aria-hidden>→</span>
-    </button>
+    </DripButton>
   );
 }
 
@@ -1322,21 +1272,9 @@ function CheckoutStyles() {
         padding-right: 2rem;
         cursor: pointer;
       }
-      .checkout-submit:hover {
-        background-color: ${CREAM};
-        color: ${INK};
-        border-color: ${INK};
-      }
-      .checkout-pill:hover {
-        background-color: ${CREAM};
-        color: ${INK};
-        outline: 1px solid ${INK};
-      }
       @media (prefers-reduced-motion: reduce) {
         .checkout-control input,
-        .checkout-control select,
-        .checkout-submit,
-        .checkout-pill {
+        .checkout-control select {
           transition: none !important;
         }
       }

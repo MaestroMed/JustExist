@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView, useReducedMotion } from 'motion/react';
+import { DripButton } from '@/components/ui/DripButton';
 
 /**
  * COMMUNAUTÉ — DA premium 2026.
@@ -605,43 +605,13 @@ function Join() {
           transition={{ duration: 0.7, delay: 0.3, ease: EASE_OUT }}
           className="flex flex-wrap items-center gap-[clamp(0.75rem,1.5vw,1.25rem)]"
         >
-          <Link
-            href="/#scene-newsletter"
-            data-cursor="link"
-            data-cursor-label="Rejoindre"
-            className="group relative inline-flex items-center transition-transform hover:-translate-y-px"
-            style={{
-              fontFamily: FONT_SERIF,
-              fontStyle: 'italic',
-              fontSize: 'clamp(0.95rem, 1.05vw, 1.1rem)',
-              color: CREAM,
-              backgroundColor: INK,
-              padding: 'clamp(0.95rem, 1.6vh, 1.15rem) clamp(1.6rem, 2.4vw, 2rem)',
-              borderRadius: '999px',
-            }}
-          >
-            <span>Newsletter mensuelle&nbsp;→</span>
-          </Link>
+          <DripButton href="/#scene-newsletter" variant="primary" glow="pink" size="md">
+            Newsletter mensuelle
+          </DripButton>
 
-          <a
-            href="https://instagram.com/nacks"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-cursor="link"
-            className="inline-flex items-center transition-colors hover:bg-[var(--color-ink)] hover:text-[var(--color-cream)]"
-            style={{
-              fontFamily: FONT_SERIF,
-              fontStyle: 'italic',
-              fontSize: 'clamp(0.95rem, 1.05vw, 1.1rem)',
-              color: INK,
-              backgroundColor: 'transparent',
-              padding: 'clamp(0.95rem, 1.6vh, 1.15rem) clamp(1.6rem, 2.4vw, 2rem)',
-              borderRadius: '999px',
-              boxShadow: 'inset 0 0 0 1.5px rgba(10,10,10,0.85)',
-            }}
-          >
-            Suivre sur Instagram&nbsp;→
-          </a>
+          <DripButton href="https://instagram.com/nacks" variant="secondary" size="md">
+            Suivre sur Instagram
+          </DripButton>
         </motion.div>
       </div>
     </section>

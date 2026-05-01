@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion, useInView, useReducedMotion } from 'motion/react';
 import { Container } from '@nacks/ui';
 import { ArtPoster } from '@/components/art/ArtPoster';
+import { DripButton } from '@/components/ui/DripButton';
 import type { JournalPost } from '@/lib/content/journal';
 
 const INK = 'var(--color-ink, #0a0a0a)';
@@ -112,34 +113,14 @@ export function JournalListing({ posts, categories, categoryLabels }: Props) {
             {/* ─────── Load more ─────── */}
             {hasMore && (
               <div className="mt-[clamp(3rem,6vh,5rem)] flex justify-center">
-                <button
+                <DripButton
                   type="button"
+                  variant="secondary"
+                  size="md"
                   onClick={() => setVisibleCount((c) => c + PAGE_SIZE_INCREMENT)}
-                  className="group inline-flex items-center gap-[0.6rem] px-[1.5rem] py-[0.85rem] uppercase transition-colors"
-                  data-cursor="link"
-                  style={{
-                    fontFamily: FONT_MONO,
-                    fontSize: '0.72rem',
-                    letterSpacing: '0.28em',
-                    color: INK,
-                    border: '1px solid rgba(10,10,10,0.25)',
-                    backgroundColor: 'transparent',
-                    cursor: 'pointer',
-                  }}
                 >
                   Charger plus
-                  <span
-                    aria-hidden
-                    style={{
-                      fontFamily: FONT_SERIF,
-                      fontStyle: 'italic',
-                      letterSpacing: 0,
-                      fontSize: '0.85rem',
-                    }}
-                  >
-                    →
-                  </span>
-                </button>
+                </DripButton>
               </div>
             )}
           </>

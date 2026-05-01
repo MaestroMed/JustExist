@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArtPoster } from '@/components/art/ArtPoster';
+import { DripButton } from '@/components/ui/DripButton';
 import { useCart, type CartItem } from '@/lib/hooks/useCart';
 import { formatPrice } from '@/lib/content/artworks';
 
 const INK = 'var(--color-ink, #0a0a0a)';
-const CREAM = 'var(--color-cream, #f5f1e8)';
 const PAPER = '#fafafa';
 
 const FONT_SERIF = "var(--font-serif, 'Playfair Display', Georgia, serif)";
@@ -237,69 +237,16 @@ function EmptyState() {
         Commencez par découvrir les œuvres.
       </p>
       <div
-        className="flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center"
-        style={{ marginTop: '2.25rem' }}
+        className="flex flex-wrap items-center justify-center"
+        style={{ marginTop: '2.25rem', gap: 'clamp(0.7rem,1.3vw,1.2rem)' }}
       >
-        <Link
-          href="/oeuvres"
-          data-cursor="link"
-          className="panier-cta-primary"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '0.5rem',
-            backgroundColor: INK,
-            color: CREAM,
-            fontFamily: FONT_SERIF,
-            fontStyle: 'italic',
-            fontWeight: 400,
-            fontSize: '1rem',
-            padding: '0.95rem 1.75rem',
-            borderRadius: 9999,
-            textDecoration: 'none',
-            border: '1px solid transparent',
-            transition: 'background-color 280ms ease, color 280ms ease, border-color 280ms ease',
-          }}
-        >
-          Voir les œuvres →
-        </Link>
-        <Link
-          href="/atelier/commission"
-          data-cursor="link"
-          className="panier-cta-outline"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '0.5rem',
-            backgroundColor: 'transparent',
-            color: INK,
-            fontFamily: FONT_SERIF,
-            fontStyle: 'italic',
-            fontWeight: 400,
-            fontSize: '1rem',
-            padding: '0.95rem 1.75rem',
-            borderRadius: 9999,
-            textDecoration: 'none',
-            border: '1px solid rgba(10,10,10,0.85)',
-            transition: 'background-color 280ms ease, color 280ms ease',
-          }}
-        >
-          Demander un custom →
-        </Link>
+        <DripButton href="/oeuvres" variant="primary" glow="pink" size="md">
+          Voir les œuvres
+        </DripButton>
+        <DripButton href="/atelier/commission" variant="secondary" size="md">
+          Demander un custom
+        </DripButton>
       </div>
-      <style>{`
-        .panier-cta-primary:hover {
-          background-color: ${CREAM};
-          color: ${INK};
-          border-color: ${INK};
-        }
-        .panier-cta-outline:hover {
-          background-color: ${INK};
-          color: ${CREAM};
-        }
-      `}</style>
     </div>
   );
 }
@@ -748,33 +695,17 @@ function RecapColumn({
         </motion.span>
       </div>
 
-      <Link
-        href="/checkout"
-        data-cursor="buy"
-        className="panier-checkout-cta"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '0.5rem',
-          width: '100%',
-          marginTop: '1.75rem',
-          backgroundColor: INK,
-          color: CREAM,
-          fontFamily: FONT_SERIF,
-          fontStyle: 'italic',
-          fontWeight: 400,
-          fontSize: '1rem',
-          padding: '1rem 1.5rem',
-          borderRadius: 9999,
-          textDecoration: 'none',
-          border: '1px solid transparent',
-          transition: 'background-color 280ms ease, color 280ms ease, border-color 280ms ease',
-        }}
-      >
-        Aller au checkout
-        <span aria-hidden style={{ display: 'inline-block' }}>→</span>
-      </Link>
+      <div style={{ marginTop: '1.75rem' }}>
+        <DripButton
+          href="/checkout"
+          variant="primary"
+          glow="pink"
+          size="md"
+          fullWidth
+        >
+          Aller au checkout
+        </DripButton>
+      </div>
 
       <p
         style={{
@@ -816,16 +747,10 @@ function RecapColumn({
       </button>
 
       <style>{`
-        .panier-checkout-cta:hover {
-          background-color: ${CREAM};
-          color: ${INK};
-          border-color: ${INK};
-        }
         .panier-clear-btn:hover {
           color: ${INK};
         }
         @media (prefers-reduced-motion: reduce) {
-          .panier-checkout-cta,
           .panier-clear-btn {
             transition: none !important;
           }

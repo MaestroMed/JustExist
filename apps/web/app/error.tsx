@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import Link from 'next/link';
 import { Container } from '@nacks/ui';
 import { PageShell } from '@/components/layouts/PageShell';
+import { DripButton } from '@/components/ui/DripButton';
 
 const INK = 'var(--color-ink, #0a0a0a)';
 const CREAM = 'var(--color-cream, #f5f1e8)';
@@ -136,7 +136,7 @@ export default function Error({ error, reset }: Props) {
             </p>
           )}
 
-          {/* CTAs pill — Réessayer (filled) + Accueil (outline) */}
+          {/* CTAs pill — Réessayer (primary) + Accueil (secondary) */}
           <div
             className="flex flex-wrap items-center"
             style={{
@@ -144,50 +144,19 @@ export default function Error({ error, reset }: Props) {
               marginTop: 'clamp(1rem, 2vh, 1.5rem)',
             }}
           >
-            <button
+            <DripButton
               type="button"
+              variant="primary"
+              glow="pink"
+              size="md"
               onClick={() => reset()}
-              data-cursor="link"
-              data-cursor-label="Réessayer"
-              className="inline-flex items-center transition-transform hover:scale-[1.02]"
-              style={{
-                fontFamily: FONT_SERIF,
-                fontStyle: 'italic',
-                fontSize: 'clamp(0.95rem, 1.05vw, 1.15rem)',
-                color: CREAM,
-                backgroundColor: INK,
-                padding:
-                  'clamp(0.75rem, 1.4vh, 1rem) clamp(1.5rem, 2.4vw, 2rem)',
-                borderRadius: '999px',
-                border: 'none',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-              }}
             >
-              <span>Réessayer&nbsp;→</span>
-            </button>
+              Réessayer
+            </DripButton>
 
-            <Link
-              href="/"
-              data-cursor="link"
-              data-cursor-label="Accueil"
-              className="inline-flex items-center transition-transform hover:scale-[1.02]"
-              style={{
-                fontFamily: FONT_SERIF,
-                fontStyle: 'italic',
-                fontSize: 'clamp(0.95rem, 1.05vw, 1.15rem)',
-                color: INK,
-                backgroundColor: 'transparent',
-                padding:
-                  'clamp(0.75rem, 1.4vh, 1rem) clamp(1.5rem, 2.4vw, 2rem)',
-                borderRadius: '999px',
-                boxShadow: 'inset 0 0 0 1.5px rgba(10,10,10,0.85)',
-                textDecoration: 'none',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              <span>Retour à l&apos;accueil&nbsp;→</span>
-            </Link>
+            <DripButton href="/" variant="secondary" size="md">
+              Retour à l&apos;accueil
+            </DripButton>
           </div>
         </Container>
       </section>
