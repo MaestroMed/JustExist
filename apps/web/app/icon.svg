@@ -1,6 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Nacks">
+  <!-- Background ink rounded -->
   <rect width="64" height="64" rx="12" fill="#0A0A0A"/>
-  <text x="50%" y="58%" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif"
-        font-weight="700" font-size="28" fill="#F5F1E8" letter-spacing="-0.03em">N</text>
-  <circle cx="50" cy="16" r="4" fill="#E63946"/>
+
+  <!-- N typographique épais, cream — dessiné en path pour lisibilité pixel-perfect à 16x16 -->
+  <path
+    d="M 14 12 L 22 12 L 42 42 L 42 12 L 50 12 L 50 50 L 42 50 L 22 20 L 22 50 L 14 50 Z"
+    fill="#F5F1E8"/>
+
+  <!-- Drip blood qui coule depuis le pied de la barre droite du N -->
+  <rect x="45" y="50" width="4" height="6" fill="#E63946"/>
+
+  <!-- Goutte arrondie au bout du drip — signature visuelle Nacks (peinture qui coule) -->
+  <circle cx="47" cy="58" r="3.5" fill="#E63946"/>
 </svg>
